@@ -2,18 +2,23 @@ package frc.robot.subsystems;
 
 import java.io.Console;
 
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoder;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANSparkMax.ControlType;
+// import com.revrobotics.CANSparkMax.IdleMode;
+// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+// import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,14 +32,14 @@ public class SwerveModule extends SubsystemBase {
     private final RelativeEncoder m_driveEncoder;
     private final RelativeEncoder m_turningEncoder;
 
-    private final CANCoder m_turningCANCoder;
+    private final CANcoder m_turningCANCoder;
 
     // absolute offset for the CANCoder so that the wheels can be aligned when the
     // robot is turned on
 //    private final Rotation2d m_CANCoderOffset;
 
-    private final SparkMaxPIDController m_turningController;
-    private final SparkMaxPIDController m_driveController;    
+    private final SparkPIDController m_turningController;
+    private final SparkPIDController m_driveController;    
 
     /**
      * Constructs a SwerveModule.
@@ -59,11 +64,15 @@ public class SwerveModule extends SubsystemBase {
         m_driveEncoder = m_driveMotor.getEncoder();
         Timer.delay(1);
         System.out.println("initialized");
-        m_turningCANCoder = new CANCoder(turningCANCoderChannel);
-        m_turningCANCoder.setPositionToAbsolute();
-        m_turningCANCoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+        m_turningCANCoder = new CANcoder(turningCANCoderChannel);
+    
+        m_turningCANCoder.setPosition(m_turningCANCoder.getAbsolutePosition().getValueAsDouble());
+        var canConfigs = new CANcoderConfiguration();
+        canConfigs.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         m_turningCANCoder.setPosition(0);        
-       
+        m_turningCANCoder.getConfigurator().apply(canConfigs);
+        
+
         m_turningEncoder = m_turningMotor.getEncoder();
 //        m_CANCoderOffset = Rotation2d.fromDegrees(turningCANCoderOffsetDegrees);
 
@@ -126,12 +135,12 @@ public class SwerveModule extends SubsystemBase {
         return m_turningEncoder;
     }
 
-    public CANCoder getTurnCANcoder() {
+    public CANcoder getTurnCANcoder() {
         return m_turningCANCoder;
     }
 
     public double getTurnCANcoderAngle() {
-        return m_turningCANCoder.getAbsolutePosition();
+        return m_turningCANCoder.getAbsolutePosition().getValueAsDouble();
     }
 
     public Rotation2d adjustedAngle = new Rotation2d();
@@ -209,7 +218,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void syncTurningEncoders() {
-        m_turningEncoder.setPosition(m_turningCANCoder.getAbsolutePosition());
+        m_turningEncoder.setPosition(m_turningCANCoder.getAbsolutePosition().getValueAsDouble());
     }
 
     /** Zeros all the SwerveModule encoders. */
@@ -218,6 +227,9 @@ public class SwerveModule extends SubsystemBase {
         m_turningEncoder.setPosition(0.0);
 
         m_turningCANCoder.setPosition(0.0);
-        m_turningCANCoder.configMagnetOffset(m_turningCANCoder.configGetMagnetOffset() - m_turningCANCoder.getAbsolutePosition());
+        var canConfigs = new CANcoderConfiguration();
+
+        canConfigs.MagnetSensor.MagnetOffset = canConfigs.MagnetSensor.MagnetOffset - m_turningCANCoder.getAbsolutePosition().getValueAsDouble();
+        m_turningCANCoder.getConfigurator().apply(canConfigs);
     }
 }

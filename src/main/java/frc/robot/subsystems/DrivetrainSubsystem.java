@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-import com.pathplanner.lib.PathPlannerTrajectory;
+// import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+// import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
@@ -76,8 +76,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     fixBackRight();
 
     // Zero out the gyro.
-    m_ahrs.calibrate();
-
     m_odometry = new SwerveDriveOdometry(Constants.kDriveKinematics, getHeading(), getModulePositions());
 
     for (SwerveModule module: modules) {
@@ -111,10 +109,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getState().angle.getDegrees());
     SmartDashboard.putNumber("Back Right CANCoder", m_rearRight.getState().angle.getDegrees());
 
-    SmartDashboard.putNumber("Front Left CANCoder", m_frontLeft.getTurnCANcoder().getPosition());
-    SmartDashboard.putNumber("Front Right CANCoder", m_frontRight.getTurnCANcoder().getPosition());
-    SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getTurnCANcoder().getPosition());
-    SmartDashboard.putNumber("Back Right CANCoder", m_rearRight.getTurnCANcoder().getPosition());
+    SmartDashboard.putNumber("Front Left CANCoder", m_frontLeft.getTurnCANcoder().getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Front Right CANCoder", m_frontRight.getTurnCANcoder().getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getTurnCANcoder().getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Back Right CANCoder", m_rearRight.getTurnCANcoder().getPosition().getValueAsDouble());
 
     SmartDashboard.putNumber("Front Left Neo Encoder", m_frontLeft.getTurnEncoder().getPosition());
     SmartDashboard.putNumber("Front Right Neo Encoder", m_frontRight.getTurnEncoder().getPosition());
@@ -373,19 +371,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
   private SwerveModuleState[] states = Constants.kDriveKinematics.toSwerveModuleStates(m_chassisSpeeds);
 
-  public Command followTrajectoryCommand(PathPlannerTrajectory traj) {
-    return new PPSwerveControllerCommand(
-        traj, 
-        this::getPose, // Pose supplier
-        Constants.kDriveKinematics, // SwerveDriveKinematics
-        new PIDController(1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-        new PIDController(3.5, 0, 0), // Y controller (usually the same values as X controller)
-        new PIDController(1.7, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-        (SwerveModuleState[] states) -> {
-               this.m_chassisSpeeds = Constants.kDriveKinematics.toChassisSpeeds(states);
-       }, // Module states consumer
-        true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-        this // Requires this drive subsystem
-    );
-  }
+  // public Command followTrajectoryCommand(PathPlannerTrajectory traj) {
+  //   return new PPSwerveControllerCommand(
+  //       traj, 
+  //       this::getPose, // Pose supplier
+  //       Constants.kDriveKinematics, // SwerveDriveKinematics
+  //       new PIDController(1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+  //       new PIDController(3.5, 0, 0), // Y controller (usually the same values as X controller)
+  //       new PIDController(1.7, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+  //       (SwerveModuleState[] states) -> {
+  //              this.m_chassisSpeeds = Constants.kDriveKinematics.toChassisSpeeds(states);
+  //      }, // Module states consumer
+  //       true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+  //       this // Requires this drive subsystem
+  //   );
+  // }
 }
