@@ -43,12 +43,9 @@ public class RobotContainer {
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
   public RobotContainer() {
-
-    m_drive.setDefaultCommand(new DriveCommand(m_drive, m_controller));
     // Configure the trigger bindings
     configureBindings();
 
-    resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
     //m_autoChooser.setDefaultOption("Only Drive Middle", m_ZeroConeAutoMiddle);
 
   }
@@ -63,6 +60,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    m_drive.setDefaultCommand(new DriveCommand(m_drive, m_controller));
+    resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
   }
 
   /**

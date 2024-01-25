@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 // import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 // import com.pathplanner.lib.PathPlannerTrajectory;
@@ -69,7 +70,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
   /** Creates a new DriveSubsystem. */
   public DrivetrainSubsystem() {
-
     fixBackRight();
 
     // Zero out the gyro
@@ -94,6 +94,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     timer.reset();
     timer.start();
     lastTime = 0;
+    new WaitCommand(0.5);
+    System.out.println("Before: "+getHeading());
+    m_ahrs.zeroYaw();
+    System.out.println("After: "+getHeading());
+
   }
 
   @Override
@@ -132,6 +137,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Angle 1", modules[1].getTurnCANcoderAngle());
     // SmartDashboard.putNumber("Angle 2", modules[2].getTurnCANcoderAngle());
     // SmartDashboard.putNumber("Angle 3", modules[3].getTurnCANcoderAngle());
+
+    if (0.49 <= timer.get() && timer.get() <= 0.51) {
+      m_ahrs.zeroYaw();
+      System.out.println("Zeroed: " + getHeading());
+    }
 
   }
 
@@ -332,7 +342,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //   pose);
   // }
   public void zeroGyroscope(){
-    m_ahrs.reset();
+    m_ahrs.zeroYaw();
   }
 
   /**
@@ -341,9 +351,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return the robot's heading as a Rotation2d
    */
   public Rotation2d getHeading() {
-    float raw_yaw = m_ahrs.getYaw() - (float)offset; // Returns yaw as -180 to +180.
+    float raw_yaw = m_ahrs.getYaw(); // Returns yaw as -180 to +180.
     // float raw_yaw = m_ahrs.getYaw(); // Returns yaw as -180 to +180.
     float calc_yaw = raw_yaw;
+
 
     if (0.0 > raw_yaw ) { // yaw is negative
       calc_yaw += 360.0;

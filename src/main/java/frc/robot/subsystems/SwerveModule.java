@@ -4,6 +4,8 @@ import java.io.Console;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -56,6 +58,8 @@ public class SwerveModule extends SubsystemBase {
         m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
         m_turningMotor.restoreFactoryDefaults();
         m_turningMotor.setIdleMode(IdleMode.kBrake);
+        m_driveMotor.setSmartCurrentLimit(40);
+        m_turningMotor.setSmartCurrentLimit(40);
         m_driveMotor.burnFlash();
         m_turningMotor.burnFlash();
         Timer.delay(0.5);
@@ -66,9 +70,10 @@ public class SwerveModule extends SubsystemBase {
         m_turningCANCoder = new CANcoder(turningCANCoderChannel);
     
         m_turningCANCoder.setPosition(m_turningCANCoder.getAbsolutePosition().getValueAsDouble());
-        m_turningCANCoder.setPosition(0);        
+        // m_turningCANCoder.setPosition(0);        
         m_turningEncoder = m_turningMotor.getEncoder();
-//        m_CANCoderOffset = Rotation2d.fromDegrees(turningCANCoderOffsetDegrees);
+
+        // m_CANCoderOffset = Rotation2d.fromDegrees(turningCANCoderOffsetDegrees);
 
         // m_driveMotor.setIdleMode(IdleMode.kBrake);
         // m_turningMotor.setIdleMode(IdleMode.kCoast);

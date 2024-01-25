@@ -47,7 +47,11 @@ public class DriveCommand extends CommandBase {
         }
 
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xDot, yDot, thetaDot, drivetrain.getHeading());
-        //System.out.println(xDot+":"+yDot+":"+thetaDot);
+        //System.out.println(drivetrain.getHeading());
+        if(chassisSpeeds == new ChassisSpeeds(xDot, yDot, thetaDot)){
+          System.out.println("good");
+        }
+        System.out.println(xDot+":"+yDot+":"+thetaDot);
         
         drivetrain.drive(chassisSpeeds, true);
     }
