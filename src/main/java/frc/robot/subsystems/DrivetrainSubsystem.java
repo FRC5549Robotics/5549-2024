@@ -23,32 +23,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
       new SwerveModule(
           Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR,
           Constants.FRONT_LEFT_MODULE_STEER_MOTOR,
-          Constants.FRONT_LEFT_MODULE_STEER_ENCODER,
-          Constants.CANCoder.kFrontLefTurningEncoderOffset
+          Constants.FRONT_LEFT_MODULE_STEER_ENCODER
           );
 
   private final SwerveModule m_frontRight =
       new SwerveModule(
           Constants.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
           Constants.FRONT_RIGHT_MODULE_STEER_MOTOR,
-          Constants.FRONT_RIGHT_MODULE_STEER_ENCODER,
-          Constants.CANCoder.kFrontRightTurningEncoderOffset
+          Constants.FRONT_RIGHT_MODULE_STEER_ENCODER
           );
 
   private final SwerveModule m_rearLeft =
       new SwerveModule(
         Constants.BACK_LEFT_MODULE_DRIVE_MOTOR,
         Constants.BACK_LEFT_MODULE_STEER_MOTOR,
-        Constants.BACK_LEFT_MODULE_STEER_ENCODER,
-          Constants.CANCoder.kRearLeftTurningEncoderOffset
+        Constants.BACK_LEFT_MODULE_STEER_ENCODER
           );
 
   private final SwerveModule m_rearRight =
       new SwerveModule(
         Constants.BACK_RIGHT_MODULE_DRIVE_MOTOR,
         Constants.BACK_RIGHT_MODULE_STEER_MOTOR,
-        Constants.BACK_RIGHT_MODULE_STEER_ENCODER,
-          Constants.CANCoder.kRearRightTurningEncoderOffset
+        Constants.BACK_RIGHT_MODULE_STEER_ENCODER
           );
 
   private SwerveModule[] modules = {m_frontLeft, m_frontRight, m_rearLeft, m_rearRight};
@@ -73,9 +69,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
   /** Creates a new DriveSubsystem. */
   public DrivetrainSubsystem() {
+
     fixBackRight();
 
-    // Zero out the gyro.
+    // Zero out the gyro
     m_odometry = new SwerveDriveOdometry(Constants.kDriveKinematics, getHeading(), getModulePositions());
 
     for (SwerveModule module: modules) {
@@ -103,16 +100,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     updateOdometry(); 
-    
-    SmartDashboard.putNumber("Front Left CANCoder", m_frontLeft.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Front Right CANCoder", m_frontRight.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getState().angle.getDegrees());
-    SmartDashboard.putNumber("Back Right CANCoder", m_rearRight.getState().angle.getDegrees());
 
-    SmartDashboard.putNumber("Front Left CANCoder", m_frontLeft.getTurnCANcoder().getPosition().getValueAsDouble());
-    SmartDashboard.putNumber("Front Right CANCoder", m_frontRight.getTurnCANcoder().getPosition().getValueAsDouble());
-    SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getTurnCANcoder().getPosition().getValueAsDouble());
-    SmartDashboard.putNumber("Back Right CANCoder", m_rearRight.getTurnCANcoder().getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Front Left CANCoder", m_frontLeft.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
+    SmartDashboard.putNumber("Front Right CANCoder", m_frontRight.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
+    SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
+    SmartDashboard.putNumber("Back Right CANCoder", m_rearRight.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
 
     SmartDashboard.putNumber("Front Left Neo Encoder", m_frontLeft.getTurnEncoder().getPosition());
     SmartDashboard.putNumber("Front Right Neo Encoder", m_frontRight.getTurnEncoder().getPosition());
@@ -126,9 +118,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("currentAngle", getPose().getRotation().getRadians());
     SmartDashboard.putNumber("targetPoseAngle", m_targetPose.getRotation().getRadians());
 
-    if(Math.abs(m_frontRight.getTurnEncoder().getPosition() - m_frontRight.getTurnCANcoderAngle()) > 2){
-      m_frontRight.getTurnEncoder().setPosition(m_frontRight.getTurnCANcoderAngle());
-    }
+    // This was due to pinion slippage: If it is still happening, uncomment this code
+    // if(Math.abs(m_frontRight.getTurnEncoder().getPosition() - m_frontRight.getTurnCANcoderAngle()) > 2){
+    //   m_frontRight.getTurnEncoder().setPosition(m_frontRight.getTurnCANcoderAngle());
+    // }
+
     // SmartDashboard.putNumber("Distance 0", modules[0].getDriveDistanceMeters());
     // SmartDashboard.putNumber("Distance 1", modules[1].getDriveDistanceMeters());
     // SmartDashboard.putNumber("Distance 2", modules[2].getDriveDistanceMeters());
@@ -235,6 +229,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates =
         Constants.kDriveKinematics.toSwerveModuleStates(speeds);
            
+    System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
     if (normalize) normalizeDrive(swerveModuleStates, speeds);
     
     setModuleStates(swerveModuleStates);

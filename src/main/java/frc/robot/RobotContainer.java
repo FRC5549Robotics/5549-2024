@@ -48,6 +48,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
+    resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
     //m_autoChooser.setDefaultOption("Only Drive Middle", m_ZeroConeAutoMiddle);
 
   }

@@ -16,34 +16,27 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 8; 
-    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 7;
+    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 4; 
+    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 3;
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 10; 
 
-    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 6; 
-    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 5;
-    public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 11; 
+    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 2; 
+    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 1;
+    public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 13; 
 
-    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 2; 
-    public static final int BACK_LEFT_MODULE_STEER_MOTOR = 1; 
+    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 6; 
+    public static final int BACK_LEFT_MODULE_STEER_MOTOR = 5; 
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 12; 
 
-    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 4; 
-    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 3; 
-    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 13;  
+    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 8; 
+    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 7; 
+    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 11;  
 
     // Define the conventional order of our modules when putting them into arrays
     public static final int FRONT_LEFT =0;
     public static final int FRONT_RIGHT =1;
     public static final int REAR_LEFT =2;
     public static final int REAR_RIGHT =3;
-
-    public static final class CANCoder {
-      public static final double kRearRightTurningEncoderOffset = 359.661088;
-      public static final double kFrontRightTurningEncoderOffset = 359.766785;
-      public static final double kFrontLefTurningEncoderOffset = 1.238770;
-      public static final double kRearLeftTurningEncoderOffset = 209.560776;
-    }
 
     public static final boolean kFrontLeftDriveEncoderReversed = false;
     public static final boolean kFrontRightDriveEncoderReversed = false;
@@ -67,10 +60,10 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4.0;
     // Units are meters.
     // Distance between centers of right and left wheels on robot
-    public static final double kTrackWidth = 0.56515; // 22.5 in
+    public static final double kTrackWidth = 0.56515;
     
     // Distance between front and back wheels on robot
-    public static final double kWheelBase = 0.56515; // 24.5 in
+    public static final double kWheelBase = 0.56515;
 
     // Units are meters per second
     public static final double kMaxTranslationalVelocity = 6380.0 / 60.0 *
@@ -128,6 +121,7 @@ public final class Constants {
     public static final int INTAKE_BUTTON = 3;
     public static final int SHOOT_BUTTON = 4;
     public static final int INDEX_OUT = 1;
+    public static final int ZERO_GYRO = 4;
 
     //Shooter Solenoids
     public static final int SHOOTER_SOLENOID_FORWARD = 6;
