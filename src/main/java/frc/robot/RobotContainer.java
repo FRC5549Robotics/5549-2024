@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.XboxController;
+
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import org.ejml.simple.SimpleBase;
@@ -28,19 +31,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  private final XboxController m_controller = new XboxController(0);
-  private final XboxController m_controller2 = new XboxController(1);
+  private final CommandXboxController m_controller = new CommandXboxController(Constants.DRIVE_CONTROLLER);
+  private final CommandXboxController m_controller2 = new CommandXboxController(Constants.OPERATOR_CONTROLLER);
   private final DrivetrainSubsystem m_drive = new DrivetrainSubsystem();
 
-  JoystickButton indexInButton = new JoystickButton(m_controller2, Constants.INDEXER_BUTTON);
-  JoystickButton resetNavXButton = new JoystickButton(m_controller, 4);
-  Trigger shootTrigger = new JoystickButton(m_controller2, Constants.SHOOT_TRIGGER);
-  JoystickButton intakeButton = new JoystickButton(m_controller2, Constants.INTAKE_BUTTON);
-  JoystickButton pnuematics = new JoystickButton(m_controller2, Constants.PNEUMATIC_BUTTON);
-  JoystickButton shootButton = new JoystickButton(m_controller2, Constants.SHOOT_BUTTON);
-  JoystickButton indexOutButton = new JoystickButton(m_controller2, Constants.INDEX_OUT);
+  JoystickButton resetNavXButton = new JoystickButton(m_controller.getHID(), Constants.RESET_NAVX_BUTTON);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+  ChoreoTrajectory traj = Choreo.getTrajectory("Simple");
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -71,6 +69,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return m_drive.ChoreoTrajectoryFollower(traj);
   }
 }

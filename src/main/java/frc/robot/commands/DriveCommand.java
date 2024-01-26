@@ -1,26 +1,28 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import java.lang.Math;
+import java.lang.Math; 
 
-public class DriveCommand extends CommandBase {
+public class DriveCommand extends Command {
 
     private double xDot;
     private double yDot;
     private double thetaDot;
     private boolean fieldRelative;
     private ChassisSpeeds chassisSpeeds, chassisPercent;
-    private XboxController m_controller;
+    private CommandXboxController m_controller;
 
     // The subsystem the command runs on
     public final DrivetrainSubsystem drivetrain;
 
-    public DriveCommand(DrivetrainSubsystem subsystem, XboxController controller){
+    public DriveCommand(DrivetrainSubsystem subsystem, CommandXboxController controller){
         drivetrain = subsystem;
         m_controller = controller;
         addRequirements(drivetrain);

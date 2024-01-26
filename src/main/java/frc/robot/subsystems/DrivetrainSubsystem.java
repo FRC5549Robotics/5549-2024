@@ -1,10 +1,17 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+import java.util.function.BooleanSupplier;
+
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
 import  com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -138,11 +145,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Angle 2", modules[2].getTurnCANcoderAngle());
     // SmartDashboard.putNumber("Angle 3", modules[3].getTurnCANcoderAngle());
 
-    if (0.49 <= timer.get() && timer.get() <= 0.51) {
+    if (1 <= timer.get() && timer.get() <= 1.03) {
       m_ahrs.zeroYaw();
       System.out.println("Zeroed: " + getHeading());
     }
-
   }
 
   public void updateOdometry() {
@@ -392,4 +398,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //       this // Requires this drive subsystem
   //   );
   // }
+  public Command ChoreoTrajectoryFollower(ChoreoTrajectory traj){
+    return Choreo.choreoSwerveCommand(
+      traj, 
+      this::getPose, 
+      new PIDController(1, 0.0, 0.0),  
+      new PIDController(1, 0.0, 0.0),  
+      new PIDController(0.5, 0.0, 0.0),  
+      (ChassisSpeeds speeds) -> 
+          drive(new ChassisSpeeds(-speeds.vxMetersPerSecond,-speeds.vyMetersPerSecond,-speeds.omegaRadiansPerSecond), true),
+      () -> {
+          Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+              return alliance.isPresent() && alliance.get() == Alliance.Red;
+      },
+      this);
+  }
+
 }
