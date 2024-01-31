@@ -13,7 +13,10 @@ import edu.wpi.first.wpilibj.XboxController;
 
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
-import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS; 
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj.SPI;
 import org.ejml.simple.SimpleBase;
 import org.ejml.simple.SimpleMatrix;
@@ -38,6 +41,13 @@ public class RobotContainer {
   JoystickButton resetNavXButton = new JoystickButton(m_controller.getHID(), Constants.RESET_NAVX_BUTTON);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+  // public static ChoreoTrajectory LefttoNote = Choreo.getTrajectory("LefttoNote");
+  // public static ChoreoTrajectory NotetoLeft = Choreo.getTrajectory("NotetoLeft");
+  // public static ChoreoTrajectory MidtoNote = Choreo.getTrajectory("MidtoNote");
+  // public static ChoreoTrajectory NotetoMid = Choreo.getTrajectory("NotetoMid");
+  // public static ChoreoTrajectory RighttoNote = Choreo.getTrajectory("RighttoNote");
+  // public static ChoreoTrajectory NotetoRight = Choreo.getTrajectory("NotetoRight");
+
   ChoreoTrajectory traj = Choreo.getTrajectory("Simple");
 
   public RobotContainer() {
@@ -45,7 +55,6 @@ public class RobotContainer {
     configureBindings();
 
     //m_autoChooser.setDefaultOption("Only Drive Middle", m_ZeroConeAutoMiddle);
-
   }
 
   /**
