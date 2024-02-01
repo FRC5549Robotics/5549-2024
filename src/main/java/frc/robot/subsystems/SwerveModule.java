@@ -2,10 +2,10 @@ package frc.robot.subsystems;
 
 import java.io.Console;
 
-
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -50,13 +50,16 @@ public class SwerveModule extends SubsystemBase {
     public SwerveModule(
                         int driveMotorChannel,
                         int turningMotorChannel,
-                        int turningCANCoderChannel,
-                        double turningCANCoderOffsetDegrees) {
+                        int turningCANCoderChannel) {
 
         m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
         m_driveMotor.restoreFactoryDefaults();
+        m_driveMotor.setIdleMode(IdleMode.kBrake);
         m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
         m_turningMotor.restoreFactoryDefaults();
+        m_turningMotor.setIdleMode(IdleMode.kBrake);
+        m_driveMotor.setSmartCurrentLimit(40);
+        m_turningMotor.setSmartCurrentLimit(40);
         m_driveMotor.burnFlash();
         m_turningMotor.burnFlash();
         Timer.delay(0.5);
@@ -67,14 +70,10 @@ public class SwerveModule extends SubsystemBase {
         m_turningCANCoder = new CANcoder(turningCANCoderChannel);
     
         m_turningCANCoder.setPosition(m_turningCANCoder.getAbsolutePosition().getValueAsDouble());
-        var canConfigs = new CANcoderConfiguration();
-        canConfigs.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
-        m_turningCANCoder.setPosition(0);        
-        m_turningCANCoder.getConfigurator().apply(canConfigs);
-        
-
+        // m_turningCANCoder.setPosition(0);        
         m_turningEncoder = m_turningMotor.getEncoder();
-//        m_CANCoderOffset = Rotation2d.fromDegrees(turningCANCoderOffsetDegrees);
+
+        // m_CANCoderOffset = Rotation2d.fromDegrees(turningCANCoderOffsetDegrees);
 
         // m_driveMotor.setIdleMode(IdleMode.kBrake);
         // m_turningMotor.setIdleMode(IdleMode.kCoast);
@@ -218,18 +217,11 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void syncTurningEncoders() {
-        m_turningEncoder.setPosition(m_turningCANCoder.getAbsolutePosition().getValueAsDouble());
+        m_turningEncoder.setPosition(m_turningCANCoder.getAbsolutePosition().getValueAsDouble()*360);
     }
 
     /** Zeros all the SwerveModule encoders. */
     public void resetEncoders() {
         // Reset the cumulative rotation counts of the SparkMax motors
-        m_turningEncoder.setPosition(0.0);
-
-        m_turningCANCoder.setPosition(0.0);
-        var canConfigs = new CANcoderConfiguration();
-
-        canConfigs.MagnetSensor.MagnetOffset = canConfigs.MagnetSensor.MagnetOffset - m_turningCANCoder.getAbsolutePosition().getValueAsDouble();
-        m_turningCANCoder.getConfigurator().apply(canConfigs);
     }
 }

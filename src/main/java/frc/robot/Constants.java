@@ -16,34 +16,30 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 8; 
-    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 7;
+    public static final int DRIVE_CONTROLLER = 0;
+    public static final int OPERATOR_CONTROLLER = 1;
+
+    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 4; 
+    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 3;
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 10; 
 
-    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 6; 
-    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 5;
-    public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 11; 
+    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 2; 
+    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 1;
+    public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 13; 
 
-    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 2; 
-    public static final int BACK_LEFT_MODULE_STEER_MOTOR = 1; 
+    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 6; 
+    public static final int BACK_LEFT_MODULE_STEER_MOTOR = 5; 
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 12; 
 
-    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 4; 
-    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 3; 
-    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 13;  
+    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 8; 
+    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 7; 
+    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 11;  
 
     // Define the conventional order of our modules when putting them into arrays
     public static final int FRONT_LEFT =0;
     public static final int FRONT_RIGHT =1;
     public static final int REAR_LEFT =2;
     public static final int REAR_RIGHT =3;
-
-    public static final class CANCoder {
-      public static final double kRearRightTurningEncoderOffset = 359.661088;
-      public static final double kFrontRightTurningEncoderOffset = 359.766785;
-      public static final double kFrontLefTurningEncoderOffset = 1.238770;
-      public static final double kRearLeftTurningEncoderOffset = 209.560776;
-    }
 
     public static final boolean kFrontLeftDriveEncoderReversed = false;
     public static final boolean kFrontRightDriveEncoderReversed = false;
@@ -67,10 +63,10 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4.0;
     // Units are meters.
     // Distance between centers of right and left wheels on robot
-    public static final double kTrackWidth = 0.56515; // 22.5 in
+    public static final double kTrackWidth = 0.56515;
     
     // Distance between front and back wheels on robot
-    public static final double kWheelBase = 0.56515; // 24.5 in
+    public static final double kWheelBase = 0.56515;
 
     // Units are meters per second
     public static final double kMaxTranslationalVelocity = 6380.0 / 60.0 *
@@ -81,9 +77,8 @@ public final class Constants {
     public static final double kMaxRotationalVelocity = kMaxTranslationalVelocity /
     Math.hypot(kTrackWidth / 2.0, kWheelBase / 2.0);; //max 5.0
 
-    // Max veloc
-
-    //The locations for the modules must be relative to the center of the robot. 
+    //The locations f
+    //*or the modules must be relative to the center of the robot. 
     // Positive x values represent moving toward the front of the robot 
     // Positive y values represent moving toward the left of the robot.
     public static final SwerveDriveKinematics kDriveKinematics =
@@ -101,45 +96,8 @@ public final class Constants {
     public static final double kDriveD = 0.0;
     public static final double kDriveFF = 2.96;
 
-    public static final double kTurningP = 0.02;
+    public static final double kTurningP = 0.01;
     public static final double kTurningI = 0.0;
-    public static final double kTurningD = 0.005;
-    
-    // public static final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(0.254, 0.137);
-    public static double INITIAL_HEADING;   
-    public static double POLE_DISTANCE = 39.75;
-
-    // Indexer
-    public static final int INDEXER_MOTOR = 20;
-    //TBD
-    public static final int INDEXER_SPEED = 1;
-    public static final int INDEXER_BUTTON = 2;
-
-    //Shintake
-    public static final int SHINTAKE_MOTOR = 21;
-    public static final double kP = 0.46416;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kS = 0.020963;
-    public static final double kV = 0.18825;
-    public static final double kA = 0.013596;
-    public static final double tP = 1/27;
-    public static final int SHOOT_TRIGGER = 2;
-    public static final int INTAKE_BUTTON = 3;
-    public static final int SHOOT_BUTTON = 4;
-    public static final int INDEX_OUT = 1;
-
-    //Shooter Solenoids
-    public static final int SHOOTER_SOLENOID_FORWARD = 6;
-    public static final int SHOOTER_SOLENOID_REVERSE = 7;
-    public static final int PNEUMATIC_BUTTON  = 8;
-
-    //ultrasonic ports
-    public static final int ULTRASONIC_PING = 1;
-    public static final int ULTRASONIC_ECHO = 0;
-
-    //LED 
-    public static final int LED_PORT = 1;
-    //TBD
-    public static final double SHINTAKE_SPEED = 0.75;
+    public static final double kTurningD = 0.0;
+    public static final int RESET_NAVX_BUTTON = 4;
 }
