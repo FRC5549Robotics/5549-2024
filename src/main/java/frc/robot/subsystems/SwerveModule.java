@@ -117,7 +117,7 @@ public class SwerveModule extends SubsystemBase {
         // double m1 = m_turningEncoder.getPosition() % 360.0;
         // double m2 = (m1 < 0) ? m1 + 360 : m1;
 
-        double m2 = (m_turningEncoder.getPosition() % 360 + 360) % 360;
+        double m2 = ((m_turningEncoder.getPosition()*360) % 360 + 360) % 360;
         String x;
         String y;
         x= null;
@@ -153,7 +153,7 @@ public class SwerveModule extends SubsystemBase {
      */
     public void setDesiredState(SwerveModuleState state) {
 
-        Rotation2d curAngle = Rotation2d.fromDegrees(m_turningEncoder.getPosition());
+        Rotation2d curAngle = Rotation2d.fromDegrees(m_turningEncoder.getPosition()*360);
 
         double delta = deltaAdjustedAngle(state.angle.getDegrees(), curAngle.getDegrees());
 
@@ -178,7 +178,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void setOpenLoopState(SwerveModuleState state) {
-        Rotation2d curAngle = Rotation2d.fromDegrees(m_turningEncoder.getPosition());
+        Rotation2d curAngle = Rotation2d.fromDegrees(m_turningEncoder.getPosition()*360);
 
         double delta = deltaAdjustedAngle(state.angle.getDegrees(), curAngle.getDegrees());
 
