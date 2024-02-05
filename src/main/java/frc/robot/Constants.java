@@ -100,4 +100,11 @@ public final class Constants {
     public static final double kTurningI = 0.0;
     public static final double kTurningD = 0.0;
     public static final int RESET_NAVX_BUTTON = 4;
+
+
+    //Pivot Constants
+    public static final double PIVOT_DEPLOY_SETPOINT = 1;
+    public static final double PIVOT_STOW_SETPOINT = 0;
+    public static final int DEPLOY_PIVOT_BUTTON = 1;
+
 }

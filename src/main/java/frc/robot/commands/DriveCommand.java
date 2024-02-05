@@ -36,7 +36,7 @@ public class DriveCommand extends Command {
     public void execute() {
         xDot = m_controller.getLeftY() * Constants.kMaxTranslationalVelocity;
         yDot = m_controller.getLeftX() * Constants.kMaxTranslationalVelocity;
-        thetaDot = m_controller.getRightX() * Constants.kMaxRotationalVelocity;
+        thetaDot = m_controller.getRightX() * m_controller.getRightX() * Constants.kMaxRotationalVelocity;
         fieldRelative = true;
         if(Math.abs(xDot)<0.06*Constants.kMaxTranslationalVelocity){
           xDot = 0;
@@ -44,7 +44,7 @@ public class DriveCommand extends Command {
         if(Math.abs(yDot)<0.06*Constants.kMaxTranslationalVelocity){
           yDot = 0;
         }
-        if(Math.abs(thetaDot)<0.06*Constants.kMaxRotationalVelocity){
+        if(Math.abs(thetaDot)<0.06*0.06*Constants.kMaxRotationalVelocity){
           thetaDot = 0;
         }
 

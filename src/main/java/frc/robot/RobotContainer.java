@@ -5,11 +5,13 @@
 package frc.robot;
 
 import frc.robot.Constants;
+import frc.robot.commands.DeployPivot;
 import frc.robot.commands.DriveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.Pivot;
 
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
@@ -37,8 +39,10 @@ public class RobotContainer {
   private final CommandXboxController m_controller = new CommandXboxController(Constants.DRIVE_CONTROLLER);
   private final CommandXboxController m_controller2 = new CommandXboxController(Constants.OPERATOR_CONTROLLER);
   private final DrivetrainSubsystem m_drive = new DrivetrainSubsystem();
+  private final Pivot m_pivot = new Pivot();
 
   JoystickButton resetNavXButton = new JoystickButton(m_controller.getHID(), Constants.RESET_NAVX_BUTTON);
+  JoystickButton deployPivotButton = new JoystickButton(m_controller2.getHID(), Constants.DEPLOY_PIVOT_BUTTON);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
   // public static ChoreoTrajectory LefttoNote = Choreo.getTrajectory("LefttoNote");
@@ -69,6 +73,7 @@ public class RobotContainer {
   private void configureBindings() {
     m_drive.setDefaultCommand(new DriveCommand(m_drive, m_controller));
     resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
+    deployPivotButton.onTrue(new DeployPivot(m_pivot));
   }
 
   /**
