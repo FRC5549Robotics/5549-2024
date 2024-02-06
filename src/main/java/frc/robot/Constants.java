@@ -106,5 +106,17 @@ public final class Constants {
     public static final double PIVOT_DEPLOY_SETPOINT = 1;
     public static final double PIVOT_STOW_SETPOINT = 0;
     public static final int DEPLOY_PIVOT_BUTTON = 1;
+    public static final int PIVOT_MOTOR_LEFT = 20;
+    public static final int PIVOT_MOTOR_RIGHT = 21;
+    public static final int PIVOT_JOYSTICK = 1;
+    public static final double PIVOT_DEADBAND = 0.05;
+    public static final double PIVOT_SCALING_FACTOR = 0.5;
 
+    //Intake Constants
+    public static final int INTAKE_MOTOR = 22; 
+    public static final int INTAKE_TRIGGER = 2;
+    public static final double INTAKE_DEADBAND = 0.05;
+    public static final double INTAKE_SCALING_FACTOR = 0.8;
+    public static final int INTAKE_SHOOTER_BUTTON = 5;
+    public static final double INTAKE_OUTTAKE_SPEED = 0.8;
 }

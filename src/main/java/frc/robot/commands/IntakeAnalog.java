@@ -4,40 +4,29 @@
 
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Intake;
 
-import java.lang.Math;
-
-public class DeployPivot extends Command {
-
-  CANSparkMax pivotRight;
-  CANSparkMax pivotLeft;
-  PIDController controller;
-  RelativeEncoder rightEncoder;
-  RelativeEncoder leftEncoder;
-  Pivot m_pivot;
-  
-  /** Creates a new DeployPivot. */
-  public DeployPivot(Pivot pivot) {
+public class IntakeAnalog extends Command {
+  /** Creates a new Intake. */
+  Intake m_intake;
+  CommandXboxController m_controller;
+  public IntakeAnalog(Intake intake, CommandXboxController controller) {
+    m_intake = intake;
+    m_controller = controller;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_pivot.checkLag();
+    m_intake.intake(m_controller.getLeftTriggerAxis()*Constants.INTAKE_SCALING_FACTOR);
   }
 
   // Called once the command ends or is interrupted.

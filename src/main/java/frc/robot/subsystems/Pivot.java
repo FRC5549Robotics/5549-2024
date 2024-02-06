@@ -23,8 +23,8 @@ public class Pivot extends SubsystemBase {
   /** Creates a new Pivot. */
   
   public Pivot() {
-    pivotRight = new CANSparkMax(0, MotorType.kBrushless);
-    pivotLeft = new CANSparkMax(1, MotorType.kBrushless);
+    pivotRight = new CANSparkMax(Constants.PIVOT_MOTOR_RIGHT, MotorType.kBrushless);
+    pivotLeft = new CANSparkMax(Constants.PIVOT_MOTOR_LEFT, MotorType.kBrushless);
     controller = new PIDController(1.0, 0.0, 0.05);
     rightEncoder = pivotRight.getEncoder();
     leftEncoder = pivotLeft.getEncoder();

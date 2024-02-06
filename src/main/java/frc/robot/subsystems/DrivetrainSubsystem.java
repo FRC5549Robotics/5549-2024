@@ -237,15 +237,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     this.speeds = speeds;
 
+    SwerveModuleState[] swerveModuleStates =
+        Constants.kDriveKinematics.toSwerveModuleStates(speeds);
+    System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
+    
     if (speeds.vxMetersPerSecond == 0 && speeds.vyMetersPerSecond == 0 && speeds.omegaRadiansPerSecond == 0) {
-      brake();
+      //brake();
       return;
     }
 
-    SwerveModuleState[] swerveModuleStates =
-        Constants.kDriveKinematics.toSwerveModuleStates(speeds);
+    // SwerveModuleState[] swerveModuleStates =
+    //     Constants.kDriveKinematics.toSwerveModuleStates(speeds);
            
-    System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
+    // System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
     if (normalize) normalizeDrive(swerveModuleStates, speeds);
     
     setModuleStates(swerveModuleStates);
