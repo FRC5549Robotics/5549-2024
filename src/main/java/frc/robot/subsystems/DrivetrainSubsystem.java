@@ -1,11 +1,12 @@
 package frc.robot.subsystems;
 
 import java.util.Optional;
-import java.util.function.BooleanSupplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
-import com.kauailabs.navx.frc.AHRS;
+import  com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
@@ -16,7 +17,6 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 // import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 // import com.pathplanner.lib.PathPlannerTrajectory;
@@ -79,7 +79,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public DrivetrainSubsystem() {
     fixBackRight();
 
-    // Zero out the gyro
+    // Zero out the gyro.
     m_odometry = new SwerveDriveOdometry(Constants.kDriveKinematics, getHeading(), getModulePositions());
 
     for (SwerveModule module: modules) {
@@ -101,22 +101,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
     timer.reset();
     timer.start();
     lastTime = 0;
-    new WaitCommand(0.5);
-    System.out.println("Before: "+getHeading());
-    m_ahrs.zeroYaw();
-    System.out.println("After: "+getHeading());
-
   }
 
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
     updateOdometry(); 
+    
+    SmartDashboard.putNumber("Front Left CANCoder", m_frontLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Front Right CANCoder", m_frontRight.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("Back Right CANCoder", m_rearRight.getState().angle.getDegrees());
 
-    SmartDashboard.putNumber("Front Left CANCoder", m_frontLeft.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
-    SmartDashboard.putNumber("Front Right CANCoder", m_frontRight.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
-    SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
-    SmartDashboard.putNumber("Back Right CANCoder", m_rearRight.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
+    SmartDashboard.putNumber("Front Left CANCoder", m_frontLeft.getTurnCANcoder().getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Front Right CANCoder", m_frontRight.getTurnCANcoder().getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getTurnCANcoder().getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Back Right CANCoder", m_rearRight.getTurnCANcoder().getPosition().getValueAsDouble());
 
     SmartDashboard.putNumber("Front Left Neo Encoder", m_frontLeft.getTurnEncoder().getPosition());
     SmartDashboard.putNumber("Front Right Neo Encoder", m_frontRight.getTurnEncoder().getPosition());
@@ -130,11 +130,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("currentAngle", getPose().getRotation().getRadians());
     SmartDashboard.putNumber("targetPoseAngle", m_targetPose.getRotation().getRadians());
 
-    // This was due to pinion slippage: If it is still happening, uncomment this code
-    // if(Math.abs(m_frontRight.getTurnEncoder().getPosition() - m_frontRight.getTurnCANcoderAngle()) > 2){
-    //   m_frontRight.getTurnEncoder().setPosition(m_frontRight.getTurnCANcoderAngle());
-    // }
-
+    if(Math.abs(m_frontRight.getTurnEncoder().getPosition() - m_frontRight.getTurnCANcoderAngle()) > 2){
+      m_frontRight.getTurnEncoder().setPosition(m_frontRight.getTurnCANcoderAngle());
+    }
     // SmartDashboard.putNumber("Distance 0", modules[0].getDriveDistanceMeters());
     // SmartDashboard.putNumber("Distance 1", modules[1].getDriveDistanceMeters());
     // SmartDashboard.putNumber("Distance 2", modules[2].getDriveDistanceMeters());
@@ -145,10 +143,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Angle 2", modules[2].getTurnCANcoderAngle());
     // SmartDashboard.putNumber("Angle 3", modules[3].getTurnCANcoderAngle());
 
-    if (1 <= timer.get() && timer.get() <= 1.03) {
-      m_ahrs.zeroYaw();
-      System.out.println("Zeroed: " + getHeading());
-    }
+    Logger.recordOutput("Odometry/Robot", getPose());
+    Logger.recordOutput("SwerveStates/Measured", getModuleStates());
+
   }
 
   public void updateOdometry() {
@@ -245,7 +242,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates =
         Constants.kDriveKinematics.toSwerveModuleStates(speeds);
            
-    System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
     if (normalize) normalizeDrive(swerveModuleStates, speeds);
     
     setModuleStates(swerveModuleStates);
@@ -254,7 +250,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void openLoopDrive(ChassisSpeeds speeds) {
     this.speeds = speeds;
     if (speeds.vxMetersPerSecond == 0 && speeds.vyMetersPerSecond == 0 && speeds.omegaRadiansPerSecond == 0) {
-      brake();
+      brake();  
       return;
     }
 
@@ -348,7 +344,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //   pose);
   // }
   public void zeroGyroscope(){
-    m_ahrs.zeroYaw();
+    m_ahrs.reset();
   }
 
   /**
@@ -357,10 +353,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return the robot's heading as a Rotation2d
    */
   public Rotation2d getHeading() {
-    float raw_yaw = m_ahrs.getYaw(); // Returns yaw as -180 to +180.
+    float raw_yaw = m_ahrs.getYaw() - (float)offset; // Returns yaw as -180 to +180.
     // float raw_yaw = m_ahrs.getYaw(); // Returns yaw as -180 to +180.
     float calc_yaw = raw_yaw;
-
 
     if (0.0 > raw_yaw ) { // yaw is negative
       calc_yaw += 360.0;
@@ -383,35 +378,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
   private SwerveModuleState[] states = Constants.kDriveKinematics.toSwerveModuleStates(m_chassisSpeeds);
 
-  // public Command followTrajectoryCommand(PathPlannerTrajectory traj) {
-  //   return new PPSwerveControllerCommand(
-  //       traj, 
-  //       this::getPose, // Pose supplier
-  //       Constants.kDriveKinematics, // SwerveDriveKinematics
-  //       new PIDController(1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-  //       new PIDController(3.5, 0, 0), // Y controller (usually the same values as X controller)
-  //       new PIDController(1.7, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-  //       (SwerveModuleState[] states) -> {
-  //              this.m_chassisSpeeds = Constants.kDriveKinematics.toChassisSpeeds(states);
-  //      }, // Module states consumer
-  //       true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-  //       this // Requires this drive subsystem
-  //   );
-  // }
   public Command ChoreoTrajectoryFollower(ChoreoTrajectory traj){
-    return Choreo.choreoSwerveCommand(
-      traj, 
-      this::getPose, 
-      new PIDController(1, 0.0, 0.0),  
-      new PIDController(1, 0.0, 0.0),  
-      new PIDController(0.5, 0.0, 0.0),  
-      (ChassisSpeeds speeds) -> 
-          drive(new ChassisSpeeds(-speeds.vxMetersPerSecond,-speeds.vyMetersPerSecond,-speeds.omegaRadiansPerSecond), true),
-      () -> {
-          Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
-              return alliance.isPresent() && alliance.get() == Alliance.Red;
-      },
-      this);
+  return Choreo.choreoSwerveCommand(
+    traj, 
+    this::getPose, 
+    new PIDController(1, 0.0, 0.0),  
+    new PIDController(1, 0.0, 0.0),  
+    new PIDController(0.5, 0.0, 0.0),  
+    (ChassisSpeeds speeds) -> 
+        drive(new ChassisSpeeds(-speeds.vxMetersPerSecond,-speeds.vyMetersPerSecond,-speeds.omegaRadiansPerSecond), true),
+    () -> {
+        Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+            return alliance.isPresent() && alliance.get() == Alliance.Red;
+    },
+    this);
   }
-
 }
