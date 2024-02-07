@@ -5,7 +5,7 @@ import java.util.function.BooleanSupplier;
 
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
-import com.kauailabs.navx.frc.AHRS;
+import  com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
@@ -237,19 +237,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     this.speeds = speeds;
 
-    SwerveModuleState[] swerveModuleStates =
-        Constants.kDriveKinematics.toSwerveModuleStates(speeds);
-    System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
-    
     if (speeds.vxMetersPerSecond == 0 && speeds.vyMetersPerSecond == 0 && speeds.omegaRadiansPerSecond == 0) {
-      //brake();
+      brake();
       return;
     }
 
-    // SwerveModuleState[] swerveModuleStates =
-    //     Constants.kDriveKinematics.toSwerveModuleStates(speeds);
+    SwerveModuleState[] swerveModuleStates =
+        Constants.kDriveKinematics.toSwerveModuleStates(speeds);
            
-    // System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
+    System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
     if (normalize) normalizeDrive(swerveModuleStates, speeds);
     
     setModuleStates(swerveModuleStates);
