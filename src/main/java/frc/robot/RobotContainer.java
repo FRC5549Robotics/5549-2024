@@ -17,6 +17,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.SPI;
 import org.ejml.simple.SimpleBase;
 import org.ejml.simple.SimpleMatrix;
@@ -51,6 +52,7 @@ public class RobotContainer {
   ChoreoTrajectory traj = Choreo.getTrajectory("Simple");
 
   public RobotContainer() {
+
     // Configure the trigger bindings
     configureBindings();
 

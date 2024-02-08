@@ -144,7 +144,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Angle 3", modules[3].getTurnCANcoderAngle());
 
     Logger.recordOutput("Odometry/Robot", getPose());
-    Logger.recordOutput("SwerveStates/Measured", getModuleStates());
+    //Logger.recordOutput("SwerveStates/Measured", getModuleStates());
 
   }
 

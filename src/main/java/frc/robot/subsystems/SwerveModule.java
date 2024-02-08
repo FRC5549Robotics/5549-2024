@@ -116,7 +116,7 @@ public class SwerveModule extends SubsystemBase {
         // double m1 = m_turningEncoder.getPosition() % 360.0;
         // double m2 = (m1 < 0) ? m1 + 360 : m1;
 
-        double m2 = ((m_turningEncoder.getPosition()*360) % 360 + 360) % 360;
+        double m2 = ((m_turningEncoder.getPosition()) % 360 + 360) % 360;
         String x;
         String y;
         x= null;
@@ -152,7 +152,7 @@ public class SwerveModule extends SubsystemBase {
      */
     public void setDesiredState(SwerveModuleState state) {
 
-        Rotation2d curAngle = Rotation2d.fromDegrees(m_turningEncoder.getPosition()*360);
+        Rotation2d curAngle = Rotation2d.fromDegrees(m_turningEncoder.getPosition());
 
         double delta = deltaAdjustedAngle(state.angle.getDegrees(), curAngle.getDegrees());
 
@@ -177,7 +177,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void setOpenLoopState(SwerveModuleState state) {
-        Rotation2d curAngle = Rotation2d.fromDegrees(m_turningEncoder.getPosition()*360);
+        Rotation2d curAngle = Rotation2d.fromDegrees(m_turningEncoder.getPosition());
 
         double delta = deltaAdjustedAngle(state.angle.getDegrees(), curAngle.getDegrees());
 
@@ -217,7 +217,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void syncTurningEncoders() {
-        m_turningEncoder.setPosition(m_turningCANCoder.getAbsolutePosition().getValueAsDouble()*360);
+        m_turningEncoder.setPosition(m_turningCANCoder.getAbsolutePosition().getValueAsDouble());
     }
 
     /** Zeros all the SwerveModule encoders. */
