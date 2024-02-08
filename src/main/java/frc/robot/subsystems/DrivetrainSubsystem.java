@@ -102,10 +102,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     timer.start();
     lastTime = 0;
     new WaitCommand(0.5);
-    System.out.println("Before: "+getHeading());
-    m_ahrs.zeroYaw();
-    System.out.println("After: "+getHeading());
-
   }
 
   @Override
@@ -145,7 +141,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Angle 2", modules[2].getTurnCANcoderAngle());
     // SmartDashboard.putNumber("Angle 3", modules[3].getTurnCANcoderAngle());
 
-    if (1 <= timer.get() && timer.get() <= 1.03) {
+    
+    if (1.1 <= timer.get() && timer.get() <= 1.13) {
       m_ahrs.zeroYaw();
       System.out.println("Zeroed: " + getHeading());
     }

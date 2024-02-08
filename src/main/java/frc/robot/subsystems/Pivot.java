@@ -28,6 +28,8 @@ public class Pivot extends SubsystemBase {
     controller = new PIDController(1.0, 0.0, 0.05);
     rightEncoder = pivotRight.getEncoder();
     leftEncoder = pivotLeft.getEncoder();
+    pivotLeft.setIdleMode(IdleMode.kBrake);
+    pivotRight.setIdleMode(IdleMode.kBrake);
     rightEncoder.setVelocityConversionFactor(Constants.kDriveConversionFactor / 60.0);
     rightEncoder.setPositionConversionFactor(Constants.kDriveConversionFactor);
 

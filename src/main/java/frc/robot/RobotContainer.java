@@ -47,6 +47,7 @@ public class RobotContainer {
 
   JoystickButton resetNavXButton = new JoystickButton(m_controller.getHID(), Constants.RESET_NAVX_BUTTON);
   JoystickButton deployPivotButton = new JoystickButton(m_controller2.getHID(), Constants.DEPLOY_PIVOT_BUTTON);
+  JoystickButton retractPivotButton = new JoystickButton(m_controller2.getHID(), Constants.RETRACT_PIVOT_BUTTON);
   JoystickButton intakeShooterButton = new JoystickButton(m_controller2.getHID(), Constants.INTAKE_SHOOTER_BUTTON);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
@@ -78,7 +79,8 @@ public class RobotContainer {
   private void configureBindings() {
     m_drive.setDefaultCommand(new DriveCommand(m_drive, m_controller));
     resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
-    deployPivotButton.onTrue(new DeployPivot(m_pivot));
+    //deployPivotButton.onTrue(new DeployPivot(m_pivot));
+    //retractPivotButton.onTrue(new DeployPivot(m_pivot));
     m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotIntake(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
     m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new IntakeAnalog(m_intake, m_controller2));
     intakeShooterButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));

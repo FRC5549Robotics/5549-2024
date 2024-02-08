@@ -27,6 +27,7 @@ public class DeployPivot extends Command {
   /** Creates a new DeployPivot. */
   public DeployPivot(Pivot pivot) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_pivot = pivot;
   }
 
   // Called when the command is initially scheduled.
