@@ -51,7 +51,7 @@ public final class Constants {
     public static final boolean kRearLeftTurningEncoderReversed = true;
     public static final boolean kRearRightTurningEncoderReversed = true;
 
-    public static final double kWheelDiameterMeters = 0.098; // 0.09398; // 3.7 in
+    public static final double kWheelDiameterMeters = 0.1016; //0.098; // 0.09398; // 3.7 in
 
     // The drive encoder reports in RPM by default. Calculate the conversion factor
     // to make it report in meters per second.

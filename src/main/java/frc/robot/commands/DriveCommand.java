@@ -38,15 +38,29 @@ public class DriveCommand extends Command {
         yDot = m_controller.getLeftX() * Constants.kMaxTranslationalVelocity;
         thetaDot = m_controller.getRightX() * Constants.kMaxRotationalVelocity;
         fieldRelative = true;
-        if(Math.abs(xDot)<0.06*Constants.kMaxTranslationalVelocity){
+        if(Math.abs(xDot)<=0.06*Constants.kMaxTranslationalVelocity){
           xDot = 0;
         }
-        if(Math.abs(yDot)<0.06*Constants.kMaxTranslationalVelocity){
+        else{
+          xDot -= 0.06;
+          xDot *= 1/0.96;
+        }
+        if(Math.abs(yDot)<=0.06*Constants.kMaxTranslationalVelocity){
           yDot = 0;
         }
-        if(Math.abs(thetaDot)<0.06*Constants.kMaxRotationalVelocity){
+        else{
+          yDot -= 0.06;
+          yDot *= 1/0.96;
+        }
+        if(Math.abs(thetaDot)<=0.06*Constants.kMaxRotationalVelocity){
           thetaDot = 0;
         }
+        else{
+          thetaDot -= 0.06;
+          thetaDot *= 1/0.96;
+        }
+        
+        
 
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xDot, yDot, thetaDot, drivetrain.getHeading());
         //System.out.println(drivetrain.getHeading());

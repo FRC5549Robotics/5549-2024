@@ -142,7 +142,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Angle 3", modules[3].getTurnCANcoderAngle());
 
     
-    if (1.1 <= timer.get() && timer.get() <= 1.13) {
+    if (1 <= timer.get() && timer.get() <= 1.5) {
       m_ahrs.zeroYaw();
       System.out.println("Zeroed: " + getHeading());
     }
@@ -241,7 +241,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     SwerveModuleState[] swerveModuleStates =
         Constants.kDriveKinematics.toSwerveModuleStates(speeds);
-           
+
     System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
     if (normalize) normalizeDrive(swerveModuleStates, speeds);
     
@@ -399,16 +399,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return Choreo.choreoSwerveCommand(
       traj, 
       this::getPose, 
-      new PIDController(1, 0.0, 0.0),  
-      new PIDController(1, 0.0, 0.0),  
-      new PIDController(0.5, 0.0, 0.0),  
+      new PIDController(0, 0.0, 0.0),  
+      new PIDController(0, 0.0, 0.0),  
+      new PIDController(0.1, 0.0, 0.001),  
       (ChassisSpeeds speeds) -> 
-          drive(new ChassisSpeeds(-speeds.vxMetersPerSecond,-speeds.vyMetersPerSecond,-speeds.omegaRadiansPerSecond), true),
+          drive(new ChassisSpeeds(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond,speeds.omegaRadiansPerSecond), true),
       () -> {
           Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
               return alliance.isPresent() && alliance.get() == Alliance.Red;
       },
       this);
+  }
+
+  public void ChoreoTest(){
+    System.out.println("the path ends");
   }
 
 }

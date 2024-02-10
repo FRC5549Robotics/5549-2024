@@ -5,16 +5,16 @@
 package frc.robot;
 
 import frc.robot.Constants;
-import frc.robot.commands.DeployPivot;
+// import frc.robot.commands.DeployPivot;
 import frc.robot.commands.DriveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.subsystems.Pivot;
-import frc.robot.subsystems.Intake;
-import frc.robot.commands.PivotIntake;
-import frc.robot.commands.IntakeAnalog;
+// import frc.robot.subsystems.Pivot;
+// import frc.robot.subsystems.Intake;
+// import frc.robot.commands.PivotIntake;
+// import frc.robot.commands.IntakeAnalog;
 
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
@@ -28,6 +28,7 @@ import org.ejml.simple.SimpleMatrix;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 /**
@@ -42,8 +43,8 @@ public class RobotContainer {
   private final CommandXboxController m_controller = new CommandXboxController(Constants.DRIVE_CONTROLLER);
   private final CommandXboxController m_controller2 = new CommandXboxController(Constants.OPERATOR_CONTROLLER);
   private final DrivetrainSubsystem m_drive = new DrivetrainSubsystem();
-  private final Pivot m_pivot = new Pivot();
-  private final Intake m_intake = new Intake();
+  // private final Pivot m_pivot = new Pivot();
+  // private final Intake m_intake = new Intake();
 
   JoystickButton resetNavXButton = new JoystickButton(m_controller.getHID(), Constants.RESET_NAVX_BUTTON);
   JoystickButton deployPivotButton = new JoystickButton(m_controller2.getHID(), Constants.DEPLOY_PIVOT_BUTTON);
@@ -81,10 +82,10 @@ public class RobotContainer {
     resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
     //deployPivotButton.onTrue(new DeployPivot(m_pivot));
     //retractPivotButton.onTrue(new DeployPivot(m_pivot));
-    m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotIntake(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
-    m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new IntakeAnalog(m_intake, m_controller2));
-    intakeShooterButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));
-    m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_intake::off));
+    // m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotIntake(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
+    // m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new IntakeAnalog(m_intake, m_controller2));
+    // intakeShooterButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));
+    // m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_intake::off));
   }
 
   /**
@@ -94,6 +95,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return m_drive.ChoreoTrajectoryFollower(traj);
+    //return m_drive.ChoreoTrajectoryFollower(traj);
+    return new SequentialCommandGroup(m_drive.ChoreoTrajectoryFollower(traj), new InstantCommand(m_drive::ChoreoTest));
   }
 }
