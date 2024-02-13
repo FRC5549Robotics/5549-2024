@@ -120,4 +120,16 @@ public final class Constants {
     public static final double INTAKE_SCALING_FACTOR = 1;
     public static final int INTAKE_SHOOTER_BUTTON = 5;
     public static final double INTAKE_OUTTAKE_SPEED = 0.8;
+
+    //Shooter Constants
+    public static final double SHOOTER_LEFT_MOTOR = 23;
+    public static final double SHOOTER_RIGHT_MOTOR = 24;
+    public static final double SHOOTER_AMP_VELOCITY = 1;
+    public static final double SHOOTER_kP = 0;
+    public static final double SHOOTER_kI = 0;
+    public static final double SHOOTER_kD = 0;
+    public static final double SHOOTER_kS = 0;
+    public static final double SHOOTER_kV = 0;
+    public static final double SHOOTER_kA = 0;
+
 }
