@@ -120,4 +120,8 @@ public final class Constants {
     public static final double INTAKE_SCALING_FACTOR = 1;
     public static final int INTAKE_SHOOTER_BUTTON = 5;
     public static final double INTAKE_OUTTAKE_SPEED = 0.8;
+
+    //Climber Constants
+    public static final int CLIMBER_MOTOR_1 = 15;
+    public static final int CLIMBER_MOTOR_2 = 16;
 }
