@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,12 +29,10 @@ public class Shooter extends SubsystemBase {
 	boolean isOn;
 	PIDController pid = new PIDController(Constants.SHOOTER_kP, Constants.SHOOTER_kI, Constants.SHOOTER_kD);
 	SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.SHOOTER_kV, Constants.SHOOTER_kS, Constants.SHOOTER_kA);
-	CommandXboxController Xbox;
-	Joystick JoystickRight;
 	double targetRPM;
 
 
-	public Shooter(CommandXboxController xbox, Joystick joystickRight) {
+	public Shooter() {
 		ShooterRight = new CANSparkFlex(0, MotorType.kBrushless);
 		ShooterLeft = new CANSparkFlex(1, MotorType.kBrushless);
 
@@ -45,8 +42,6 @@ public class Shooter extends SubsystemBase {
 		SmartDashboard.putNumber("P1 Gain", Constants.SHOOTER_kP);
 		SmartDashboard.putNumber("I1 Gain", Constants.SHOOTER_kI);
 		SmartDashboard.putNumber("D1 Gain", Constants.SHOOTER_kD);
-		Xbox = xbox;
-		JoystickRight = joystickRight;
 	
 		SmartDashboard.putNumber("motor 1 velocity", motor1_encoder.getVelocity());
 		SmartDashboard.putNumber("motor 2 velocity", motor2_encoder.getVelocity());
@@ -70,7 +65,7 @@ public class Shooter extends SubsystemBase {
 
 	public void off(){
 		ShooterRight.set(0);
-    ShooterLeft.set(0);
+    	ShooterLeft.set(0);
 	}
 
 	public void on(double setPoint) {
@@ -83,11 +78,10 @@ public class Shooter extends SubsystemBase {
 		SmartDashboard.putNumber("RPM Left", motor1_encoder.getVelocity());
 		SmartDashboard.putNumber("RPM Right", motor2_encoder.getVelocity());
 	}
-  public void shootAmp(){
+  	public void shootAmp(){
 		ShooterRight.setVoltage(pid.calculate(motor1_encoder.getVelocity(), Constants.SHOOTER_AMP_VELOCITY) + feedforward.calculate(Constants.SHOOTER_AMP_VELOCITY));
 		ShooterLeft.setVoltage(pid.calculate(motor2_encoder.getVelocity(), Constants.SHOOTER_AMP_VELOCITY) + feedforward.calculate(Constants.SHOOTER_AMP_VELOCITY));
-
-  }
+	}
 	
 	@Override
 	public void periodic(){

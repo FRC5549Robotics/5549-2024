@@ -4,19 +4,20 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants;
-import frc.robot.subsystems.Pivot;
+import com.kauailabs.navx.frc.AHRS;
 
-public class PivotIntake extends Command {
-  /** Creates a new PivotIntake. */
-  Pivot m_pivot;
-  CommandXboxController m_controller;
-  public PivotIntake(Pivot pivot, CommandXboxController controller) {
-    m_pivot = pivot;
-    m_controller = controller;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Climber;
+
+public class AutoClimb extends Command {
+
+  Climber m_climber;
+  AHRS m_navx;
+  /** Creates a new AutoClimb. */
+  public AutoClimb(Climber climber, AHRS navx) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_climber = climber;
+    m_navx = navx;
   }
 
   // Called when the command is initially scheduled.
@@ -26,7 +27,7 @@ public class PivotIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_pivot.pivot(-m_controller.getLeftY()*Constants.PIVOT_SCALING_FACTOR);
+    m_climber.autoClimb(m_navx);
   }
 
   // Called once the command ends or is interrupted.

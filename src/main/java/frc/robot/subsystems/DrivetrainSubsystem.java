@@ -62,7 +62,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private final Timer timer;
 
   // The gyro sensor
-  private final AHRS m_ahrs = new AHRS();
+  AHRS m_ahrs;
 //  private final Gyro m_gyro =  new ADIS16470_IMU(); // new ADXRS450_Gyro();
   // private final PigeonIMU m_pigeon = new PigeonIMU(DriveConstants.kPigeonPort);
 
@@ -76,7 +76,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private ChassisSpeeds speeds; 
     
   /** Creates a new DriveSubsystem. */
-  public DrivetrainSubsystem() {
+  public DrivetrainSubsystem(AHRS ahrs) {
     fixBackRight();
 
     // Zero out the gyro
@@ -96,6 +96,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
       m_rearLeft.getDriveDistanceMeters(),
       m_rearRight.getDriveDistanceMeters(),
     };
+
+
+    m_ahrs = ahrs;
 
     timer = new Timer();
     timer.reset();

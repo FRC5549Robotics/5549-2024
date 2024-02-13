@@ -5,8 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants;
+import frc.robot.commands.AutoClimb;
 // import frc.robot.commands.DeployPivot;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.PIDShooter;
+import frc.robot.commands.RetractPivot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,7 +28,11 @@ import com.pathplanner.lib.path.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.SPI;
 import org.ejml.simple.SimpleBase;
 import org.ejml.simple.SimpleMatrix;
+
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -42,14 +49,20 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   private final CommandXboxController m_controller = new CommandXboxController(Constants.DRIVE_CONTROLLER);
   private final CommandXboxController m_controller2 = new CommandXboxController(Constants.OPERATOR_CONTROLLER);
-  private final DrivetrainSubsystem m_drive = new DrivetrainSubsystem();
+  private final AHRS m_ahrs = new AHRS();
+  private final DrivetrainSubsystem m_drive = new DrivetrainSubsystem(m_ahrs);
   // private final Pivot m_pivot = new Pivot();
   // private final Intake m_intake = new Intake();
+  // private final Conveyor m_conveyor = new Conveyor();
+  private final Shooter m_shooter = new Shooter();
+  // private final Climber m_climber = new Climber();
+  // private final Limelight m_limelight = new Limelight();//Find Feedforward Constants );
 
   JoystickButton resetNavXButton = new JoystickButton(m_controller.getHID(), Constants.RESET_NAVX_BUTTON);
   JoystickButton deployPivotButton = new JoystickButton(m_controller2.getHID(), Constants.DEPLOY_PIVOT_BUTTON);
   JoystickButton retractPivotButton = new JoystickButton(m_controller2.getHID(), Constants.RETRACT_PIVOT_BUTTON);
-  JoystickButton intakeShooterButton = new JoystickButton(m_controller2.getHID(), Constants.INTAKE_SHOOTER_BUTTON);
+  JoystickButton intakeShootingButton = new JoystickButton(m_controller2.getHID(), Constants.INTAKE_SHOOTER_BUTTON);
+  JoystickButton autoClimbButton = new JoystickButton(m_controller.getHID(), Constants.CLIMBER_BUTTON);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
   // public static ChoreoTrajectory LefttoNote = Choreo.getTrajectory("LefttoNote");
@@ -64,7 +77,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-
     //m_autoChooser.setDefaultOption("Only Drive Middle", m_ZeroConeAutoMiddle);
   }
 
@@ -80,12 +92,24 @@ public class RobotContainer {
   private void configureBindings() {
     m_drive.setDefaultCommand(new DriveCommand(m_drive, m_controller));
     resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
-    //deployPivotButton.onTrue(new DeployPivot(m_pivot));
-    //retractPivotButton.onTrue(new DeployPivot(m_pivot));
+
+    // Pivot
+    // deployPivotButton.onTrue(new DeployPivot(m_pivot));
+    // retractPivotButton.onTrue(new RetractPivot(m_pivot));
     // m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotIntake(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
+    
+    // Intake
     // m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new IntakeAnalog(m_intake, m_controller2));
-    // intakeShooterButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));
+    // intakeShootingButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));
     // m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_intake::off));
+    
+    //Shooter
+    // m_controller2.axisGreaterThan(Constants.SHOOTER_TRIGGER, Constants.SHOOTER_TRIGGER_THRESHOLD).onTrue(new PIDShooter(m_shooter, m_limelight)).onFalse(new InstantCommand(m_shooter::off));
+    
+    //Climber
+    // autoClimbButton.onTrue(new AutoClimb(m_climber, m_ahrs)).onFalse(new InstantCommand(m_climber::off));
+    m_controller2.axisGreaterThan(, 0)
+
   }
 
   /**
