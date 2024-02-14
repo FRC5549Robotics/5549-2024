@@ -5,33 +5,42 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Shooter;
 import frc.robot.Constants;
-import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Limelight;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID;
 
-public class PivotIntake extends Command {
-  /** Creates a new PivotIntake. */
-  Pivot m_pivot;
-  CommandXboxController m_controller;
-  public PivotIntake(Pivot pivot, CommandXboxController controller) {
-    m_pivot = pivot;
-    m_controller = controller;
+
+public class PIDShooter extends Command {
+  /** Creates a new PIDShooter. */
+  Shooter m_shooter;
+  Double shootSpeed;
+  Limelight m_limelight;
+  public PIDShooter(Shooter shooter, Limelight limelight) {
     // Use addRequirements() here to declare subsystem dependencies.
-  }
+    m_shooter = shooter;
+    m_limelight = limelight;
+  } 
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    shootSpeed = m_limelight.getDesiredRPM();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_pivot.pivot(-m_controller.getLeftY()*Constants.PIVOT_SCALING_FACTOR);
+    m_shooter.on(shootSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_shooter.off();
+  }
 
   // Returns true when the command should end.
   @Override

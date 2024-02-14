@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class Climber extends SubsystemBase {
   CANSparkMax climber_motor_L, climber_motor_R;
-  
 
   /** Creates a new Climber. */
   public Climber() {
@@ -23,25 +22,44 @@ public class Climber extends SubsystemBase {
     climber_motor_R = new CANSparkMax(Constants.CLIMBER_MOTOR_2, MotorType.kBrushless);
   }
 
-  public void runRightClimber(CommandXboxController m_controller) {
-    climber_motor_R.set(m_controller.getLeftY());
+  public void runRightClimber(double speed) {
+    climber_motor_R.set(speed);
   }
 
-  public void runLeftClimber(CommandXboxController m_controller) {
-    climber_motor_L.set(m_controller.getLeftY());
+  public void runLeftClimber(double speed) {
+    climber_motor_L.set(speed);
   }
 
   public void autoClimb(AHRS m_navx) {
     double theta = m_navx.getRoll();
-    double c = Math.sin(theta);
+    double c = Math.sin(Math.toRadians(theta));
 
     //Under the assumption that leftward tilt is a positive angle and motor down = positive
-    if (theta < -5 || theta > 5) {
+    if (theta < -3 || theta > 3) {
       if (c > 0) {
         climber_motor_R.set(c);
       }
+      else {
+        climber_motor_L.set(-c);
+      }
+    }
+    else{
+      if(climber_motor_L.getEncoder().getPosition() < Constants.CLIMBER_LEFT_ENCODER_MAX && climber_motor_R.getEncoder().getPosition() > Constants.CLIMBER_RIGHT_ENCODER_MAX) {
+        climber_motor_L.set(Constants.CLIMBER_SPEED);
+        climber_motor_R.set(Constants.CLIMBER_SPEED);
+      }
+      else{
+        climber_motor_L.set(0);
+        climber_motor_R.set(0);
+      }
     }
   }
+
+  public void off() {
+    climber_motor_L.set(0);
+    climber_motor_R.set(0);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

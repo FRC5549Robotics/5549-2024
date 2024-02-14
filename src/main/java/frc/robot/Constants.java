@@ -111,7 +111,9 @@ public final class Constants {
     public static final int PIVOT_MOTOR_RIGHT = 21;
     public static final int PIVOT_JOYSTICK = 1;
     public static final double PIVOT_DEADBAND = 0.05;
-    public static final double PIVOT_SCALING_FACTOR = 0.5;
+    public static final double PIVOT_SCALING_FACTOR = 0.15;// placeholder
+    public static final double PIVOT_RIGHT_SETPOINT = 0;// placeholder
+    public static final double PIVOT_LEFT_SETPOINT = 0;// placeholder
 
     //Intake Constants
     public static final int INTAKE_MOTOR = 22; 
@@ -121,7 +123,27 @@ public final class Constants {
     public static final int INTAKE_SHOOTER_BUTTON = 5;
     public static final double INTAKE_OUTTAKE_SPEED = 0.8;
 
+    //Shooter Constants
+    public static final double SHOOTER_LEFT_MOTOR = 23;
+    public static final double SHOOTER_RIGHT_MOTOR = 24;
+    public static final double SHOOTER_AMP_VELOCITY = 1;
+    public static final double SHOOTER_kP = 0;
+    public static final double SHOOTER_kI = 0;
+    public static final double SHOOTER_kD = 0;
+    public static final double SHOOTER_kS = 0;
+    public static final double SHOOTER_kV = 0;
+    public static final double SHOOTER_kA = 0;
+    public static final double SHOOTER_TRIGGER_THRESHOLD = 0.15;
+    public static final int SHOOTER_TRIGGER = 3;
+
     //Climber Constants
-    public static final int CLIMBER_MOTOR_1 = 15;
-    public static final int CLIMBER_MOTOR_2 = 16;
+    public static final int CLIMBER_MOTOR_1 = 25;
+    public static final int CLIMBER_MOTOR_2 = 26;
+    public static final double CLIMBER_SPEED = 0.5;// placeholder
+    public static final int CLIMBER_BUTTON = 1;
+    public static final double CLIMBER_LEFT_ENCODER_MAX = 1;// placeholder
+    public static final double CLIMBER_RIGHT_ENCODER_MAX = 1;// placeholder
+
+    //Limelight Constants
+    public static final double Kp = 1/27;
 }
