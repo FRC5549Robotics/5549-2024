@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+//import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
 	/** Creates a new Shooter. */
 	CANSparkFlex ShooterRight, ShooterLeft;
 	RelativeEncoder motor1_encoder, motor2_encoder;
-	MotorControllerGroup shooterGroup;
+	//MotorControllerGroup shooterGroup;
 	boolean isOn;
 	PIDController pid = new PIDController(Constants.SHOOTER_kP, Constants.SHOOTER_kI, Constants.SHOOTER_kD);
 	SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.SHOOTER_kV, Constants.SHOOTER_kS, Constants.SHOOTER_kA);

@@ -115,6 +115,12 @@ public final class Constants {
     public static final double PIVOT_RIGHT_SETPOINT = 0;// placeholder
     public static final double PIVOT_LEFT_SETPOINT = 0;// placeholder
 
+    //Indexer Constants
+    public static final int INDEXER_MOTOR = 0;
+    public static final double INDEXER_SPEED = 0.5;
+    public static final int INDEXER_IN_BUTTON = 2;
+    public static final int INDEXER_OUT_BUTTON = 5;
+
     //Intake Constants
     public static final int INTAKE_MOTOR = 22; 
     public static final int INTAKE_TRIGGER = 2;
