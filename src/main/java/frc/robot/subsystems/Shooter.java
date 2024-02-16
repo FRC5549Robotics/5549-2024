@@ -33,8 +33,8 @@ public class Shooter extends SubsystemBase {
 
 
 	public Shooter() {
-		ShooterRight = new CANSparkFlex(0, MotorType.kBrushless);
-		ShooterLeft = new CANSparkFlex(1, MotorType.kBrushless);
+		ShooterRight = new CANSparkFlex(Constants.SHOOTER_RIGHT_MOTOR, MotorType.kBrushless);
+		ShooterLeft = new CANSparkFlex(Constants.SHOOTER_LEFT_MOTOR, MotorType.kBrushless);
 
 		motor1_encoder = ShooterRight.getEncoder();
 		motor2_encoder = ShooterLeft.getEncoder();
@@ -60,10 +60,11 @@ public class Shooter extends SubsystemBase {
 
 	public void runShooter(double speed){
 		ShooterRight.set(speed);
-    ShooterLeft.set(speed);
+        ShooterLeft.set(-speed);
 	}
 
 	public void off(){
+		System.out.println("-------OFF-------");
 		ShooterRight.set(0);
     	ShooterLeft.set(0);
 	}
@@ -71,8 +72,12 @@ public class Shooter extends SubsystemBase {
 	public void on(double setPoint) {
 		targetRPM = setPoint;
 		SmartDashboard.putNumber("SetPoint", setPoint);
-		ShooterRight.setVoltage(pid.calculate(motor1_encoder.getVelocity(), setPoint) + feedforward.calculate(setPoint));
-		ShooterLeft.setVoltage(pid.calculate(motor2_encoder.getVelocity(), setPoint) + feedforward.calculate(setPoint));
+		// ShooterRight.setVoltage(pid.calculate(motor1_encoder.getVelocity(), setPoint) + feedforward.calculate(setPoint));
+		// ShooterLeft.setVoltage(pid.calculate(motor2_encoder.getVelocity(), setPoint) + feedforward.calculate(setPoint));
+
+		ShooterRight.set(-setPoint);
+		ShooterLeft.set(setPoint);
+		
 		// M1pid.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
 		// M2pid.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
 		SmartDashboard.putNumber("RPM Left", motor1_encoder.getVelocity());

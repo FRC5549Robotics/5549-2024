@@ -22,7 +22,7 @@ public class Indexer extends SubsystemBase {
     public void indexOut(){
     IndexerMotor.set(-Constants.INDEXER_SPEED);
   }
-  public void stop(){
+  public void off(){
     IndexerMotor.set(0);
   }
 

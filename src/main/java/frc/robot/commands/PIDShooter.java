@@ -33,7 +33,8 @@ public class PIDShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.on(shootSpeed);
+    // m_shooter.on(shootSpeed);
+    m_shooter.on(0.5);
   }
 
   // Called once the command ends or is interrupted.

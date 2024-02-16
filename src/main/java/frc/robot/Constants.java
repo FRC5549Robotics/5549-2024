@@ -122,7 +122,8 @@ public final class Constants {
     public static final int INDEXER_OUT_BUTTON = 5;
 
     //Intake Constants
-    public static final int INTAKE_MOTOR = 23; 
+    public static final int INTAKE_MOTOR_BOTTOM = 23; 
+    public static final int INTAKE_MOTOR_TOP = 24; 
     public static final int INTAKE_TRIGGER = 2;
     public static final double INTAKE_DEADBAND = 0.05;
     public static final double INTAKE_SCALING_FACTOR = 1;
@@ -130,8 +131,8 @@ public final class Constants {
     public static final double INTAKE_OUTTAKE_SPEED = 0.8;
 
     //Shooter Constants
-    public static final double SHOOTER_LEFT_MOTOR = 24;
-    public static final double SHOOTER_RIGHT_MOTOR = 25;
+    public static final int SHOOTER_LEFT_MOTOR = 25;
+    public static final int SHOOTER_RIGHT_MOTOR = 26;
     public static final double SHOOTER_AMP_VELOCITY = 1;
     public static final double SHOOTER_kP = 0;
     public static final double SHOOTER_kI = 0;
@@ -143,12 +144,18 @@ public final class Constants {
     public static final int SHOOTER_TRIGGER = 3;
 
     //Climber Constants
-    public static final int CLIMBER_MOTOR_1 = 26;
-    public static final int CLIMBER_MOTOR_2 = 27;
+    public static final int CLIMBER_MOTOR_LEFT = 27;
+    public static final int CLIMBER_MOTOR_RIGHT = 28;
     public static final double CLIMBER_SPEED = 0.5;// placeholder
     public static final int CLIMBER_BUTTON = 1;
     public static final double CLIMBER_LEFT_ENCODER_MAX = 1;// placeholder
     public static final double CLIMBER_RIGHT_ENCODER_MAX = 1;// placeholder
+
+    //Deflectorinator Constants
+    public static final int DEFLECTORINATOR_MOTOR = 29;
+    public static final double kDeflectGearRatio = 20;
+    public static final int DEFLECTORINATOR_IN_BUTTON = 5;
+    public static final int DEFLECTORINATOR_OUT_BUTTON = 6;
 
     //Limelight Constants
     public static final double Kp = 1/27;

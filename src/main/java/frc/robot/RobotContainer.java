@@ -30,6 +30,7 @@ import org.ejml.simple.SimpleBase;
 import org.ejml.simple.SimpleMatrix;
 
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Deflectorinator;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
@@ -52,12 +53,13 @@ public class RobotContainer {
   private final CommandXboxController m_controller2 = new CommandXboxController(Constants.OPERATOR_CONTROLLER);
   private final AHRS m_ahrs = new AHRS();
   private final DrivetrainSubsystem m_drive = new DrivetrainSubsystem(m_ahrs);
-   private final Pivot m_pivot = new Pivot();
-   private final Intake m_intake = new Intake();
-   //private final Conveyor m_conveyor = new Conveyor();
+  private final Pivot m_pivot = new Pivot();
+  private final Intake m_intake = new Intake();
+  // private final Conveyor m_conveyor = new Conveyor();
   private final Shooter m_shooter = new Shooter();
-   private final Climber m_climber = new Climber();
-   private final Limelight m_limelight = new Limelight();//Find Feedforward Constants );
+  private final Deflectorinator m_deflectorinator = new Deflectorinator();
+  private final Climber m_climber = new Climber();
+  private final Limelight m_limelight = new Limelight();//Find Feedforward Constants );
   private final Indexer m_indexer = new Indexer();
 
   JoystickButton resetNavXButton = new JoystickButton(m_controller.getHID(), Constants.RESET_NAVX_BUTTON);
@@ -67,6 +69,8 @@ public class RobotContainer {
   JoystickButton autoClimbButton = new JoystickButton(m_controller.getHID(), Constants.CLIMBER_BUTTON);
   JoystickButton indexerInButton = new JoystickButton(m_controller2.getHID(), Constants.INDEXER_IN_BUTTON);
   JoystickButton indexerOutButton = new JoystickButton(m_controller2.getHID(), Constants.INDEXER_OUT_BUTTON);
+  JoystickButton deflectorinatorInButton = new JoystickButton(m_controller.getHID(), Constants.DEFLECTORINATOR_IN_BUTTON);
+  JoystickButton deflectorinatorOutButton = new JoystickButton(m_controller.getHID(), Constants.DEFLECTORINATOR_OUT_BUTTON);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
   // public static ChoreoTrajectory LefttoNote = Choreo.getTrajectory("LefttoNote");
@@ -109,11 +113,15 @@ public class RobotContainer {
     
     //Indexer
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new InstantCommand(m_indexer::indexIn));
-     m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_indexer::indexOut));
-    
+     m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_indexer::off));
+     intakeShootingButton.onTrue(new InstantCommand(m_indexer::indexOut)).onFalse(new InstantCommand(m_indexer::off));
+
     //Shooter
-     m_controller2.axisGreaterThan(Constants.SHOOTER_TRIGGER, Constants.SHOOTER_TRIGGER_THRESHOLD).onTrue(new PIDShooter(m_shooter, m_limelight)).onFalse(new InstantCommand(m_shooter::off));
+     m_controller2.axisGreaterThan(Constants.SHOOTER_TRIGGER, Constants.SHOOTER_TRIGGER_THRESHOLD).whileTrue(new PIDShooter(m_shooter, m_limelight)).whileFalse(new InstantCommand(m_shooter::off));
     
+    //Deflectorinato
+     deflectorinatorInButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateIn));
+     deflectorinatorOutButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateOut));
     //Climber
      autoClimbButton.onTrue(new AutoClimb(m_climber, m_ahrs)).onFalse(new InstantCommand(m_climber::off));
     //m_controller2.axisGreaterThan(, 0)

@@ -77,6 +77,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
   /** Creates a new DriveSubsystem. */
   public DrivetrainSubsystem(AHRS ahrs) {
+    m_ahrs = ahrs;
     fixBackRight();
 
     // Zero out the gyro
@@ -96,9 +97,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
       m_rearLeft.getDriveDistanceMeters(),
       m_rearRight.getDriveDistanceMeters(),
     };
-
-
-    m_ahrs = ahrs;
 
     timer = new Timer();
     timer.reset();

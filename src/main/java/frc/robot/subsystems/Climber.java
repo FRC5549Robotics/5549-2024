@@ -18,8 +18,8 @@ public class Climber extends SubsystemBase {
 
   /** Creates a new Climber. */
   public Climber() {
-    climber_motor_L = new CANSparkMax(Constants.CLIMBER_MOTOR_1, MotorType.kBrushless);
-    climber_motor_R = new CANSparkMax(Constants.CLIMBER_MOTOR_2, MotorType.kBrushless);
+    climber_motor_L = new CANSparkMax(Constants.CLIMBER_MOTOR_LEFT, MotorType.kBrushless);
+    climber_motor_R = new CANSparkMax(Constants.CLIMBER_MOTOR_RIGHT, MotorType.kBrushless);
   }
 
   public void runRightClimber(double speed) {

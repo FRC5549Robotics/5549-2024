@@ -13,22 +13,27 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
-  CANSparkMax IntakeMotor;
+  CANSparkMax IntakeMotorBottom, IntakeMotorTop;
   public Intake() {
-    IntakeMotor = new CANSparkMax(Constants.INTAKE_MOTOR, MotorType.kBrushless);
-    IntakeMotor.setIdleMode(IdleMode.kCoast);
+    IntakeMotorBottom = new CANSparkMax(Constants.INTAKE_MOTOR_BOTTOM, MotorType.kBrushless);
+    IntakeMotorTop = new CANSparkMax(Constants.INTAKE_MOTOR_TOP, MotorType.kBrushless);
+    IntakeMotorBottom.setIdleMode(IdleMode.kCoast);
+    IntakeMotorTop.setIdleMode(IdleMode.kCoast);
   }
   public void intake(double speed) {//make dependent on trigger
-    IntakeMotor.set(-speed);
+    IntakeMotorBottom.set(speed);
+    IntakeMotorTop.set(-speed);
     System.out.println("kind of works");
   }
 
   public void shoot() {
-    IntakeMotor.set(-Constants.INTAKE_OUTTAKE_SPEED);
+    IntakeMotorBottom.set(Constants.INTAKE_OUTTAKE_SPEED);
+    IntakeMotorTop.set(-Constants.INTAKE_OUTTAKE_SPEED);
   }
 
   public void off(){
-    IntakeMotor.set(0);
+    IntakeMotorBottom.set(0);
+    IntakeMotorTop.set(0);
   }
   @Override
   public void periodic() {
