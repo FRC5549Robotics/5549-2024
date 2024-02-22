@@ -154,9 +154,13 @@ public final class Constants {
     //Deflectorinator Constants
     public static final int DEFLECTORINATOR_MOTOR = 29;
     public static final double kDeflectGearRatio = 20;
-    public static final int DEFLECTORINATOR_IN_BUTTON = 5;
-    public static final int DEFLECTORINATOR_OUT_BUTTON = 6;
+    public static final int DEFLECTORINATOR_IN_BUTTON = 6;
+    public static final int DEFLECTORINATOR_OUT_BUTTON = 5;
+    public static final double DEFLECTORINATOR_SPEED = 0.05;
 
     //Limelight Constants
     public static final double Kp = 1/27;
+    public static final int AUTO_ALIGN_BUTTON = 8;
+    public static final double CAMERA_HEIGHT_METERS = 0.8;
+    public static final double TARGET_HEIGHT_METERS = 1.22;
 }

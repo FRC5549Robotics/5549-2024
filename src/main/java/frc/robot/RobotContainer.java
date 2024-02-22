@@ -58,7 +58,7 @@ public class RobotContainer {
   // private final Conveyor m_conveyor = new Conveyor();
   private final Shooter m_shooter = new Shooter();
   private final Deflectorinator m_deflectorinator = new Deflectorinator();
-  private final Climber m_climber = new Climber();
+  // private final Climber m_climber = new Climber();
   private final Limelight m_limelight = new Limelight();//Find Feedforward Constants );
   private final Indexer m_indexer = new Indexer();
 
@@ -98,7 +98,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_drive.setDefaultCommand(new DriveCommand(m_drive, m_controller));
+    m_drive.setDefaultCommand(new DriveCommand(m_drive, m_controller, m_limelight));
     resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
 
     // Pivot
@@ -122,8 +122,10 @@ public class RobotContainer {
     //Deflectorinato
      deflectorinatorInButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateIn));
      deflectorinatorOutButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateOut));
-    //Climber
-     autoClimbButton.onTrue(new AutoClimb(m_climber, m_ahrs)).onFalse(new InstantCommand(m_climber::off));
+     deflectorinatorInButton.or(deflectorinatorOutButton).onFalse(new InstantCommand(m_deflectorinator::off));
+    
+     //Climber
+     //autoClimbButton.onTrue(new AutoClimb(m_climber, m_ahrs)).onFalse(new InstantCommand(m_climber::off));
     //m_controller2.axisGreaterThan(, 0)
   }
 

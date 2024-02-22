@@ -22,10 +22,11 @@ public class Limelight extends SubsystemBase {
   
   double steering_adjust = 0.0;
   private static Limelight limelight = null;
-
+  //PhotonCamera camera;
 
   public Limelight() {
     limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    //camera = new PhotonCamera("photonvision");
     
     //Kp = inputkP;
   }
@@ -38,6 +39,7 @@ public class Limelight extends SubsystemBase {
     return 0;
     }
   }
+
 
 
   public double getDistance() {
@@ -54,6 +56,14 @@ public class Limelight extends SubsystemBase {
     // return a*getDistance() + b;
     // // return 0.149827*(Math.pow(1.04964, (4.99985*this.getDistance()) + 29.9996) + 28.4836);
     // //Add implementation
+    return 0;
+  }
+
+  public double getSpeakerTheta(){
+    return 0;
+  }
+  
+  public double getAmpTheta(){
     return 0;
   }
 
