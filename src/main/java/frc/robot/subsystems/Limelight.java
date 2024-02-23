@@ -13,6 +13,10 @@ import frc.robot.Constants;
 import java.lang.Math;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Translation3d;
 
 
 public class Limelight extends SubsystemBase {
@@ -22,26 +26,28 @@ public class Limelight extends SubsystemBase {
   double ty, tv, tx, angle, distance;
   double min_command = 0.05;
   PIDController alignController = new PIDController(Constants.ALIGN_kP, Constants.ALIGN_kI, Constants.ALIGN_kD);
-  //PhotonCamera camera;
+  PhotonCamera camera;
   
   double steering_adjust = 0.0;
   private static Limelight limelight = null;
-  //PhotonCamera camera;
+ 
 
   public Limelight() {
     limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-    //camera = new PhotonCamera("photonvision");
-    // camera = new PhotonCamera("photonvision");
+    camera = new PhotonCamera("photonvision");
     //Kp = inputkP;
   }
 
   public double getAngle() {
-    SmartDashboard.putNumber("Horizontal Angle:", tx);
-    if (tx != 0) {
-      return tx;
-    } else {
-    return 0;
-    }
+    var result = camera.getLatestResult();
+    return result.getBestTarget().getYaw();
+
+    // SmartDashboard.putNumber("Horizontal Angle:", tx);
+    // if (tx != 0) {
+    //   return tx;
+    // } else {
+    // return 0;
+    // }
   }
 
 
@@ -72,7 +78,13 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getAmpDesiredAngle(){
-    double angle = 0;
+    var result = camera.getLatestResult();
+    var res = result.getBestTarget().getBestCameraToTarget();
+    double x = res.getX();
+    double y = res.getY();
+    angle = Math.atan(x/y);
+    
+    
     return angle;
   }
 
