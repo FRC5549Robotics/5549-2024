@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -13,27 +14,28 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
-  CANSparkMax IntakeMotorBottom, IntakeMotorTop;
+  CANSparkFlex IntakeMotorBottom;
+  CANSparkMax IntakeMotorTop;
   public Intake() {
-    IntakeMotorBottom = new CANSparkMax(Constants.INTAKE_MOTOR_BOTTOM, MotorType.kBrushless);
-    // IntakeMotorTop = new CANSparkMax(Constants.INTAKE_MOTOR_TOP, MotorType.kBrushless);
+    IntakeMotorBottom = new CANSparkFlex(Constants.INTAKE_MOTOR_BOTTOM, MotorType.kBrushless);
+    IntakeMotorTop = new CANSparkMax(Constants.INTAKE_MOTOR_TOP, MotorType.kBrushless);
     IntakeMotorBottom.setIdleMode(IdleMode.kCoast);
-    // IntakeMotorTop.setIdleMode(IdleMode.kCoast);
+    IntakeMotorTop.setIdleMode(IdleMode.kCoast);
   }
   public void intake(double speed) {//make dependent on trigger
     IntakeMotorBottom.set(speed);
-    // IntakeMotorTop.set(-speed);
+    IntakeMotorTop.set(-speed);
     System.out.println("kind of works");
   }
 
   public void shoot() {
     IntakeMotorBottom.set(Constants.INTAKE_OUTTAKE_SPEED);
-    // IntakeMotorTop.set(-Constants.INTAKE_OUTTAKE_SPEED);
+    IntakeMotorTop.set(-Constants.INTAKE_OUTTAKE_SPEED);
   }
 
   public void off(){
     IntakeMotorBottom.set(0);
-    //  IntakeMotorTop.set(0);
+    IntakeMotorTop.set(0);
   }
   @Override
   public void periodic() {

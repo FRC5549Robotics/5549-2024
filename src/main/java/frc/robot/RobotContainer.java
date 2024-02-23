@@ -6,10 +6,9 @@ package frc.robot;
 
 import frc.robot.Constants;
 import frc.robot.commands.AutoClimb;
- import frc.robot.commands.DeployPivot;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.PIDShooter;
-import frc.robot.commands.RetractPivot;
+import frc.robot.commands.PivotAnalog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -34,6 +33,7 @@ import frc.robot.subsystems.Deflectorinator;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Pivot.PivotTarget;
 import frc.robot.subsystems.Indexer;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -102,9 +102,9 @@ public class RobotContainer {
     resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
 
     // Pivot
-     deployPivotButton.onTrue(new DeployPivot(m_pivot));
-     retractPivotButton.onTrue(new RetractPivot(m_pivot));
-     m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotIntake(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
+     deployPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Intake));
+     retractPivotButton.onTrue(new PivotIntake(m_pivot, PivotTarget.Retracted));
+     m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
     
     // Intake
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new IntakeAnalog(m_intake, m_controller2));
@@ -122,7 +122,9 @@ public class RobotContainer {
     //Deflectorinato
      deflectorinatorInButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateIn));
      deflectorinatorOutButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateOut));
+
      deflectorinatorInButton.or(deflectorinatorOutButton).onFalse(new InstantCommand(m_deflectorinator::off));
+
     
      //Climber
      //autoClimbButton.onTrue(new AutoClimb(m_climber, m_ahrs)).onFalse(new InstantCommand(m_climber::off));

@@ -4,41 +4,29 @@
 
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.subsystems.Pivot;
 
-import java.lang.Math;
-
-public class RetractPivot extends Command {
-
-  CANSparkMax pivotRight;
-  CANSparkMax pivotLeft;
-  PIDController controller;
-  RelativeEncoder rightEncoder;
-  RelativeEncoder leftEncoder;
+public class PivotAnalog extends Command {
+  /** Creates a new PivotIntake. */
   Pivot m_pivot;
-  
-  /** Creates a new RetractPivot. */
-  public RetractPivot(Pivot pivot) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  CommandXboxController m_controller;
+  public PivotAnalog(Pivot pivot, CommandXboxController controller) {
     m_pivot = pivot;
+    m_controller = controller;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_pivot.checkLag(0,0);
+    m_pivot.pivot(-m_controller.getLeftY()*Constants.PIVOT_SCALING_FACTOR);
   }
 
   // Called once the command ends or is interrupted.

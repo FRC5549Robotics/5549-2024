@@ -8,25 +8,35 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Pivot.PivotTarget;
 
 public class PivotIntake extends Command {
   /** Creates a new PivotIntake. */
   Pivot m_pivot;
-  CommandXboxController m_controller;
-  public PivotIntake(Pivot pivot, CommandXboxController controller) {
+  Pivot.PivotTarget target;
+  double setpoint;
+  public PivotIntake(Pivot pivot, Pivot.PivotTarget Target) {
     m_pivot = pivot;
-    m_controller = controller;
+    target = Target;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if(target == PivotTarget.Intake){
+      setpoint = Constants.PIVOT_INTAKE_SETPOINT;
+    }
+    else if(target == PivotTarget.Intake){
+      setpoint = Constants.PIVOT_RETRACTED_SETPOINT;
+    }
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_pivot.pivot(-m_controller.getLeftY()*Constants.PIVOT_SCALING_FACTOR);
+    m_pivot.checkLag(setpoint);
   }
 
   // Called once the command ends or is interrupted.

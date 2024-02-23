@@ -112,8 +112,8 @@ public final class Constants {
     public static final int PIVOT_JOYSTICK = 1;
     public static final double PIVOT_DEADBAND = 0.05;
     public static final double PIVOT_SCALING_FACTOR = 0.15;// placeholder
-    public static final double PIVOT_RIGHT_SETPOINT = 0;// placeholder
-    public static final double PIVOT_LEFT_SETPOINT = 0;// placeholder
+    public static final double PIVOT_INTAKE_SETPOINT = 45;// placeholder
+    public static final double PIVOT_RETRACTED_SETPOINT = 45;// placeholder
 
     //Indexer Constants
     public static final int INDEXER_MOTOR = 22;
@@ -157,10 +157,17 @@ public final class Constants {
     public static final int DEFLECTORINATOR_IN_BUTTON = 6;
     public static final int DEFLECTORINATOR_OUT_BUTTON = 5;
     public static final double DEFLECTORINATOR_SPEED = 0.05;
+    public static final double DEFLECTORINATOR_OUT_SETPOINT = 45;// placeholder
+    public static final double DEFLECTORINATOR_RETRACTED_SETPOINT = 45;// placeholder
+
 
     //Limelight Constants
     public static final double Kp = 1/27;
     public static final int AUTO_ALIGN_BUTTON = 8;
     public static final double CAMERA_HEIGHT_METERS = 0.8;
     public static final double TARGET_HEIGHT_METERS = 1.22;
+    public static final double ALIGN_kP = 0;
+    public static final double ALIGN_kI = 0;
+    public static final double ALIGN_kD = 0;
+
 }

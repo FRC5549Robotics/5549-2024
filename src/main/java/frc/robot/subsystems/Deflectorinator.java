@@ -19,6 +19,11 @@ import frc.robot.Constants;
 
 public class Deflectorinator extends SubsystemBase {
 
+  public enum DeflectorinatorTarget{
+    Retracted,
+    AmpShooting,
+  }
+
   CANSparkMax DeflectMotor;
   CANSparkLowLevel deflect;
   PIDController controller;
@@ -46,6 +51,15 @@ public class Deflectorinator extends SubsystemBase {
   public void off(){
     System.out.println("Deflectorinator off");
     DeflectMotor.set(0);
+  }
+
+  public void deflectorinatorEncoderPivot(double setpoint) {
+    if (Math.abs(DeflectEncoder.getPosition() - setpoint) > 2) {
+      DeflectMotor.set(controller.calculate(DeflectEncoder.getPosition(), setpoint));
+    }
+    else {
+      DeflectMotor.set(0);
+    } 
   }
 
   @Override

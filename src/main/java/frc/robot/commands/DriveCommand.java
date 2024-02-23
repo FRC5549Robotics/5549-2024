@@ -40,7 +40,6 @@ public class DriveCommand extends Command {
             
     @Override
     public void execute() {
-
       xDot = m_controller.getLeftY() * Constants.kMaxTranslationalVelocity;
       yDot = m_controller.getLeftX() * Constants.kMaxTranslationalVelocity;
       if (m_controller.getHID().getRightTriggerAxis() > 0.1) {
