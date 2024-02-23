@@ -5,64 +5,72 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+  
 public class Pivot extends SubsystemBase {
+
+  public enum PivotTarget{
+    Retracted,
+    Intake,
+  }
 
   CANSparkMax PivotRightMotor;
   CANSparkMax PivotLeftMotor;
   PIDController controller;
-  RelativeEncoder RightThroughbore;
-  RelativeEncoder LeftThroughbore;
+  DutyCycleEncoder RightThroughbore;
+  DutyCycleEncoder LeftThroughbore;
   /** Creates a new Pivot. */
   
   public Pivot() {
     PivotRightMotor = new CANSparkMax(Constants.PIVOT_MOTOR_RIGHT, MotorType.kBrushless);
     PivotLeftMotor = new CANSparkMax(Constants.PIVOT_MOTOR_LEFT, MotorType.kBrushless);
-    controller = new PIDController(1.0, 0.0, 0.05);
-    RightThroughbore = PivotRightMotor.getEncoder();
-    LeftThroughbore = PivotLeftMotor.getEncoder();
+    controller = new PIDController(0, 0.0, 0.0);
+    RightThroughbore = new DutyCycleEncoder(4);
+    LeftThroughbore = new DutyCycleEncoder(0);
+    RightThroughbore.setPositionOffset(0.9015);
+    LeftThroughbore.setPositionOffset(0.3688);
+    RightThroughbore.setDistancePerRotation(360);
+    LeftThroughbore.setDistancePerRotation(360);
     PivotLeftMotor.setIdleMode(IdleMode.kBrake);
     PivotRightMotor.setIdleMode(IdleMode.kBrake);
-    RightThroughbore.setVelocityConversionFactor(Constants.kDriveConversionFactor / 60.0);
-    RightThroughbore.setPositionConversionFactor(Constants.kDriveConversionFactor);
-
-    LeftThroughbore.setVelocityConversionFactor(Constants.kDriveConversionFactor / 60.0);
-    LeftThroughbore.setPositionConversionFactor(Constants.kDriveConversionFactor);
   }
 
   public void pivot(double speed){
+  
     PivotRightMotor.set(speed);
     PivotLeftMotor.set(-speed);
+
   }
   public void off(){
     PivotRightMotor.set(0);
     PivotLeftMotor.set(0);
   }
   
-  public void checkLag(double leftSetpoint, double rightSetpoint) {
-    if (Math.abs(RightThroughbore.getPosition() - LeftThroughbore.getPosition()) > 3) {
-      if (RightThroughbore.getPosition() < LeftThroughbore.getPosition()) {
-        PivotRightMotor.set(controller.calculate(RightThroughbore.getPosition(), rightSetpoint));
+  public void checkLag(double setpoint) {
+    if (Math.abs(RightThroughbore.getDistance() - LeftThroughbore.getDistance()) > 5) {
+      if (RightThroughbore.getDistance() < LeftThroughbore.getDistance()) {
+        PivotRightMotor.set(controller.calculate(RightThroughbore.getDistance(), setpoint));
       }
       else {
-        PivotLeftMotor.set(controller.calculate(LeftThroughbore.getPosition(), leftSetpoint));
+        PivotLeftMotor.set(controller.calculate(LeftThroughbore.getDistance(), setpoint));
       }
     }
     else {
-      PivotRightMotor.set(controller.calculate(RightThroughbore.getPosition(), rightSetpoint));
-      PivotLeftMotor.set(controller.calculate(LeftThroughbore.getPosition(), leftSetpoint));
+      PivotRightMotor.set(controller.calculate(RightThroughbore.getDistance(), setpoint));
+      PivotLeftMotor.set(controller.calculate(LeftThroughbore.getDistance(), setpoint));
     } 
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Right ThroughBore Encoders", RightThroughbore.getDistance());
+    SmartDashboard.putNumber("Left ThroughBore Encoders", LeftThroughbore.getDistance());
   }
 }

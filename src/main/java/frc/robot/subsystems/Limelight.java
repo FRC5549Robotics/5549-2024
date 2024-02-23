@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,20 +14,24 @@ import java.lang.Math;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
 
+
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
   
   NetworkTable limelightTable;
   double ty, tv, tx, angle, distance;
   double min_command = 0.05;
+  PIDController alignController = new PIDController(Constants.ALIGN_kP, Constants.ALIGN_kI, Constants.ALIGN_kD);
+  //PhotonCamera camera;
   
   double steering_adjust = 0.0;
   private static Limelight limelight = null;
-
+  //PhotonCamera camera;
 
   public Limelight() {
     limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-    
+    //camera = new PhotonCamera("photonvision");
+    // camera = new PhotonCamera("photonvision");
     //Kp = inputkP;
   }
 
@@ -38,6 +43,7 @@ public class Limelight extends SubsystemBase {
     return 0;
     }
   }
+
 
 
   public double getDistance() {
@@ -55,6 +61,19 @@ public class Limelight extends SubsystemBase {
     // // return 0.149827*(Math.pow(1.04964, (4.99985*this.getDistance()) + 29.9996) + 28.4836);
     // //Add implementation
     return 0;
+  }
+
+  public double getSpeakerTheta(){
+    return alignController.calculate(getAngle(), 0);
+  }
+  
+  public double getAmpTheta(){
+    return alignController.calculate(getAngle(), getAmpDesiredAngle());
+  }
+
+  public double getAmpDesiredAngle(){
+    double angle = 0;
+    return angle;
   }
 
   @Override
