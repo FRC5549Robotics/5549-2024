@@ -23,7 +23,7 @@ public class Pivot extends SubsystemBase {
 
   CANSparkMax PivotRightMotor;
   CANSparkMax PivotLeftMotor;
-  PIDController controller;
+  PIDController controllerRight, controllerLeft;
   DutyCycleEncoder RightThroughbore;
   DutyCycleEncoder LeftThroughbore;
   /** Creates a new Pivot. */
@@ -31,11 +31,12 @@ public class Pivot extends SubsystemBase {
   public Pivot() {
     PivotRightMotor = new CANSparkMax(Constants.PIVOT_MOTOR_RIGHT, MotorType.kBrushless);
     PivotLeftMotor = new CANSparkMax(Constants.PIVOT_MOTOR_LEFT, MotorType.kBrushless);
-    controller = new PIDController(0, 0.0, 0.0);
-    RightThroughbore = new DutyCycleEncoder(4);
-    LeftThroughbore = new DutyCycleEncoder(0);
-    RightThroughbore.setPositionOffset(0.9015);
-    LeftThroughbore.setPositionOffset(0.3688);
+    controllerRight = new PIDController(0.008, 0.0, 0.00);
+    controllerLeft = new PIDController(0.008, 0.0, 0.00);
+    RightThroughbore = new DutyCycleEncoder(Constants.PIVOT_ENCODER_RIGHT);
+    LeftThroughbore = new DutyCycleEncoder(Constants.PIVOT_ENCODER_LEFT);
+    RightThroughbore.setPositionOffset(Constants.PIVOT_OFFSET_RIGHT);
+    LeftThroughbore.setPositionOffset(Constants.PIVOT_OFFSET_LEFT);
     RightThroughbore.setDistancePerRotation(360);
     LeftThroughbore.setDistancePerRotation(360);
     PivotLeftMotor.setIdleMode(IdleMode.kBrake);
@@ -53,19 +54,28 @@ public class Pivot extends SubsystemBase {
     PivotLeftMotor.set(0);
   }
   
-  public void checkLag(double setpoint) {
-    if (Math.abs(RightThroughbore.getDistance() - LeftThroughbore.getDistance()) > 5) {
-      if (RightThroughbore.getDistance() < LeftThroughbore.getDistance()) {
-        PivotRightMotor.set(controller.calculate(RightThroughbore.getDistance(), setpoint));
-      }
-      else {
-        PivotLeftMotor.set(controller.calculate(LeftThroughbore.getDistance(), setpoint));
-      }
-    }
-    else {
-      PivotRightMotor.set(controller.calculate(RightThroughbore.getDistance(), setpoint));
-      PivotLeftMotor.set(controller.calculate(LeftThroughbore.getDistance(), setpoint));
-    } 
+  public void checkLag(double leftSetpoint, double rightSetpoint) {
+    // if(Math.abs(RightThroughbore.getDistance() - rightSetpoint) > 2){
+    //   System.out.println("run right");
+    //   PivotRightMotor.set(controller.calculate(RightThroughbore.getDistance(), rightSetpoint));
+    // }
+    // else{ 
+    //   System.out.println("stop right");
+    //   PivotRightMotor.set(0);
+    // }
+    // if(Math.abs(LeftThroughbore.getDistance() - leftSetpoint) > 2){
+    //   System.out.println("run left");
+    //   PivotLeftMotor.set(controller.calculate(LeftThroughbore.getDistance(), leftSetpoint));
+    // }
+    // else{
+    //   System.out.println("dtop left");
+    //   PivotLeftMotor.set(0);
+    // }
+    PivotRightMotor.set(-controllerRight.calculate(RightThroughbore.getDistance(), rightSetpoint));
+    PivotLeftMotor.set(-controllerLeft.calculate(LeftThroughbore.getDistance(), leftSetpoint));
+    System.out.println("Running");
+    SmartDashboard.putNumber("rs", rightSetpoint);
+    SmartDashboard.putNumber("ls", leftSetpoint);
   }
 
   @Override

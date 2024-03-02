@@ -14,7 +14,7 @@ public class PivotIntake extends Command {
   /** Creates a new PivotIntake. */
   Pivot m_pivot;
   Pivot.PivotTarget target;
-  double setpoint;
+  double leftSetpoint, rightSetpoint;
   public PivotIntake(Pivot pivot, Pivot.PivotTarget Target) {
     m_pivot = pivot;
     target = Target;
@@ -25,10 +25,12 @@ public class PivotIntake extends Command {
   @Override
   public void initialize() {
     if(target == PivotTarget.Intake){
-      setpoint = Constants.PIVOT_INTAKE_SETPOINT;
+      leftSetpoint = Constants.PIVOT_LEFT_INTAKE_SETPOINT;
+      rightSetpoint = Constants.PIVOT_RIGHT_INTAKE_SETPOINT;
     }
-    else if(target == PivotTarget.Intake){
-      setpoint = Constants.PIVOT_RETRACTED_SETPOINT;
+    else if(target == PivotTarget.Retracted){
+      leftSetpoint = Constants.PIVOT_LEFT_RETRACTED_SETPOINT;
+      rightSetpoint = Constants.PIVOT_RIGHT_RETRACTED_SETPOINT;
     }
 
   }
@@ -36,7 +38,7 @@ public class PivotIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_pivot.checkLag(setpoint);
+    m_pivot.checkLag(leftSetpoint, rightSetpoint);
   }
 
   // Called once the command ends or is interrupted.

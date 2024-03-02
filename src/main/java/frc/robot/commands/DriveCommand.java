@@ -42,48 +42,49 @@ public class DriveCommand extends Command {
     public void execute() {
       xDot = m_controller.getLeftY() * Constants.kMaxTranslationalVelocity;
       yDot = m_controller.getLeftX() * Constants.kMaxTranslationalVelocity;
-      if (m_controller.getHID().getRightTriggerAxis() > 0.1) {
-        thetaDot = m_limelight.getSpeakerTheta();
-        if (-2 > m_limelight.getAngle() || 2 < m_limelight.getAngle()) {
-          thetaDot = 0;
-        }
-      }
-      else if (m_controller.getHID().getLeftTriggerAxis() > 0.1) {
-        thetaDot = m_limelight.getAmpTheta();
-        if (-2 > m_limelight.getAngle() || 2 < m_limelight.getAngle()) {
-          thetaDot = 0;
-        }
-      }
-      else{
-        thetaDot = m_controller.getRightX() * Constants.kMaxRotationalVelocity;
-      }
+      thetaDot = m_controller.getRightX() * Constants.kMaxRotationalVelocity;
+      // if (m_controller.getHID().getRightTriggerAxis() > 0.1) {
+      //   thetaDot = m_limelight.getSpeakerTheta();
+      //   if (-2 > m_limelight.getAngle() || 2 < m_limelight.getAngle()) {
+      //     thetaDot = 0;
+      //   }
+      // }
+      // else if (m_controller.getHID().getLeftTriggerAxis() > 0.1) {
+      //   thetaDot = m_limelight.getAmpTheta();
+      //   if (-2 > m_limelight.getAngle() || 2 < m_limelight.getAngle()) {
+      //     thetaDot = 0;
+      //   }
+      // }
+      // else{
+      //   thetaDot = m_controller.getRightX() * Constants.kMaxRotationalVelocity;
+      // }
       fieldRelative = true;
-      if(Math.abs(xDot)<=0.06*Constants.kMaxTranslationalVelocity){
+      if(Math.abs(xDot)<=0.07*Constants.kMaxTranslationalVelocity){
         xDot = 0;
       }
       else{
-        xDot -= 0.06;
-        xDot *= 1/0.96;
+        xDot -= 0.07;
+        xDot *= 1/0.93;
       }
-      if(Math.abs(yDot)<=0.06*Constants.kMaxTranslationalVelocity){
+      if(Math.abs(yDot)<=0.07*Constants.kMaxTranslationalVelocity){
         yDot = 0;
       }
       else{
-        yDot -= 0.06;
-        yDot *= 1/0.96;
+        yDot -= 0.07;
+        yDot *= 1/0.93;
       }
-      if(Math.abs(thetaDot)<=0.06*Constants.kMaxRotationalVelocity){
+      if(Math.abs(thetaDot)<=0.07*Constants.kMaxRotationalVelocity){
           thetaDot = 0;
       }
       else{
-        thetaDot -= 0.06;
-        thetaDot *= 1/0.96;
+        thetaDot -= 0.07;
+        thetaDot *= 1/0.93;
       }
         
         
 
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xDot, yDot, thetaDot, drivetrain.getHeading());
-      //System.out.println(drivetrain.getHeading());
+      System.out.println(drivetrain.getHeading());
       if(chassisSpeeds == new ChassisSpeeds(xDot, yDot, thetaDot)){
         System.out.println("good");
       }

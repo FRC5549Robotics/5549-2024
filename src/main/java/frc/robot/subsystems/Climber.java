@@ -45,8 +45,8 @@ public class Climber extends SubsystemBase {
     }
     else{
       if(climber_motor_L.getEncoder().getPosition() < Constants.CLIMBER_LEFT_ENCODER_MAX && climber_motor_R.getEncoder().getPosition() > Constants.CLIMBER_RIGHT_ENCODER_MAX) {
-        climber_motor_L.set(Constants.CLIMBER_SPEED);
-        climber_motor_R.set(Constants.CLIMBER_SPEED);
+        climber_motor_L.set(Constants.CLIMBER_SCALING_FACTOR);
+        climber_motor_R.set(Constants.CLIMBER_SCALING_FACTOR);
       }
       else{
         climber_motor_L.set(0);
@@ -57,6 +57,14 @@ public class Climber extends SubsystemBase {
 
   public void off() {
     climber_motor_L.set(0);
+    climber_motor_R.set(0);
+  }
+
+  public void leftOff() {
+    climber_motor_L.set(0);
+  }  
+
+  public void rightOff() {
     climber_motor_R.set(0);
   }
 

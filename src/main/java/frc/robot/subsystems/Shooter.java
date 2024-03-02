@@ -63,6 +63,16 @@ public class Shooter extends SubsystemBase {
         ShooterLeft.set(-speed);
 	}
 
+	public void shooterIn(){
+		ShooterRight.set(Constants.SHOOTER_SET_SPEED);
+		ShooterLeft.set(-Constants.SHOOTER_SET_SPEED);
+	}
+
+	public void shooterAmp(){
+		ShooterRight.set(-Constants.SHOOTER_SET_SPEED/2.7);
+		ShooterLeft.set(Constants.SHOOTER_SET_SPEED/2.7);
+	}
+
 	public void off(){
 		System.out.println("-------OFF-------");
 		ShooterRight.set(0);
@@ -82,10 +92,6 @@ public class Shooter extends SubsystemBase {
 		// M2pid.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
 		SmartDashboard.putNumber("RPM Left", motor1_encoder.getVelocity());
 		SmartDashboard.putNumber("RPM Right", motor2_encoder.getVelocity());
-	}
-  	public void shootAmp(){
-		ShooterRight.setVoltage(pid.calculate(motor1_encoder.getVelocity(), Constants.SHOOTER_AMP_VELOCITY) + feedforward.calculate(Constants.SHOOTER_AMP_VELOCITY));
-		ShooterLeft.setVoltage(pid.calculate(motor2_encoder.getVelocity(), Constants.SHOOTER_AMP_VELOCITY) + feedforward.calculate(Constants.SHOOTER_AMP_VELOCITY));
 	}
 	
 	@Override

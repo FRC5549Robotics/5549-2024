@@ -24,13 +24,13 @@ public class Intake extends SubsystemBase {
   }
   public void intake(double speed) {//make dependent on trigger
     IntakeMotorBottom.set(speed);
-    IntakeMotorTop.set(-speed);
+    IntakeMotorTop.set(speed);
     System.out.println("kind of works");
   }
 
   public void shoot() {
     IntakeMotorBottom.set(Constants.INTAKE_OUTTAKE_SPEED);
-    IntakeMotorTop.set(-Constants.INTAKE_OUTTAKE_SPEED);
+    IntakeMotorTop.set(Constants.INTAKE_OUTTAKE_SPEED);
   }
 
   public void off(){

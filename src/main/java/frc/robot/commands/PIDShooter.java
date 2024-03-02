@@ -34,7 +34,7 @@ public class PIDShooter extends Command {
   @Override
   public void execute() {
     // m_shooter.on(shootSpeed);
-    m_shooter.on(0.5);
+    m_shooter.on(Constants.SHOOTER_SET_SPEED);
   }
 
   // Called once the command ends or is interrupted.

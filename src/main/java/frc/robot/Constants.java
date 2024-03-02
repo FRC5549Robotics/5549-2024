@@ -111,15 +111,24 @@ public final class Constants {
     public static final int PIVOT_MOTOR_RIGHT = 21;
     public static final int PIVOT_JOYSTICK = 1;
     public static final double PIVOT_DEADBAND = 0.05;
-    public static final double PIVOT_SCALING_FACTOR = 0.15;// placeholder
-    public static final double PIVOT_INTAKE_SETPOINT = 45;// placeholder
-    public static final double PIVOT_RETRACTED_SETPOINT = 45;// placeholder
+    public static final double PIVOT_SCALING_FACTOR = 0.15;
+    public static final double PIVOT_RIGHT_RETRACTED_SETPOINT = 34.5;
+    public static final double PIVOT_LEFT_RETRACTED_SETPOINT = -23.4;
+    public static final double PIVOT_RIGHT_INTAKE_SETPOINT = 115.9;
+    public static final double PIVOT_LEFT_INTAKE_SETPOINT = -113.8;
+    public static final int PIVOT_ENCODER_RIGHT = 0;
+    public static final int PIVOT_ENCODER_LEFT = 4;
+    public static final double PIVOT_OFFSET_RIGHT = 0.1561;
+    public static final double PIVOT_OFFSET_LEFT = 0.7657;
+
+    
 
     //Indexer Constants
     public static final int INDEXER_MOTOR = 22;
-    public static final double INDEXER_SPEED = 0.5;
+    public static final double INDEXER_SPEED = 1;
     public static final int INDEXER_IN_BUTTON = 2;
     public static final int INDEXER_OUT_BUTTON = 5;
+    public static final double SENSOR_VOLTAGE_THRESHOLD = 0.18;
 
     //Intake Constants
     public static final int INTAKE_MOTOR_BOTTOM = 23; 
@@ -128,25 +137,30 @@ public final class Constants {
     public static final double INTAKE_DEADBAND = 0.05;
     public static final double INTAKE_SCALING_FACTOR = 1;
     public static final int INTAKE_SHOOTER_BUTTON = 5;
-    public static final double INTAKE_OUTTAKE_SPEED = 0.8;
+    public static final double INTAKE_OUTTAKE_SPEED = 1;
 
     //Shooter Constants
     public static final int SHOOTER_LEFT_MOTOR = 25;
     public static final int SHOOTER_RIGHT_MOTOR = 26;
-    public static final double SHOOTER_AMP_VELOCITY = 1;
+    public static final int SHOOTER_AMP_BUTTON = 2;
+    public static final int SHOOTER_INTAKE_BUTTON = 6;
     public static final double SHOOTER_kP = 0;
     public static final double SHOOTER_kI = 0;
     public static final double SHOOTER_kD = 0;
     public static final double SHOOTER_kS = 0;
     public static final double SHOOTER_kV = 0;
     public static final double SHOOTER_kA = 0;
-    public static final double SHOOTER_TRIGGER_THRESHOLD = 0.15;
+    public static final double SHOOTER_TRIGGER_THRESHOLD = 0.075;
     public static final int SHOOTER_TRIGGER = 3;
+    public static final double SHOOTER_SET_SPEED = 0.8;
 
     //Climber Constants
     public static final int CLIMBER_MOTOR_LEFT = 27;
     public static final int CLIMBER_MOTOR_RIGHT = 28;
-    public static final double CLIMBER_SPEED = 0.5;// placeholder
+    public static final double CLIMBER_SCALING_FACTOR = 1;// placeholder
+    public static final int CLIMBER_LEFT_JOYSTICK = 1;
+    public static final int CLIMBER_RIGHT_JOYSTICK = 5;
+    public static final double CLIMBER_DEADBAND = 0.05;
     public static final int CLIMBER_BUTTON = 1;
     public static final double CLIMBER_LEFT_ENCODER_MAX = 1;// placeholder
     public static final double CLIMBER_RIGHT_ENCODER_MAX = 1;// placeholder
@@ -154,11 +168,11 @@ public final class Constants {
     //Deflectorinator Constants
     public static final int DEFLECTORINATOR_MOTOR = 29;
     public static final double kDeflectGearRatio = 20;
-    public static final int DEFLECTORINATOR_IN_BUTTON = 6;
-    public static final int DEFLECTORINATOR_OUT_BUTTON = 5;
-    public static final double DEFLECTORINATOR_SPEED = 0.05;
-    public static final double DEFLECTORINATOR_OUT_SETPOINT = 45;// placeholder
-    public static final double DEFLECTORINATOR_RETRACTED_SETPOINT = 45;// placeholder
+    public static final int DEFLECTORINATOR_IN_BUTTON = 5;
+    public static final int DEFLECTORINATOR_OUT_BUTTON = 6;
+    public static final double DEFLECTORINATOR_SPEED = 0.1;
+    public static final double DEFLECTORINATOR_OUT_SETPOINT = -0.325;
+    public static final double DEFLECTORINATOR_RETRACTED_SETPOINT = 0;
 
 
     //Limelight Constants

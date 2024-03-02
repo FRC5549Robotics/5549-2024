@@ -147,6 +147,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
       m_ahrs.zeroYaw();
       System.out.println("Zeroed: " + getHeading());
     }
+    
+    // if(Math.abs(m_frontRight.getTurnEncoder().getPosition() - m_frontRight.getTurnCANcoderAngle()) > 2){
+    //   m_frontRight.getTurnEncoder().setPosition(m_frontRight.getTurnCANcoderAngle());
+    // }
+    // if(Math.abs(m_frontLeft.getTurnEncoder().getPosition() - m_frontLeft.getTurnCANcoderAngle()) > 2){
+    //   m_frontLeft.getTurnEncoder().setPosition(m_frontLeft.getTurnCANcoderAngle());
+    // }
+    // if(Math.abs(m_rearRight.getTurnEncoder().getPosition() - m_rearRight.getTurnCANcoderAngle()) > 2){
+    //   m_rearRight.getTurnEncoder().setPosition(m_rearRight.getTurnCANcoderAngle());
+    // }
+
+    if(Math.abs(m_rearLeft.getTurnEncoder().getPosition() - m_rearLeft.getTurnCANcoderAngle()*360) > 2){
+      m_rearLeft.getTurnEncoder().setPosition(m_rearLeft.getTurnCANcoderAngle()*360);
+    }
   }
 
   public void updateOdometry() {
@@ -355,10 +369,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return the robot's heading as a Rotation2d
    */
   public Rotation2d getHeading() {
-    float raw_yaw = m_ahrs.getYaw(); // Returns yaw as -180 to +180.
+    float raw_yaw = -m_ahrs.getYaw(); // Returns yaw as -180 to +180.
     // float raw_yaw = m_ahrs.getYaw(); // Returns yaw as -180 to +180.
     float calc_yaw = raw_yaw;
-
 
     if (0.0 > raw_yaw ) { // yaw is negative
       calc_yaw += 360.0;

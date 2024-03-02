@@ -31,7 +31,7 @@ public class Deflectorinator extends SubsystemBase {
   /** Creates a new Deflectorinator. */
   public Deflectorinator() {
     DeflectMotor = new CANSparkMax(Constants.DEFLECTORINATOR_MOTOR, MotorType.kBrushless);
-    controller = new PIDController(1.0, 0.0, 0.05);
+    controller = new PIDController(0.9, 0.0, 0.0);
     DeflectEncoder = DeflectMotor.getEncoder();
     DeflectMotor.setIdleMode(IdleMode.kBrake);
     DeflectEncoder.setPositionConversionFactor(1/Constants.kDeflectGearRatio);
@@ -42,11 +42,11 @@ public class Deflectorinator extends SubsystemBase {
   }
   public void deflectorinateIn(){
     System.out.println("Deflectorinator in");
-    DeflectMotor.set(Constants.DEFLECTORINATOR_SPEED);
+    DeflectMotor.set(-Constants.DEFLECTORINATOR_SPEED);
   }
   public void deflectorinateOut(){
     System.out.println("Deflectorinator out");
-    DeflectMotor.set(-Constants.DEFLECTORINATOR_SPEED);
+    DeflectMotor.set(Constants.DEFLECTORINATOR_SPEED);
   }
   public void off(){
     System.out.println("Deflectorinator off");
@@ -54,12 +54,8 @@ public class Deflectorinator extends SubsystemBase {
   }
 
   public void deflectorinatorEncoderPivot(double setpoint) {
-    if (Math.abs(DeflectEncoder.getPosition() - setpoint) > 2) {
-      DeflectMotor.set(controller.calculate(DeflectEncoder.getPosition(), setpoint));
-    }
-    else {
-      DeflectMotor.set(0);
-    } 
+    System.out.println("Moving");
+    DeflectMotor.set(controller.calculate(DeflectEncoder.getPosition(), setpoint));
   }
 
   @Override

@@ -38,7 +38,8 @@ public class DeflectRotate extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    m_deflectorinator.deflectorinatorEncoderPivot(setpoint);
+    System.out.println("running deflect");
   }
 
   // Called once the command ends or is interrupted.

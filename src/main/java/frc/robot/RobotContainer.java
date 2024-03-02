@@ -6,6 +6,8 @@ package frc.robot;
 
 import frc.robot.Constants;
 import frc.robot.commands.AutoClimb;
+import frc.robot.commands.ClimberAnalog;
+import frc.robot.commands.DeflectRotate;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.PIDShooter;
 import frc.robot.commands.PivotAnalog;
@@ -16,7 +18,9 @@ import edu.wpi.first.wpilibj.XboxController;
  import frc.robot.subsystems.Pivot;
  import frc.robot.subsystems.Intake;
  import frc.robot.commands.PivotIntake;
- import frc.robot.commands.IntakeAnalog;
+import frc.robot.commands.Auton.OneNoteAutonNoDrive;
+import frc.robot.commands.ClimberAnalog.Side;
+import frc.robot.commands.IntakeAnalog;
 
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
@@ -55,10 +59,9 @@ public class RobotContainer {
   private final DrivetrainSubsystem m_drive = new DrivetrainSubsystem(m_ahrs);
   private final Pivot m_pivot = new Pivot();
   private final Intake m_intake = new Intake();
-  // private final Conveyor m_conveyor = new Conveyor();
   private final Shooter m_shooter = new Shooter();
   private final Deflectorinator m_deflectorinator = new Deflectorinator();
-  // private final Climber m_climber = new Climber();
+  private final Climber m_climber = new Climber();
   private final Limelight m_limelight = new Limelight();//Find Feedforward Constants );
   private final Indexer m_indexer = new Indexer();
 
@@ -69,6 +72,8 @@ public class RobotContainer {
   JoystickButton autoClimbButton = new JoystickButton(m_controller.getHID(), Constants.CLIMBER_BUTTON);
   JoystickButton indexerInButton = new JoystickButton(m_controller2.getHID(), Constants.INDEXER_IN_BUTTON);
   JoystickButton indexerOutButton = new JoystickButton(m_controller2.getHID(), Constants.INDEXER_OUT_BUTTON);
+  JoystickButton shooterIntakingButton = new JoystickButton(m_controller2.getHID(), Constants.SHOOTER_INTAKE_BUTTON);
+  JoystickButton shooterAmpButton = new JoystickButton(m_controller2.getHID(), Constants.SHOOTER_AMP_BUTTON);
   JoystickButton deflectorinatorInButton = new JoystickButton(m_controller.getHID(), Constants.DEFLECTORINATOR_IN_BUTTON);
   JoystickButton deflectorinatorOutButton = new JoystickButton(m_controller.getHID(), Constants.DEFLECTORINATOR_OUT_BUTTON);
 
@@ -103,32 +108,37 @@ public class RobotContainer {
 
     // Pivot
      deployPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Intake));
-     retractPivotButton.onTrue(new PivotIntake(m_pivot, PivotTarget.Retracted));
+     retractPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Retracted));
+     deployPivotButton.or(retractPivotButton).onFalse(new InstantCommand(m_pivot::off));
      m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
     
     // Intake
-     m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new IntakeAnalog(m_intake, m_controller2));
+     m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).whileTrue(new IntakeAnalog(m_intake, m_controller2));
      intakeShootingButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_intake::off));
     
-    //Indexer
+    // Indexer
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new InstantCommand(m_indexer::indexIn));
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_indexer::off));
      intakeShootingButton.onTrue(new InstantCommand(m_indexer::indexOut)).onFalse(new InstantCommand(m_indexer::off));
 
-    //Shooter
+    // Shooter
      m_controller2.axisGreaterThan(Constants.SHOOTER_TRIGGER, Constants.SHOOTER_TRIGGER_THRESHOLD).whileTrue(new PIDShooter(m_shooter, m_limelight)).whileFalse(new InstantCommand(m_shooter::off));
-    
-    //Deflectorinato
-     deflectorinatorInButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateIn));
-     deflectorinatorOutButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateOut));
+     shooterIntakingButton.onTrue(new InstantCommand(m_shooter::shooterIn)).onFalse(new InstantCommand(m_shooter::off));
+     shooterAmpButton.onTrue(new InstantCommand(m_shooter::shooterAmp)).onFalse(new InstantCommand(m_shooter::off));
 
+    // Deflectorinato
+    //  deflectorinatorInButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateIn));
+    //  deflectorinatorOutButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateOut));
+    //  deflectorinatorInButton.or(deflectorinatorOutButton).onFalse(new InstantCommand(m_deflectorinator::off));
+     deflectorinatorOutButton.whileTrue(new DeflectRotate(m_deflectorinator, Deflectorinator.DeflectorinatorTarget.AmpShooting));
+     deflectorinatorInButton.whileTrue(new DeflectRotate(m_deflectorinator, Deflectorinator.DeflectorinatorTarget.Retracted));
      deflectorinatorInButton.or(deflectorinatorOutButton).onFalse(new InstantCommand(m_deflectorinator::off));
 
-    
-     //Climber
-     //autoClimbButton.onTrue(new AutoClimb(m_climber, m_ahrs)).onFalse(new InstantCommand(m_climber::off));
-    //m_controller2.axisGreaterThan(, 0)
+    // Climber
+    //  autoClimbButton.onTrue(new AutoClimb(m_climber, m_ahrs)).onFalse(new InstantCommand(m_climber::off));
+    //  m_controller2.axisGreaterThan(Constants.CLIMBER_LEFT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_LEFT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Left)).onFalse(new InstantCommand(m_climber::leftOff));
+    //  m_controller2.axisGreaterThan(Constants.CLIMBER_RIGHT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_RIGHT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Right)).onFalse(new InstantCommand(m_climber::rightOff));
   }
 
   /**
@@ -139,6 +149,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return m_drive.ChoreoTrajectoryFollower(traj);
-    return new SequentialCommandGroup(m_drive.ChoreoTrajectoryFollower(traj), new InstantCommand(m_drive::ChoreoTest));
+    //return new SequentialCommandGroup(m_drive.ChoreoTrajectoryFollower(traj), new InstantCommand(m_drive::ChoreoTest));
+    return new OneNoteAutonNoDrive(m_shooter, m_indexer, m_limelight);
   }
 }
