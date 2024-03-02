@@ -110,7 +110,7 @@ public class RobotContainer {
      deployPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Intake));
      retractPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Retracted));
      deployPivotButton.or(retractPivotButton).onFalse(new InstantCommand(m_pivot::off));
-     m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
+    //  m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
     
     // Intake
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).whileTrue(new IntakeAnalog(m_intake, m_controller2));
@@ -137,8 +137,8 @@ public class RobotContainer {
 
     // Climber
     //  autoClimbButton.onTrue(new AutoClimb(m_climber, m_ahrs)).onFalse(new InstantCommand(m_climber::off));
-    //  m_controller2.axisGreaterThan(Constants.CLIMBER_LEFT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_LEFT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Left)).onFalse(new InstantCommand(m_climber::leftOff));
-    //  m_controller2.axisGreaterThan(Constants.CLIMBER_RIGHT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_RIGHT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Right)).onFalse(new InstantCommand(m_climber::rightOff));
+     m_controller2.axisGreaterThan(Constants.CLIMBER_LEFT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_LEFT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Left)).onFalse(new InstantCommand(m_climber::leftOff));
+     m_controller2.axisGreaterThan(Constants.CLIMBER_RIGHT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_RIGHT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Right)).onFalse(new InstantCommand(m_climber::rightOff));
   }
 
   /**
@@ -148,8 +148,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    //return m_drive.ChoreoTrajectoryFollower(traj);
+    return m_drive.ChoreoTrajectoryFollower(traj);
     //return new SequentialCommandGroup(m_drive.ChoreoTrajectoryFollower(traj), new InstantCommand(m_drive::ChoreoTest));
-    return new OneNoteAutonNoDrive(m_shooter, m_indexer, m_limelight);
+    //return new OneNoteAutonNoDrive(m_shooter, m_indexer, m_limelight);
   }
 }
