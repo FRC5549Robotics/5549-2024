@@ -160,6 +160,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     if(Math.abs(m_rearLeft.getTurnEncoder().getPosition() - m_rearLeft.getTurnCANcoderAngle()*360) > 2){
       m_rearLeft.getTurnEncoder().setPosition(m_rearLeft.getTurnCANcoderAngle()*360);
+      System.out.println("Pinion Slip Corrected");
     }
   }
 
@@ -413,11 +414,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return Choreo.choreoSwerveCommand(
       traj, 
       this::getPose, 
-      new PIDController(0, 0.0, 0.0),  
-      new PIDController(0, 0.0, 0.0),  
-      new PIDController(0.1, 0.0, 0.001),  
+      new PIDController(1, 0.0, 0.0),  
+      new PIDController(1, 0.0, 0.0),  
+      new PIDController(0.5, 0.0, 0.0),  
+
       (ChassisSpeeds speeds) -> 
-          drive(new ChassisSpeeds(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond,speeds.omegaRadiansPerSecond), true),
+          drive(new ChassisSpeeds(-speeds.vxMetersPerSecond,-speeds.vyMetersPerSecond,-speeds.omegaRadiansPerSecond), true),
       () -> {
           Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
               return alliance.isPresent() && alliance.get() == Alliance.Red;

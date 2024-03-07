@@ -32,6 +32,10 @@ public class PivotIntake extends Command {
       leftSetpoint = Constants.PIVOT_LEFT_RETRACTED_SETPOINT;
       rightSetpoint = Constants.PIVOT_RIGHT_RETRACTED_SETPOINT;
     }
+    else if(target == PivotTarget.Amp) {
+      leftSetpoint = Constants.PIVOT_LEFT_AMP_SETPOINT;
+      rightSetpoint = Constants.PIVOT_RIGHT_AMP_SETPOINT;
+    }
 
   }
 

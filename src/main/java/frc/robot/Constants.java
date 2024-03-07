@@ -112,14 +112,17 @@ public final class Constants {
     public static final int PIVOT_JOYSTICK = 1;
     public static final double PIVOT_DEADBAND = 0.05;
     public static final double PIVOT_SCALING_FACTOR = 0.15;
-    public static final double PIVOT_RIGHT_RETRACTED_SETPOINT = 34.5;
-    public static final double PIVOT_LEFT_RETRACTED_SETPOINT = -23.4;
-    public static final double PIVOT_RIGHT_INTAKE_SETPOINT = 115.9;
-    public static final double PIVOT_LEFT_INTAKE_SETPOINT = -113.8;
-    public static final int PIVOT_ENCODER_RIGHT = 0;
-    public static final int PIVOT_ENCODER_LEFT = 4;
-    public static final double PIVOT_OFFSET_RIGHT = 0.1561;
-    public static final double PIVOT_OFFSET_LEFT = 0.7657;
+    public static final double PIVOT_RIGHT_RETRACTED_SETPOINT = -93;
+    public static final double PIVOT_LEFT_RETRACTED_SETPOINT = 93;
+    public static final double PIVOT_RIGHT_INTAKE_SETPOINT = 0;
+    public static final double PIVOT_LEFT_INTAKE_SETPOINT = 0;
+    public static final int PIVOT_ENCODER_RIGHT = 4;
+    public static final int PIVOT_ENCODER_LEFT = 0;
+    public static final double PIVOT_OFFSET_RIGHT = 0.635;
+    public static final double PIVOT_OFFSET_LEFT = 0.117;
+    public static final double PIVOT_RIGHT_AMP_SETPOINT = -108.13;
+    public static final double PIVOT_LEFT_AMP_SETPOINT = 109.9;
+    public static final int AMP_SHOOTER_BUTTON = 3;
 
     
 
@@ -168,8 +171,8 @@ public final class Constants {
     //Deflectorinator Constants
     public static final int DEFLECTORINATOR_MOTOR = 29;
     public static final double kDeflectGearRatio = 20;
-    public static final int DEFLECTORINATOR_IN_BUTTON = 5;
-    public static final int DEFLECTORINATOR_OUT_BUTTON = 6;
+    public static final int DEFLECTORINATOR_IN_BUTTON = 2;
+    public static final int DEFLECTORINATOR_OUT_BUTTON = 3;
     public static final double DEFLECTORINATOR_SPEED = 0.1;
     public static final double DEFLECTORINATOR_OUT_SETPOINT = -0.325;
     public static final double DEFLECTORINATOR_RETRACTED_SETPOINT = 0;

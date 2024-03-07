@@ -81,9 +81,12 @@ public class DriveCommand extends Command {
         thetaDot *= 1/0.93;
       }
         
-        
-
-      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xDot, yDot, thetaDot, drivetrain.getHeading());
+      if(m_controller.leftBumper().getAsBoolean()){
+        chassisSpeeds = new ChassisSpeeds(xDot, yDot, thetaDot);
+      }
+      else{
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xDot, yDot, thetaDot, drivetrain.getHeading());
+      }
       System.out.println(drivetrain.getHeading());
       if(chassisSpeeds == new ChassisSpeeds(xDot, yDot, thetaDot)){
         System.out.println("good");

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
   
@@ -19,6 +20,7 @@ public class Pivot extends SubsystemBase {
   public enum PivotTarget{
     Retracted,
     Intake,
+    Amp
   }
 
   CANSparkMax PivotRightMotor;
@@ -26,9 +28,11 @@ public class Pivot extends SubsystemBase {
   PIDController controllerRight, controllerLeft;
   DutyCycleEncoder RightThroughbore;
   DutyCycleEncoder LeftThroughbore;
+  CommandXboxController XboxController;
+
   /** Creates a new Pivot. */
-  
-  public Pivot() {
+  public Pivot(CommandXboxController xboxController) {
+    XboxController = xboxController;
     PivotRightMotor = new CANSparkMax(Constants.PIVOT_MOTOR_RIGHT, MotorType.kBrushless);
     PivotLeftMotor = new CANSparkMax(Constants.PIVOT_MOTOR_LEFT, MotorType.kBrushless);
     controllerRight = new PIDController(0.008, 0.0, 0.00);
@@ -82,5 +86,10 @@ public class Pivot extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Right ThroughBore Encoders", RightThroughbore.getDistance());
     SmartDashboard.putNumber("Left ThroughBore Encoders", LeftThroughbore.getDistance());
+    if(!XboxController.a().getAsBoolean() || !XboxController.x().getAsBoolean()){
+    PivotRightMotor.set(-controllerRight.calculate(RightThroughbore.getDistance(), Constants.PIVOT_RIGHT_RETRACTED_SETPOINT));
+    PivotLeftMotor.set(-controllerLeft.calculate(LeftThroughbore.getDistance(), Constants.PIVOT_LEFT_RETRACTED_SETPOINT));
+    }
+
   }
 }

@@ -57,7 +57,7 @@ public class RobotContainer {
   private final CommandXboxController m_controller2 = new CommandXboxController(Constants.OPERATOR_CONTROLLER);
   private final AHRS m_ahrs = new AHRS();
   private final DrivetrainSubsystem m_drive = new DrivetrainSubsystem(m_ahrs);
-  private final Pivot m_pivot = new Pivot();
+  private final Pivot m_pivot = new Pivot(m_controller2);
   private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
   private final Deflectorinator m_deflectorinator = new Deflectorinator();
@@ -76,6 +76,7 @@ public class RobotContainer {
   JoystickButton shooterAmpButton = new JoystickButton(m_controller2.getHID(), Constants.SHOOTER_AMP_BUTTON);
   JoystickButton deflectorinatorInButton = new JoystickButton(m_controller.getHID(), Constants.DEFLECTORINATOR_IN_BUTTON);
   JoystickButton deflectorinatorOutButton = new JoystickButton(m_controller.getHID(), Constants.DEFLECTORINATOR_OUT_BUTTON);
+  JoystickButton ampPivotButton = new JoystickButton(m_controller2.getHID(), Constants.AMP_SHOOTER_BUTTON);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
   // public static ChoreoTrajectory LefttoNote = Choreo.getTrajectory("LefttoNote");
@@ -109,7 +110,8 @@ public class RobotContainer {
     // Pivot
      deployPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Intake));
      retractPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Retracted));
-     deployPivotButton.or(retractPivotButton).onFalse(new InstantCommand(m_pivot::off));
+     ampPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Amp));
+    //  deployPivotButton.or(retractPivotButton).onFalse(new InstantCommand(m_pivot::off));
     //  m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
     
     // Intake

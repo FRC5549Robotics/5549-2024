@@ -10,25 +10,29 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   CANSparkFlex IntakeMotorBottom;
   CANSparkMax IntakeMotorTop;
-  public Intake() {
+
+  public Intake(){
     IntakeMotorBottom = new CANSparkFlex(Constants.INTAKE_MOTOR_BOTTOM, MotorType.kBrushless);
     IntakeMotorTop = new CANSparkMax(Constants.INTAKE_MOTOR_TOP, MotorType.kBrushless);
     IntakeMotorBottom.setIdleMode(IdleMode.kCoast);
     IntakeMotorTop.setIdleMode(IdleMode.kCoast);
   }
+
   public void intake(double speed) {//make dependent on trigger
-    IntakeMotorBottom.set(speed);
-    IntakeMotorTop.set(speed);
+    IntakeMotorBottom.set(-speed);
+    IntakeMotorTop.set(-speed);
     System.out.println("kind of works");
   }
 
-  public void shoot() {
+  public void 
+  shoot() {
     IntakeMotorBottom.set(Constants.INTAKE_OUTTAKE_SPEED);
     IntakeMotorTop.set(Constants.INTAKE_OUTTAKE_SPEED);
   }
