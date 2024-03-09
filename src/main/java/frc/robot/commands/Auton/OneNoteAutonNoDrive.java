@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.IntakeAnalog;
 import frc.robot.commands.PIDShooter;
-import frc.robot.commands.PIDShooterAuton;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
@@ -25,9 +24,8 @@ public class OneNoteAutonNoDrive extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(
-          new PIDShooterAuton(shooter, limelight),
+          new PIDShooter(shooter, limelight),
           new SequentialCommandGroup(new WaitCommand(1), new InstantCommand(indexer::indexIn))),
-        new WaitCommand(1),
         new InstantCommand(shooter::off),
         new InstantCommand(indexer::off)
     );

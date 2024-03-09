@@ -24,8 +24,10 @@ import frc.robot.commands.IntakeAnalog;
 
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
-import com.kauailabs.navx.frc.AHRS; 
+import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -86,7 +88,7 @@ public class RobotContainer {
   // public static ChoreoTrajectory RighttoNote = Choreo.getTrajectory("RighttoNote");
   // public static ChoreoTrajectory NotetoRight = Choreo.getTrajectory("NotetoRight");
 
-  ChoreoTrajectory traj = Choreo.getTrajectory("Simple");
+  PathPlannerPath traj = PathPlannerPath.fromChoreoTrajectory("Simple");
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -150,7 +152,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // return m_drive.ChoreoTrajectoryFollower(traj);
+    // return AutoBuilder.followPath(traj);
     // return new SequentialCommandGroup(m_drive.ChoreoTrajectoryFollower(traj), new InstantCommand(m_drive::ChoreoTest));
     return new OneNoteAutonNoDrive(m_shooter, m_indexer, m_limelight);
   }

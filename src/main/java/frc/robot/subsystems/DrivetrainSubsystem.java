@@ -6,6 +6,10 @@ import java.util.function.BooleanSupplier;
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
 import  com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
@@ -77,6 +81,32 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
   /** Creates a new DriveSubsystem. */
   public DrivetrainSubsystem(AHRS ahrs) {
+    AutoBuilder.configureHolonomic(
+      this::getPose, // Robot pose supplier
+      this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+      this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+      (ChassisSpeeds speeds) -> 
+      drive(new ChassisSpeeds(-speeds.vxMetersPerSecond,-speeds.vyMetersPerSecond,-speeds.omegaRadiansPerSecond), true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+      new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+              new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+              new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+              4.5, // Max module speed, in m/s
+              0.399621397388, // Drive base radius in meters. Distance from robot center to furthest module.
+              new ReplanningConfig() // Default path replanning config. See the API for the options here
+      ),
+      () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      },
+      this // Reference to this subsystem to set requirements
+    );
     m_ahrs = ahrs;
     fixBackRight();
 
@@ -395,21 +425,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
   private SwerveModuleState[] states = Constants.kDriveKinematics.toSwerveModuleStates(m_chassisSpeeds);
 
-  // public Command followTrajectoryCommand(PathPlannerTrajectory traj) {
-  //   return new PPSwerveControllerCommand(
-  //       traj, 
-  //       this::getPose, // Pose supplier
-  //       Constants.kDriveKinematics, // SwerveDriveKinematics
-  //       new PIDController(1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-  //       new PIDController(3.5, 0, 0), // Y controller (usually the same values as X controller)
-  //       new PIDController(1.7, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-  //       (SwerveModuleState[] states) -> {
-  //              this.m_chassisSpeeds = Constants.kDriveKinematics.toChassisSpeeds(states);
-  //      }, // Module states consumer
-  //       true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-  //       this // Requires this drive subsystem
-  //   );
-  // }
   public Command ChoreoTrajectoryFollower(ChoreoTrajectory traj){
     return Choreo.choreoSwerveCommand(
       traj, 
@@ -428,6 +443,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void ChoreoTest(){
     System.out.println("the path ends");
+  }
+
+  public ChassisSpeeds getChassisSpeeds() {
+    return Constants.kDriveKinematics.toChassisSpeeds(
+        m_frontLeft.getState(),
+        m_frontRight.getState(),
+        m_rearLeft.getState(),
+        m_rearRight.getState());
   }
 
 }
