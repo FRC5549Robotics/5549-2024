@@ -69,8 +69,8 @@ public class Shooter extends SubsystemBase {
 	}
 
 	public void shooterAmp(){
-		ShooterRight.set(-Constants.SHOOTER_SET_SPEED/2.7);
-		ShooterLeft.set(Constants.SHOOTER_SET_SPEED/2.7);
+		ShooterRight.set(-Constants.SHOOTER_SET_SPEED/2.74);
+		ShooterLeft.set(Constants.SHOOTER_SET_SPEED/2.74);
 	}
 
 	public void off(){

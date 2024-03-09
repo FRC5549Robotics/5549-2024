@@ -31,7 +31,7 @@ public class Deflectorinator extends SubsystemBase {
   /** Creates a new Deflectorinator. */
   public Deflectorinator() {
     DeflectMotor = new CANSparkMax(Constants.DEFLECTORINATOR_MOTOR, MotorType.kBrushless);
-    controller = new PIDController(0.9, 0.0, 0.0);
+    controller = new PIDController(1, 0.0, 0.0);
     DeflectEncoder = DeflectMotor.getEncoder();
     DeflectMotor.setIdleMode(IdleMode.kBrake);
     DeflectEncoder.setPositionConversionFactor(1/Constants.kDeflectGearRatio);

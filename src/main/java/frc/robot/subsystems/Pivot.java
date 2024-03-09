@@ -86,7 +86,7 @@ public class Pivot extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Right ThroughBore Encoders", RightThroughbore.getDistance());
     SmartDashboard.putNumber("Left ThroughBore Encoders", LeftThroughbore.getDistance());
-    if(!XboxController.a().getAsBoolean() || !XboxController.x().getAsBoolean()){
+    if(!XboxController.a().getAsBoolean() && !XboxController.x().getAsBoolean()){
     PivotRightMotor.set(-controllerRight.calculate(RightThroughbore.getDistance(), Constants.PIVOT_RIGHT_RETRACTED_SETPOINT));
     PivotLeftMotor.set(-controllerLeft.calculate(LeftThroughbore.getDistance(), Constants.PIVOT_LEFT_RETRACTED_SETPOINT));
     }

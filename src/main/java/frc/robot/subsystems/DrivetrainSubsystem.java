@@ -414,10 +414,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return Choreo.choreoSwerveCommand(
       traj, 
       this::getPose, 
-      new PIDController(1, 0.0, 0.0),  
-      new PIDController(1, 0.0, 0.0),  
-      new PIDController(0.5, 0.0, 0.0),  
-
+      new PIDController(5, 0.0, 0.0),  
+      new PIDController(5, 0.0, 0.0),  
+      new PIDController(0.35, 0.0, 0.0),  
       (ChassisSpeeds speeds) -> 
           drive(new ChassisSpeeds(-speeds.vxMetersPerSecond,-speeds.vyMetersPerSecond,-speeds.omegaRadiansPerSecond), true),
       () -> {
