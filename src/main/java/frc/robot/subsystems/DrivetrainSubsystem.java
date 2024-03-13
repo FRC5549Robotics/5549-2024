@@ -10,6 +10,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
@@ -187,11 +188,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // if(Math.abs(m_rearRight.getTurnEncoder().getPosition() - m_rearRight.getTurnCANcoderAngle()) > 2){
     //   m_rearRight.getTurnEncoder().setPosition(m_rearRight.getTurnCANcoderAngle());
     // }
-
-    if(Math.abs(m_rearLeft.getTurnEncoder().getPosition() - m_rearLeft.getTurnCANcoderAngle()*360) > 2){
-      m_rearLeft.getTurnEncoder().setPosition(m_rearLeft.getTurnCANcoderAngle()*360);
-      System.out.println("Pinion Slip Corrected");
-    }
   }
 
   public void updateOdometry() {

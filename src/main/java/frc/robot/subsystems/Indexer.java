@@ -8,6 +8,8 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,7 +29,13 @@ public class Indexer extends SubsystemBase {
   Color kBlack = new Color(0, 0, 0);
   Color detectedColor;
   ColorMatchResult match;
-  public Indexer() {
+
+  AddressableLED LED;
+  AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(Constants.INDEXER_LED_STRIP_LENGTH);
+  Color kGreen1 = new Color(0, 150,  0);
+  Color kOrange1 = new Color(247, 125, 2);
+
+  public Indexer(AddressableLED led) {
     IndexerMotor = new CANSparkMax(Constants.INDEXER_MOTOR, MotorType.kBrushless);
     IndexerMotor.setIdleMode(IdleMode.kCoast);
     analog = new AnalogInput(0);
@@ -36,25 +44,53 @@ public class Indexer extends SubsystemBase {
     m_colorSensor = new ColorSensorV3(i2cPort);
     m_colorMatcher = new ColorMatch();
     m_colorMatcher.addColorMatch(kOrangeTarget);
+
+    LED = led;
+    LED.setLength(ledBuffer.getLength());
+    LED.setData(ledBuffer);
+    LED.start();
+    for(int i = 0; i < ledBuffer.getLength(); i++){
+      ledBuffer.setLED(i, kGreen1);
+    }
+    LED.setData(ledBuffer);
   }
+
   public void indexIn(){
-    // if (analog.getVoltage() < Constants.SENSOR_VOLTAGE_THRESHOLD) {
-    //   IndexerMotor.set(-Constants.INDEXER_SPEED);
-    // }
+    if (analog.getVoltage() < Constants.SENSOR_VOLTAGE_THRESHOLD) {
+      IndexerMotor.set(-Constants.INDEXER_SPEED);
+    }
+    else {
+      IndexerMotor.set(0);
+      for(int i = 0; i < ledBuffer.getLength(); i++){
+        ledBuffer.setLED(i, kOrange1);
+      }
+      LED.setData(ledBuffer);
+    }
+    // if (match.color != kOrangeTarget){
+    // IndexerMotor.set(-Constants.INDEXER_SPEED);
+    // } 
     // else {
     //   IndexerMotor.set(0);
-    // }
-    // if (match.color != kOrangeTarget){
-    IndexerMotor.set(-Constants.INDEXER_SPEED);
-    // } else {
-    //   IndexerMotor.set(0);
+    //   for(int i = 0; i < ledBuffer.getLength(); i++){
+    //     ledBuffer.setLED(i, kOrange1);
+    //   }
+    // LED.setData(ledBuffer);
     // }    
   }
-    public void indexOut(){
+  public void indexOut(){
     IndexerMotor.set(Constants.INDEXER_SPEED_OUT);
   }
+
   public void off(){
     IndexerMotor.set(0);
+    resetLEDs();
+  }
+
+  public void resetLEDs(){
+    for(int i = 0; i < ledBuffer.getLength(); i++){
+      ledBuffer.setLED(i, kGreen1);
+    }
+    LED.setData(ledBuffer);
   }
 
   @Override

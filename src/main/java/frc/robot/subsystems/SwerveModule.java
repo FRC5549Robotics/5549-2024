@@ -130,6 +130,10 @@ public class SwerveModule extends SubsystemBase {
         return m_turningMotor;
     }
 
+    public CANSparkMax getDriveMotor() {
+        return m_driveMotor;
+    }
+
     public RelativeEncoder getTurnEncoder() {
         return m_turningEncoder;
     }

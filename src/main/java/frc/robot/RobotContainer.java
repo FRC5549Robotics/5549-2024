@@ -30,6 +30,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.SPI;
 import org.ejml.simple.SimpleBase;
 import org.ejml.simple.SimpleMatrix;
@@ -60,12 +61,14 @@ public class RobotContainer {
   private final AHRS m_ahrs = new AHRS();
   private final DrivetrainSubsystem m_drive = new DrivetrainSubsystem(m_ahrs);
   private final Pivot m_pivot = new Pivot(m_controller2);
-  private final Intake m_intake = new Intake();
+  //private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
   private final Deflectorinator m_deflectorinator = new Deflectorinator();
   private final Climber m_climber = new Climber();
   private final Limelight m_limelight = new Limelight();//Find Feedforward Constants );
-  private final Indexer m_indexer = new Indexer();
+  private final AddressableLED led = new AddressableLED(9);
+  private final Indexer m_indexer = new Indexer(led);
+
 
   JoystickButton resetNavXButton = new JoystickButton(m_controller.getHID(), Constants.RESET_NAVX_BUTTON);
   JoystickButton deployPivotButton = new JoystickButton(m_controller2.getHID(), Constants.DEPLOY_PIVOT_BUTTON);
@@ -89,6 +92,7 @@ public class RobotContainer {
   // public static ChoreoTrajectory NotetoRight = Choreo.getTrajectory("NotetoRight");
 
   PathPlannerPath traj = PathPlannerPath.fromChoreoTrajectory("Simple");
+  PathPlannerPath traj2 = PathPlannerPath.fromChoreoTrajectory("RighttoNoteFarR");
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -117,9 +121,9 @@ public class RobotContainer {
     // m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
     
     // Intake
-     m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).whileTrue(new IntakeAnalog(m_intake, m_controller2));
-     intakeShootingButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));
-     m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_intake::off));
+    //  m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).whileTrue(new IntakeAnalog(m_intake, m_controller2));
+    //  intakeShootingButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));
+    //  m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_intake::off));
     
     // Indexer
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new InstantCommand(m_indexer::indexIn));
@@ -131,7 +135,7 @@ public class RobotContainer {
      shooterIntakingButton.onTrue(new InstantCommand(m_shooter::shooterIn)).onFalse(new InstantCommand(m_shooter::off));
      shooterAmpButton.onTrue(new InstantCommand(m_shooter::shooterAmp)).onFalse(new InstantCommand(m_shooter::off));
 
-    // Deflectorinato
+    // Deflectorinator
      deflectorinatorInButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateIn));
      deflectorinatorOutButton.whileTrue(new InstantCommand(m_deflectorinator::deflectorinateOut));
      deflectorinatorInButton.or(deflectorinatorOutButton).onFalse(new InstantCommand(m_deflectorinator::off));
