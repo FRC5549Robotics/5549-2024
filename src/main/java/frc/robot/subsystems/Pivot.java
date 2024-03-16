@@ -63,6 +63,11 @@ public class Pivot extends SubsystemBase {
     PivotRightMotor.set(-controllerRight.calculate(RightThroughbore.getDistance(), Constants.PIVOT_RIGHT_INTAKE_SETPOINT));
     PivotLeftMotor.set(-controllerLeft.calculate(LeftThroughbore.getDistance(), Constants.PIVOT_LEFT_INTAKE_SETPOINT));
   }
+
+  public void autonPivotIn() {
+    PivotRightMotor.set(-controllerRight.calculate(RightThroughbore.getDistance(), Constants.PIVOT_RIGHT_RETRACTED_SETPOINT));
+    PivotLeftMotor.set(-controllerLeft.calculate(LeftThroughbore.getDistance(), Constants.PIVOT_LEFT_RETRACTED_SETPOINT));
+  }
   
   public void checkLag(double leftSetpoint, double rightSetpoint) {
     // if(Math.abs(RightThroughbore.getDistance() - rightSetpoint) > 2){
@@ -87,14 +92,23 @@ public class Pivot extends SubsystemBase {
     SmartDashboard.putNumber("rs", rightSetpoint);
     SmartDashboard.putNumber("ls", leftSetpoint);
   }
+  public double getRightPosition(){
+    return RightThroughbore.getDistance();
+  }
+  public double getLeftPosition(){
+    return LeftThroughbore.getDistance();
+  }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Right ThroughBore Encoders", RightThroughbore.getDistance());
+    
     SmartDashboard.putNumber("Left ThroughBore Encoders", LeftThroughbore.getDistance());
     if(!XboxController.a().getAsBoolean() && !XboxController.x().getAsBoolean()){
     PivotRightMotor.set(-controllerRight.calculate(RightThroughbore.getDistance(), Constants.PIVOT_RIGHT_RETRACTED_SETPOINT));
     PivotLeftMotor.set(-controllerLeft.calculate(LeftThroughbore.getDistance(), Constants.PIVOT_LEFT_RETRACTED_SETPOINT));
     }
+
+
   }
 }

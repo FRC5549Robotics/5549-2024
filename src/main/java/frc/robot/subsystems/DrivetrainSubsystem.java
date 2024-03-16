@@ -178,16 +178,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
       m_ahrs.zeroYaw();
       System.out.println("Zeroed: " + getHeading());
     }
-    
-    // if(Math.abs(m_frontRight.getTurnEncoder().getPosition() - m_frontRight.getTurnCANcoderAngle()) > 2){
-    //   m_frontRight.getTurnEncoder().setPosition(m_frontRight.getTurnCANcoderAngle());
-    // }
-    // if(Math.abs(m_frontLeft.getTurnEncoder().getPosition() - m_frontLeft.getTurnCANcoderAngle()) > 2){
-    //   m_frontLeft.getTurnEncoder().setPosition(m_frontLeft.getTurnCANcoderAngle());
-    // }
-    // if(Math.abs(m_rearRight.getTurnEncoder().getPosition() - m_rearRight.getTurnCANcoderAngle()) > 2){
-    //   m_rearRight.getTurnEncoder().setPosition(m_rearRight.getTurnCANcoderAngle());
-    // }
   }
 
   public void updateOdometry() {

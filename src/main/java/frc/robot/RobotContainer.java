@@ -61,7 +61,7 @@ public class RobotContainer {
   private final AHRS m_ahrs = new AHRS();
   private final DrivetrainSubsystem m_drive = new DrivetrainSubsystem(m_ahrs);
   private final Pivot m_pivot = new Pivot(m_controller2);
-  //private final Intake m_intake = new Intake();
+  private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
   private final Deflectorinator m_deflectorinator = new Deflectorinator();
   private final Climber m_climber = new Climber();
@@ -114,16 +114,17 @@ public class RobotContainer {
     resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
 
     // Pivot
-     deployPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Intake));
-     retractPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Retracted));
-    // ampPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Amp));
-    // deployPivotButton.or(retractPivotButton).onFalse(new InstantCommand(m_pivot::off));
-    // m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
+    //  deployPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Intake, m_indexer, m_intake));
+    //  retractPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Retracted, m_intake));
+    //  ampPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Amp));
+    //  deployPivotButton.or(retractPivotButton).onFalse(new InstantCommand(m_pivot::off));
+    //  m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
     
     // Intake
     //  m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).whileTrue(new IntakeAnalog(m_intake, m_controller2));
     //  intakeShootingButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));
     //  m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_intake::off));
+    //  deployPivotButton.whileTrue(new InstantCommand(m_intake::intakeFull));
     
     // Indexer
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new InstantCommand(m_indexer::indexIn));
@@ -131,6 +132,7 @@ public class RobotContainer {
      intakeShootingButton.onTrue(new InstantCommand(m_indexer::indexOut)).onFalse(new InstantCommand(m_indexer::off));
 
     // Shooter
+    //Change this line to include parallel command group: PIDShooter, sequentialCommandGroup(wait, index) 
      m_controller2.axisGreaterThan(Constants.SHOOTER_TRIGGER, Constants.SHOOTER_TRIGGER_THRESHOLD).whileTrue(new PIDShooter(m_shooter, m_limelight)).whileFalse(new InstantCommand(m_shooter::off));
      shooterIntakingButton.onTrue(new InstantCommand(m_shooter::shooterIn)).onFalse(new InstantCommand(m_shooter::off));
      shooterAmpButton.onTrue(new InstantCommand(m_shooter::shooterAmp)).onFalse(new InstantCommand(m_shooter::off));

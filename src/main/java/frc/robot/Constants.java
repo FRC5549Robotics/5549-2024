@@ -91,7 +91,7 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
-    public static final double kDriveP = 0.4;
+    public static final double kDriveP = 0.1;
     public static final double kDriveI = 0.0;
     public static final double kDriveD = 0.0;
     public static final double kDriveFF = 2.96;
@@ -128,7 +128,7 @@ public final class Constants {
     //Indexer Constants
     public static final int INDEXER_MOTOR = 22;
     public static final double INDEXER_SPEED = 1;
-    public static final double INDEXER_SPEED_OUT = 0.6;
+    public static final double INDEXER_SPEED_OUT = 0.5;
     public static final int INDEXER_IN_BUTTON = 2;
     public static final int INDEXER_OUT_BUTTON = 5;
     public static final double SENSOR_VOLTAGE_THRESHOLD = 0.18;

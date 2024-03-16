@@ -32,8 +32,8 @@ public class Indexer extends SubsystemBase {
 
   AddressableLED LED;
   AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(Constants.INDEXER_LED_STRIP_LENGTH);
-  Color kGreen1 = new Color(0, 150,  0);
-  Color kOrange1 = new Color(247, 125, 2);
+  Color kGreen1 = new Color(20, 150,  0);
+  Color kOrange1 = new Color(255, 25, 0);
 
   public Indexer(AddressableLED led) {
     IndexerMotor = new CANSparkMax(Constants.INDEXER_MOTOR, MotorType.kBrushless);
@@ -56,16 +56,16 @@ public class Indexer extends SubsystemBase {
   }
 
   public void indexIn(){
-    if (analog.getVoltage() < Constants.SENSOR_VOLTAGE_THRESHOLD) {
+    // if (analog.getVoltage() < Constants.SENSOR_VOLTAGE_THRESHOLD) {
       IndexerMotor.set(-Constants.INDEXER_SPEED);
-    }
-    else {
-      IndexerMotor.set(0);
-      for(int i = 0; i < ledBuffer.getLength(); i++){
-        ledBuffer.setLED(i, kOrange1);
-      }
-      LED.setData(ledBuffer);
-    }
+    // }
+    // else {
+    //   IndexerMotor.set(0);
+    //   for(int i = 0; i < ledBuffer.getLength(); i++){
+    //     ledBuffer.setLED(i, kOrange1);
+    //   }
+    //   LED.setData(ledBuffer);
+    // }
     // if (match.color != kOrangeTarget){
     // IndexerMotor.set(-Constants.INDEXER_SPEED);
     // } 
@@ -97,9 +97,9 @@ public class Indexer extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Sensor Output", analog.getVoltage());
     SmartDashboard.putNumber("Color Sensor IR", m_colorSensor.getIR());
-    SmartDashboard.putNumber("Color Sensor Red", m_colorSensor.getRed());
-    SmartDashboard.putNumber("Color Sensor Green", m_colorSensor.getGreen());    
-    SmartDashboard.putNumber("Color Sensor Blue", m_colorSensor.getBlue());
+    SmartDashboard.putNumber("Color Sensor Red", m_colorSensor.getColor().red);
+    SmartDashboard.putNumber("Color Sensor Green", m_colorSensor.getColor().green);    
+    SmartDashboard.putNumber("Color Sensor Blue", m_colorSensor.getColor().blue);
     SmartDashboard.putString("Color Matched", m_colorSensor.getColor().toString());
     // This method will be called once per scheduler run
   }

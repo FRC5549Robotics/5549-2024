@@ -3,15 +3,19 @@ package frc.robot.subsystems;
 import java.io.Console;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.DeviceIdentifier;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.ctre.phoenix6.hardware.TalonFX;
 // import com.revrobotics.CANSparkMax.IdleMode;
 // import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 // import com.revrobotics.CANSparkMax.ControlType;
@@ -26,10 +30,12 @@ import frc.robot.Constants;
 
 public class SwerveModule extends SubsystemBase {
 
-    private final CANSparkMax m_driveMotor;
-    private final CANSparkMax m_turningMotor;
 
-    private final RelativeEncoder m_driveEncoder;
+    private final CANSparkMax m_turningMotor;
+    private final TalonFX m_krakenMotor;
+    private final TalonFXConfigurator m_krakenConfigurator;
+
+  
     private final RelativeEncoder m_turningEncoder;
 
     private final CANcoder m_turningCANCoder;
@@ -39,7 +45,6 @@ public class SwerveModule extends SubsystemBase {
 //    private final Rotation2d m_CANCoderOffset;
 
     private final SparkPIDController m_turningController;
-    private final SparkPIDController m_driveController;    
 
     /**
      * Constructs a SwerveModule.
@@ -51,20 +56,27 @@ public class SwerveModule extends SubsystemBase {
                         int driveMotorChannel,
                         int turningMotorChannel,
                         int turningCANCoderChannel) {
-
-        m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
-        m_driveMotor.restoreFactoryDefaults();
-        m_driveMotor.setIdleMode(IdleMode.kBrake);
+        m_krakenMotor = new TalonFX(driveMotorChannel);
+        m_krakenMotor.getPosition();
+        m_krakenMotor.getVelocity();
+        m_krakenConfigurator = m_krakenMotor.getConfigurator();
+        TalonFXConfiguration m_krakenConfiguration = new TalonFXConfiguration();
+        {
+            m_krakenConfiguration.Feedback.RotorToSensorRatio = Constants.kDriveConversionFactor;
+            m_krakenConfiguration.CurrentLimits.StatorCurrentLimit = 150;
+            m_krakenConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
+            m_krakenConfiguration.Slot0.kP = Constants.kDriveP;
+            m_krakenConfiguration.Slot0.kI = Constants.kDriveI;
+            m_krakenConfiguration.Slot0.kD = Constants.kDriveD;
+        }
+        m_krakenConfigurator.apply(m_krakenConfiguration);
         m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
         m_turningMotor.restoreFactoryDefaults();
         m_turningMotor.setIdleMode(IdleMode.kBrake);
-        m_driveMotor.setSmartCurrentLimit(40);
         m_turningMotor.setSmartCurrentLimit(40);
-        m_driveMotor.burnFlash();
         m_turningMotor.burnFlash();
         Timer.delay(0.5);
 
-        m_driveEncoder = m_driveMotor.getEncoder();
         Timer.delay(1);
         System.out.println("initialized");
         m_turningCANCoder = new CANcoder(turningCANCoderChannel);
@@ -78,31 +90,22 @@ public class SwerveModule extends SubsystemBase {
         // m_driveMotor.setIdleMode(IdleMode.kBrake);
         // m_turningMotor.setIdleMode(IdleMode.kCoast);
 
-        m_driveMotor.setIdleMode(IdleMode.kBrake);
         m_turningMotor.setIdleMode(IdleMode.kBrake);
-        m_driveMotor.setSmartCurrentLimit(40);
         m_turningMotor.setSmartCurrentLimit(40);
 
         // m_driveEncoder returns RPM by default. Use setVelocityConversionFactor() to
         // convert that to meters per second.
-        m_driveEncoder.setVelocityConversionFactor(Constants.kDriveConversionFactor / 60.0);
-        m_driveEncoder.setPositionConversionFactor(Constants.kDriveConversionFactor);
 
         m_turningEncoder.setPositionConversionFactor(360.0 / Constants.kTurnPositionConversionFactor);
 
         m_turningController = m_turningMotor.getPIDController();
-        m_driveController = m_driveMotor.getPIDController();
 
-        m_driveMotor.enableVoltageCompensation(12);
 
         m_turningController.setP(Constants.kTurningP);
         m_turningController.setI(Constants.kTurningI);
         m_turningController.setD(Constants.kTurningD);
 
         // 401 only sets P of the drive PID
-        m_driveController.setP(Constants.kDriveP);
-        m_driveController.setI(Constants.kDriveI);
-        m_driveController.setD(Constants.kDriveD);
     }
 
     /**
@@ -123,15 +126,15 @@ public class SwerveModule extends SubsystemBase {
         y="3";
         String a = x != null ? y : x;
 
-        return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(m2 * Math.PI / 180));
+        return new SwerveModuleState(m_krakenMotor.getVelocity().getValueAsDouble(), new Rotation2d(m2 * Math.PI / 180));
     }
 
     public CANSparkMax getTurnMotor() {
         return m_turningMotor;
     }
 
-    public CANSparkMax getDriveMotor() {
-        return m_driveMotor;
+    public TalonFX getDriveMotor() {
+        return m_krakenMotor;
     }
 
     public RelativeEncoder getTurnEncoder() {
@@ -202,7 +205,7 @@ public class SwerveModule extends SubsystemBase {
 
         SmartDashboard.putNumber("Commanded Velocity", driveOutput);
 
-        m_driveMotor.setVoltage(Constants.kDriveFF * driveOutput);
+        m_krakenMotor.setVoltage(Constants.kDriveFF * driveOutput);
     }
 
     //calculate the angle motor setpoint based on the desired angle and the current angle measurement
@@ -213,11 +216,11 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public double getDriveDistanceMeters() {
-        return m_driveEncoder.getPosition();
+        return m_krakenMotor.getPosition().getValueAsDouble();
     }
 
     public void resetDistance() {
-        m_driveEncoder.setPosition(0.0);
+        m_krakenMotor.setPosition(0.0);
     }
 
     public void syncTurningEncoders() {

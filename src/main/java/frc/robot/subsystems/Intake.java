@@ -30,9 +30,12 @@ public class Intake extends SubsystemBase {
     IntakeMotorTop.set(-speed);
     System.out.println("kind of works");
   }
+    public void intakeFull() {
+    IntakeMotorBottom.set(-1);
+    IntakeMotorTop.set(-1);
+  }
 
-  public void 
-  shoot() {
+  public void shoot() {
     IntakeMotorBottom.set(Constants.INTAKE_OUTTAKE_SPEED);
     IntakeMotorTop.set(Constants.INTAKE_OUTTAKE_SPEED);
   }
