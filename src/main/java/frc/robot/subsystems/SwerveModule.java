@@ -6,9 +6,11 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.DeviceIdentifier;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -34,7 +36,7 @@ public class SwerveModule extends SubsystemBase {
     private final CANSparkMax m_turningMotor;
     private final TalonFX m_krakenMotor;
     private final TalonFXConfigurator m_krakenConfigurator;
-
+    private TalonFXConfiguration m_krakenConfiguration = new TalonFXConfiguration();
   
     private final RelativeEncoder m_turningEncoder;
 
@@ -60,11 +62,11 @@ public class SwerveModule extends SubsystemBase {
         m_krakenMotor.getPosition();
         m_krakenMotor.getVelocity();
         m_krakenConfigurator = m_krakenMotor.getConfigurator();
-        TalonFXConfiguration m_krakenConfiguration = new TalonFXConfiguration();
         {
             m_krakenConfiguration.Feedback.RotorToSensorRatio = Constants.kDriveConversionFactor;
-            m_krakenConfiguration.CurrentLimits.StatorCurrentLimit = 150;
+            m_krakenConfiguration.CurrentLimits.StatorCurrentLimit = 100;
             m_krakenConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
+            m_krakenConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             m_krakenConfiguration.Slot0.kP = Constants.kDriveP;
             m_krakenConfiguration.Slot0.kI = Constants.kDriveI;
             m_krakenConfiguration.Slot0.kD = Constants.kDriveD;
@@ -180,7 +182,7 @@ public class SwerveModule extends SubsystemBase {
 
         SmartDashboard.putNumber("Commanded Velocity", driveOutput);
 
-        m_driveController.setReference(driveOutput, ControlType.kVelocity, 0, Constants.kDriveFF * driveOutput);
+        m_krakenMotor.setControl(new VelocityVoltage(driveOutput, 4, false, Constants.kDriveFF * driveOutput, 0, false, false, false));
     }
 
     public void setOpenLoopState(SwerveModuleState state) {
