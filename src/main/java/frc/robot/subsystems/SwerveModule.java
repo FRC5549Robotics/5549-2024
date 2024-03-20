@@ -182,7 +182,8 @@ public class SwerveModule extends SubsystemBase {
 
         SmartDashboard.putNumber("Commanded Velocity", driveOutput);
 
-        m_krakenMotor.setControl(new VelocityVoltage(driveOutput, 4, false, Constants.kDriveFF * driveOutput, 0, false, false, false));
+        m_krakenMotor.setControl(new VelocityVoltage(driveOutput, 6, false, Constants.kDriveFF * driveOutput, 0, false, false, false));
+        SmartDashboard.putNumber("Module Speeds", m_krakenMotor.getMotorVoltage().getValueAsDouble());
     }
 
     public void setOpenLoopState(SwerveModuleState state) {

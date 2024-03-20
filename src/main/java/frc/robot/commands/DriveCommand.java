@@ -43,6 +43,7 @@ public class DriveCommand extends Command {
       xDot = m_controller.getLeftY() * Constants.kMaxTranslationalVelocity;
       yDot = m_controller.getLeftX() * Constants.kMaxTranslationalVelocity;
       thetaDot = m_controller.getRightX() * Constants.kMaxRotationalVelocity;
+      System.out.println("X:  " + m_controller.getLeftY() + "   Y: " + m_controller.getLeftX() + "   Z: " + m_controller.getRightX());
       // if (m_controller.getHID().getRightTriggerAxis() > 0.1) {
       //   thetaDot = m_limelight.getSpeakerTheta();
       //   if (-2 > m_limelight.getAngle() || 2 < m_limelight.getAngle()) {

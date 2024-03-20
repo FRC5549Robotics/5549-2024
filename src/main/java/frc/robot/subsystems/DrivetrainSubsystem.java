@@ -304,9 +304,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     double realMaxSpeed = 0.0;
     for (SwerveModuleState moduleState : desiredStates) {
       realMaxSpeed = Math.max(realMaxSpeed, Math.abs(moduleState.speedMetersPerSecond));
+      SmartDashboard.putNumber("Capped Speed", realMaxSpeed);
     }
 
-    double scale = Math.min(k * Constants.kMaxSpeedMetersPerSecond / realMaxSpeed, 1);
+    double scale = Math.min(k * Constants.kMaxTranslationalVelocity / realMaxSpeed, 1);
     for (SwerveModuleState moduleState : desiredStates) {
       moduleState.speedMetersPerSecond *= scale;
     }

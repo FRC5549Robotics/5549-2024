@@ -60,7 +60,7 @@ public final class Constants {
 
     public static final double kTurnPositionConversionFactor = 12.8;
 
-    public static final double kMaxSpeedMetersPerSecond = 4.0;
+    public static final double kMaxSpeedMetersPerSecond = 6.0;
     // Units are meters.
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = 0.56515;
@@ -69,7 +69,7 @@ public final class Constants {
     public static final double kWheelBase = 0.56515;
 
     // Units are meters per second
-    public static final double kMaxTranslationalVelocity = 6380.0 / 60.0 *
+    public static final double kMaxTranslationalVelocity = 6000 / 60.0 *
     (1/kDriveGearRatio) *
     kWheelDiameterMeters * Math.PI; //max 4.5
 
@@ -94,7 +94,7 @@ public final class Constants {
     public static final double kDriveP = 0.1;
     public static final double kDriveI = 0.0;
     public static final double kDriveD = 0.0;
-    public static final double kDriveFF = 2.96;
+    public static final double kDriveFF = 4;
 
     public static final double kTurningP = 0.01;
     public static final double kTurningI = 0.0;
@@ -112,14 +112,14 @@ public final class Constants {
     public static final int PIVOT_JOYSTICK = 1;
     public static final double PIVOT_DEADBAND = 0.05;
     public static final double PIVOT_SCALING_FACTOR = 0.15;
-    public static final double PIVOT_RIGHT_RETRACTED_SETPOINT = -57.6;
-    public static final double PIVOT_LEFT_RETRACTED_SETPOINT = 63.6;
+    public static final double PIVOT_RIGHT_RETRACTED_SETPOINT = -96.7;
+    public static final double PIVOT_LEFT_RETRACTED_SETPOINT = 102.2;
     public static final double PIVOT_RIGHT_INTAKE_SETPOINT = 0;
     public static final double PIVOT_LEFT_INTAKE_SETPOINT = 0;
     public static final int PIVOT_ENCODER_RIGHT = 4;
     public static final int PIVOT_ENCODER_LEFT = 0;
-    public static final double PIVOT_OFFSET_RIGHT = 0.635;
-    public static final double PIVOT_OFFSET_LEFT = 0.117;
+    public static final double PIVOT_OFFSET_RIGHT = 0.615;
+    public static final double PIVOT_OFFSET_LEFT = 0.805;
     public static final double PIVOT_RIGHT_AMP_SETPOINT = -108.13;
     public static final double PIVOT_LEFT_AMP_SETPOINT = 109.9;
     public static final int AMP_SHOOTER_BUTTON = 3;

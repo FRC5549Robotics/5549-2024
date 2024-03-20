@@ -35,8 +35,8 @@ public class Pivot extends SubsystemBase {
     XboxController = xboxController;
     PivotRightMotor = new CANSparkMax(Constants.PIVOT_MOTOR_RIGHT, MotorType.kBrushless);
     PivotLeftMotor = new CANSparkMax(Constants.PIVOT_MOTOR_LEFT, MotorType.kBrushless);
-    controllerRight = new PIDController(0.008, 0.0, 0.00);
-    controllerLeft = new PIDController(0.008, 0.0, 0.00);
+    controllerRight = new PIDController(0.001, 0.0, 0.00);
+    controllerLeft = new PIDController(0.001, 0.0, 0.00);
     RightThroughbore = new DutyCycleEncoder(Constants.PIVOT_ENCODER_RIGHT);
     LeftThroughbore = new DutyCycleEncoder(Constants.PIVOT_ENCODER_LEFT);
     RightThroughbore.setPositionOffset(Constants.PIVOT_OFFSET_RIGHT);

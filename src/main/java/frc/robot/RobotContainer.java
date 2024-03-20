@@ -60,7 +60,7 @@ public class RobotContainer {
   private final CommandXboxController m_controller2 = new CommandXboxController(Constants.OPERATOR_CONTROLLER);
   private final AHRS m_ahrs = new AHRS();
   private final DrivetrainSubsystem m_drive = new DrivetrainSubsystem(m_ahrs);
-  //private final Pivot m_pivot = new Pivot(m_controller2);
+  private final Pivot m_pivot = new Pivot(m_controller2);
   private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
   private final Deflectorinator m_deflectorinator = new Deflectorinator();
@@ -71,9 +71,9 @@ public class RobotContainer {
 
 
   JoystickButton resetNavXButton = new JoystickButton(m_controller.getHID(), Constants.RESET_NAVX_BUTTON);
-  //JoystickButton deployPivotButton = new JoystickButton(m_controller2.getHID(), Constants.DEPLOY_PIVOT_BUTTON);
-  //JoystickButton retractPivotButton = new JoystickButton(m_controller2.getHID(), Constants.RETRACT_PIVOT_BUTTON);
-  //JoystickButton intakeShootingButton = new JoystickButton(m_controller2.getHID(), Constants.INTAKE_SHOOTER_BUTTON);
+  JoystickButton deployPivotButton = new JoystickButton(m_controller2.getHID(), Constants.DEPLOY_PIVOT_BUTTON);
+  JoystickButton retractPivotButton = new JoystickButton(m_controller2.getHID(), Constants.RETRACT_PIVOT_BUTTON);
+  JoystickButton intakeShootingButton = new JoystickButton(m_controller2.getHID(), Constants.INTAKE_SHOOTER_BUTTON);
   JoystickButton autoClimbButton = new JoystickButton(m_controller.getHID(), Constants.CLIMBER_BUTTON);
   JoystickButton indexerInButton = new JoystickButton(m_controller2.getHID(), Constants.INDEXER_IN_BUTTON);
   JoystickButton indexerOutButton = new JoystickButton(m_controller2.getHID(), Constants.INDEXER_OUT_BUTTON);
@@ -114,17 +114,19 @@ public class RobotContainer {
     resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
 
     // Pivot
+    //  deployPivotButton.whileTrue(
+    //    new SequentialCommandGroup(new PivotIntake(m_pivot, PivotTarget.Intake, m_indexer, m_intake),
+    //    new InstantCommand(m_pivot::autonPivotIn)));
     //  deployPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Intake, m_indexer, m_intake));
-    //  retractPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Retracted, m_intake));
+    //  retractPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Retracted, m_indexer, m_intake));
     //  ampPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Amp));
     //  deployPivotButton.or(retractPivotButton).onFalse(new InstantCommand(m_pivot::off));
-    //  m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
+     m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
     
     // Intake
-    //  m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).whileTrue(new IntakeAnalog(m_intake, m_controller2));
-    //  intakeShootingButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));
-    //  m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_intake::off));
-    //  deployPivotButton.whileTrue(new InstantCommand(m_intake::intakeFull));
+     m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).whileTrue(new IntakeAnalog(m_intake, m_controller2));
+     intakeShootingButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));
+     m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_intake::off));
     
     // Indexer
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new InstantCommand(m_indexer::indexIn));
@@ -147,8 +149,8 @@ public class RobotContainer {
 
     // Climber
     //  autoClimbButton.onTrue(new AutoClimb(m_climber, m_ahrs)).onFalse(new InstantCommand(m_climber::off));
-     m_controller2.axisGreaterThan(Constants.CLIMBER_LEFT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_LEFT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Left)).onFalse(new InstantCommand(m_climber::leftOff));
-     m_controller2.axisGreaterThan(Constants.CLIMBER_RIGHT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_RIGHT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Right)).onFalse(new InstantCommand(m_climber::rightOff));
+    //  m_controller2.axisGreaterThan(Constants.CLIMBER_LEFT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_LEFT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Left)).onFalse(new InstantCommand(m_climber::leftOff));
+    //  m_controller2.axisGreaterThan(Constants.CLIMBER_RIGHT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_RIGHT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Right)).onFalse(new InstantCommand(m_climber::rightOff));
   }
 
   /**
@@ -158,8 +160,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // return AutoBuilder.followPath(traj);
+    return AutoBuilder.followPath(traj);
     // return new SequentialCommandGroup(m_drive.ChoreoTrajectoryFollower(traj), new InstantCommand(m_drive::ChoreoTest));
-    return new OneNoteAutonNoDrive(m_shooter, m_indexer, m_limelight);
+    // return new OneNoteAutonNoDrive(m_shooter, m_indexer, m_limelight);
   }
 }

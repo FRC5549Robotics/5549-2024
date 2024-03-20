@@ -29,6 +29,7 @@ public class Indexer extends SubsystemBase {
   Color kBlack = new Color(0, 0, 0);
   Color detectedColor;
   ColorMatchResult match;
+  
 
   AddressableLED LED;
   AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(Constants.INDEXER_LED_STRIP_LENGTH);
@@ -55,17 +56,19 @@ public class Indexer extends SubsystemBase {
     LED.setData(ledBuffer);
   }
 
-  public void indexIn(){
-    // if (analog.getVoltage() < Constants.SENSOR_VOLTAGE_THRESHOLD) {
+  public boolean indexIn(){
+    if (analog.getVoltage() < Constants.SENSOR_VOLTAGE_THRESHOLD) {
       IndexerMotor.set(-Constants.INDEXER_SPEED);
-    // }
-    // else {
-    //   IndexerMotor.set(0);
-    //   for(int i = 0; i < ledBuffer.getLength(); i++){
-    //     ledBuffer.setLED(i, kOrange1);
-    //   }
-    //   LED.setData(ledBuffer);
-    // }
+      return false;
+    }
+    else {
+      IndexerMotor.set(0);
+      for(int i = 0; i < ledBuffer.getLength(); i++){
+        ledBuffer.setLED(i, kOrange1);
+      }
+      LED.setData(ledBuffer);
+      return true;
+    }
     // if (match.color != kOrangeTarget){
     // IndexerMotor.set(-Constants.INDEXER_SPEED);
     // } 
