@@ -16,16 +16,12 @@ import frc.robot.subsystems.Pivot.PivotTarget;
 public class PivotIntake extends Command {
   /** Creates a new PivotIntake. */
   Pivot m_pivot;
-  Indexer m_indexer;
-  Intake m_intake;
   Pivot.PivotTarget target;
   double leftSetpoint, rightSetpoint;
   boolean end;
-  public PivotIntake(Pivot pivot, Pivot.PivotTarget Target, Indexer indexer, Intake intake) {
+  public PivotIntake(Pivot pivot, Pivot.PivotTarget Target) {
     m_pivot = pivot;
     target = Target;
-    m_indexer = indexer;
-    m_intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -51,8 +47,8 @@ public class PivotIntake extends Command {
   @Override
   public void execute() {
     m_pivot.checkLag(leftSetpoint, rightSetpoint);
-    // if(Math.abs(m_pivot.getRightPosition()-Constants.PIVOT_RIGHT_INTAKE_SETPOINT) < 3 && 
-    //   Math.abs(m_pivot.getLeftPosition()-Constants.PIVOT_LEFT_INTAKE_SETPOINT) < 3){
+    // if(Math.abs(m_pivot.getRightPosition()-Constants.PIVOT_RIGHT_INTAKE_SETPOINT) < 5 && 
+    //   Math.abs(m_pivot.getLeftPosition()-Constants.PIVOT_LEFT_INTAKE_SETPOINT) < 5){
     //     m_indexer.indexIn();
     //     m_intake.intake(1);
     // }
@@ -64,7 +60,9 @@ public class PivotIntake extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_pivot.off();      
+  }
 
   // Returns true when the command should end.
   @Override

@@ -93,6 +93,7 @@ public class RobotContainer {
 
   PathPlannerPath traj = PathPlannerPath.fromChoreoTrajectory("Simple");
   PathPlannerPath traj2 = PathPlannerPath.fromChoreoTrajectory("RighttoNoteFarR");
+  PathPlannerPath t3 = PathPlannerPath.fromPathFile("Simple2");
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -117,21 +118,21 @@ public class RobotContainer {
     //  deployPivotButton.whileTrue(
     //    new SequentialCommandGroup(new PivotIntake(m_pivot, PivotTarget.Intake, m_indexer, m_intake),
     //    new InstantCommand(m_pivot::autonPivotIn)));
-    //  deployPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Intake, m_indexer, m_intake));
-    //  retractPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Retracted, m_indexer, m_intake));
+     deployPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Intake));
+     retractPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Retracted));
     //  ampPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Amp));
-    //  deployPivotButton.or(retractPivotButton).onFalse(new InstantCommand(m_pivot::off));
+     deployPivotButton.or(retractPivotButton).onFalse(new InstantCommand(m_pivot::off));
      m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
     
     // Intake
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).whileTrue(new IntakeAnalog(m_intake, m_controller2));
      intakeShootingButton.onTrue(new InstantCommand(m_intake::shoot)).onFalse(new InstantCommand(m_intake::off));
-     m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_intake::off));
+    //  m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_intake::off));
     
     // Indexer
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onTrue(new InstantCommand(m_indexer::indexIn));
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).onFalse(new InstantCommand(m_indexer::off));
-    // intakeShootingButton.onTrue(new InstantCommand(m_indexer::indexOut)).onFalse(new InstantCommand(m_indexer::off));
+    intakeShootingButton.onTrue(new InstantCommand(m_indexer::indexOut)).onFalse(new InstantCommand(m_indexer::off));
 
     // Shooter
     //Change this line to include parallel command group: PIDShooter, sequentialCommandGroup(wait, index) 
@@ -160,7 +161,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return AutoBuilder.followPath(traj);
+    return AutoBuilder.followPath(t3);
     // return new SequentialCommandGroup(m_drive.ChoreoTrajectoryFollower(traj), new InstantCommand(m_drive::ChoreoTest));
     // return new OneNoteAutonNoDrive(m_shooter, m_indexer, m_limelight);
   }

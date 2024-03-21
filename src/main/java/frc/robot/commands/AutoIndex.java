@@ -27,7 +27,7 @@ public class AutoIndex extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    end = m_indexer.indexIn();
+    m_indexer.indexIn();
   }
 
   // Called once the command ends or is interrupted.
@@ -37,6 +37,6 @@ public class AutoIndex extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return end;
+    return false;
   }
 }
