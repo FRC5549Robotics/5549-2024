@@ -87,10 +87,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
       this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
       this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       (ChassisSpeeds speeds) -> 
-      drive(speeds, true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+      drive(new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond), true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-              new PIDConstants(0.0005, 0.0, 0.0), // Translation PID constants
-              new PIDConstants(0.00001, 0.0, 0.0), // Rotation PID constants
+              new PIDConstants(0.1, 0.0, 0.0), // Translation PID constants
+              new PIDConstants(0.001, 0.0, 0.0), // Rotation PID constants
               4.2, // Max module speed, in m/s
               0.399621397388, // Drive base radius in meters. Distance from robot center to furthest module.
               new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -180,6 +180,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
       m_ahrs.zeroYaw();
       System.out.println("Zeroed: " + getHeading());
     }
+
+    System.out.println(getPose());
   }
 
   public void updateOdometry() {

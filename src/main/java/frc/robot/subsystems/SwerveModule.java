@@ -70,6 +70,7 @@ public class SwerveModule extends SubsystemBase {
             m_krakenConfiguration.Slot0.kP = Constants.kDriveP;
             m_krakenConfiguration.Slot0.kI = Constants.kDriveI;
             m_krakenConfiguration.Slot0.kD = Constants.kDriveD;
+            m_krakenConfiguration.Slot0.kS = Constants.kDriveP/2;
         }
         m_krakenConfigurator.apply(m_krakenConfiguration);
         m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
@@ -78,6 +79,7 @@ public class SwerveModule extends SubsystemBase {
         m_turningMotor.setSmartCurrentLimit(40);
         m_turningMotor.burnFlash();
         Timer.delay(0.5);
+
 
         Timer.delay(1);
         System.out.println("initialized");
