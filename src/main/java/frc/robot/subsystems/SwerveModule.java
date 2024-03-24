@@ -70,12 +70,8 @@ public class SwerveModule extends SubsystemBase {
             m_krakenConfiguration.Slot0.kP = Constants.kDriveP;
             m_krakenConfiguration.Slot0.kI = Constants.kDriveI;
             m_krakenConfiguration.Slot0.kD = Constants.kDriveD;
-<<<<<<< HEAD
-            m_krakenConfiguration.Slot0.kS = 0.05;
-=======
             m_krakenConfiguration.Slot0.kS = 0.3;
             m_krakenConfiguration.Slot0.kV = (1/(Constants.kMaxTranslationalVelocity-0.3)+0.6);
->>>>>>> 9a8808d8ba0d4527bb7ea2e843319566a1f48f37
         }
         m_krakenConfigurator.apply(m_krakenConfiguration);
         m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
