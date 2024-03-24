@@ -138,6 +138,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     new WaitCommand(0.5);
   }
 
+  public void syncEncoders() {
+    for (SwerveModule module: modules) {
+      module.resetDistance();
+      module.syncTurningEncoders();
+    }
+  }
+
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
@@ -180,8 +187,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
       m_ahrs.zeroYaw();
       System.out.println("Zeroed: " + getHeading());
     }
-
-    System.out.println(getPose());
   }
 
   public void updateOdometry() {
@@ -278,7 +283,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates =
         Constants.kDriveKinematics.toSwerveModuleStates(speeds);
 
-    System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
+    // System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
     if (normalize) normalizeDrive(swerveModuleStates, speeds);
     
     setModuleStates(swerveModuleStates);
@@ -430,10 +435,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
               return alliance.isPresent() && alliance.get() == Alliance.Red;
       },
       this);
-  }
-
-  public void ChoreoTest(){
-    System.out.println("the path ends");
   }
 
   public ChassisSpeeds getChassisSpeeds() {

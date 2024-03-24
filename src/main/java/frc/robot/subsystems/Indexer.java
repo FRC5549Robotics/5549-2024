@@ -87,14 +87,6 @@ public class Indexer extends SubsystemBase {
 
   public void off(){
     IndexerMotor.set(0);
-    resetLEDs();
-  }
-
-  public void resetLEDs(){
-    for(int i = 0; i < ledBuffer.getLength(); i++){
-      ledBuffer.setLED(i, kGreen1);
-    }
-    LED.setData(ledBuffer);
   }
 
   @Override

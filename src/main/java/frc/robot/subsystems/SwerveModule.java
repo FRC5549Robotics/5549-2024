@@ -64,13 +64,14 @@ public class SwerveModule extends SubsystemBase {
         m_krakenConfigurator = m_krakenMotor.getConfigurator();
         {
             m_krakenConfiguration.Feedback.RotorToSensorRatio = Constants.kDriveConversionFactor;
-            m_krakenConfiguration.CurrentLimits.StatorCurrentLimit = 100;
+            m_krakenConfiguration.CurrentLimits.StatorCurrentLimit = 80;
             m_krakenConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
             m_krakenConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             m_krakenConfiguration.Slot0.kP = Constants.kDriveP;
             m_krakenConfiguration.Slot0.kI = Constants.kDriveI;
             m_krakenConfiguration.Slot0.kD = Constants.kDriveD;
-            m_krakenConfiguration.Slot0.kS = Constants.kDriveP/2;
+            m_krakenConfiguration.Slot0.kS = 0.3;
+            m_krakenConfiguration.Slot0.kV = (1/(Constants.kMaxTranslationalVelocity-0.3)+0.6);
         }
         m_krakenConfigurator.apply(m_krakenConfiguration);
         m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);

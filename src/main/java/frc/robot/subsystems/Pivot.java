@@ -29,7 +29,7 @@ public class Pivot extends SubsystemBase {
   DutyCycleEncoder RightThroughbore;
   DutyCycleEncoder LeftThroughbore;
   CommandXboxController XboxController;
-  boolean intakePosition = false;
+  boolean intakePosition = true;
 
   /** Creates a new Pivot. */
   public Pivot(CommandXboxController xboxController) {
