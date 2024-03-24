@@ -74,7 +74,6 @@ public class Shooter extends SubsystemBase {
 	}
 
 	public void off(){
-		System.out.println("-------OFF-------");
 		ShooterRight.set(0);
     	ShooterLeft.set(0);
 	}

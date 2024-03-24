@@ -29,14 +29,15 @@ public class Pivot extends SubsystemBase {
   DutyCycleEncoder RightThroughbore;
   DutyCycleEncoder LeftThroughbore;
   CommandXboxController XboxController;
+  boolean intakePosition = true;
 
   /** Creates a new Pivot. */
   public Pivot(CommandXboxController xboxController) {
     XboxController = xboxController;
     PivotRightMotor = new CANSparkMax(Constants.PIVOT_MOTOR_RIGHT, MotorType.kBrushless);
     PivotLeftMotor = new CANSparkMax(Constants.PIVOT_MOTOR_LEFT, MotorType.kBrushless);
-    controllerRight = new PIDController(0.001, 0.0, 0.00);
-    controllerLeft = new PIDController(0.001, 0.0, 0.00);
+    controllerRight = new PIDController(0.007, 0.0, 0.00);
+    controllerLeft = new PIDController(0.007, 0.0, 0.00);
     RightThroughbore = new DutyCycleEncoder(Constants.PIVOT_ENCODER_RIGHT);
     LeftThroughbore = new DutyCycleEncoder(Constants.PIVOT_ENCODER_LEFT);
     RightThroughbore.setPositionOffset(Constants.PIVOT_OFFSET_RIGHT);
@@ -45,6 +46,9 @@ public class Pivot extends SubsystemBase {
     LeftThroughbore.setDistancePerRotation(360);
     PivotLeftMotor.setIdleMode(IdleMode.kBrake);
     PivotRightMotor.setIdleMode(IdleMode.kBrake);
+    if(LeftThroughbore.getDistance()>0){
+      intakePosition = false;
+    }
   }
 
   public void pivot(double speed){
@@ -104,11 +108,10 @@ public class Pivot extends SubsystemBase {
     SmartDashboard.putNumber("Right ThroughBore Encoders", RightThroughbore.getDistance());
     
     SmartDashboard.putNumber("Left ThroughBore Encoders", LeftThroughbore.getDistance());
-    if(!XboxController.a().getAsBoolean() && !XboxController.x().getAsBoolean()){
+    
+    if(!XboxController.a().getAsBoolean() && !XboxController.x().getAsBoolean() && intakePosition){
     PivotRightMotor.set(-controllerRight.calculate(RightThroughbore.getDistance(), Constants.PIVOT_RIGHT_RETRACTED_SETPOINT));
     PivotLeftMotor.set(-controllerLeft.calculate(LeftThroughbore.getDistance(), Constants.PIVOT_LEFT_RETRACTED_SETPOINT));
     }
-
-
   }
 }

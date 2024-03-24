@@ -56,19 +56,20 @@ public class Indexer extends SubsystemBase {
     LED.setData(ledBuffer);
   }
 
-  public boolean indexIn(){
-    if (analog.getVoltage() < Constants.SENSOR_VOLTAGE_THRESHOLD) {
-      IndexerMotor.set(-Constants.INDEXER_SPEED);
-      return false;
-    }
-    else {
-      IndexerMotor.set(0);
-      for(int i = 0; i < ledBuffer.getLength(); i++){
-        ledBuffer.setLED(i, kOrange1);
-      }
-      LED.setData(ledBuffer);
-      return true;
-    }
+  public void indexIn(){
+    IndexerMotor.set(-Constants.INDEXER_SPEED);
+    // if (analog.getVoltage() < Constants.SENSOR_VOLTAGE_THRESHOLD) {
+    //   IndexerMotor.set(-Constants.INDEXER_SPEED);
+    //   return false;
+    // }
+    // else {
+    //   IndexerMotor.set(0);
+    //   for(int i = 0; i < ledBuffer.getLength(); i++){
+    //     ledBuffer.setLED(i, kOrange1);
+    //   }
+    //   LED.setData(ledBuffer);
+    //   return true;
+    // }
     // if (match.color != kOrangeTarget){
     // IndexerMotor.set(-Constants.INDEXER_SPEED);
     // } 
@@ -86,14 +87,6 @@ public class Indexer extends SubsystemBase {
 
   public void off(){
     IndexerMotor.set(0);
-    resetLEDs();
-  }
-
-  public void resetLEDs(){
-    for(int i = 0; i < ledBuffer.getLength(); i++){
-      ledBuffer.setLED(i, kGreen1);
-    }
-    LED.setData(ledBuffer);
   }
 
   @Override

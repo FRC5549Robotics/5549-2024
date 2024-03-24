@@ -41,20 +41,16 @@ public class Deflectorinator extends SubsystemBase {
     DeflectMotor.set(speed);
   }
   public void deflectorinateIn(){
-    System.out.println("Deflectorinator in");
     DeflectMotor.set(-Constants.DEFLECTORINATOR_SPEED);
   }
   public void deflectorinateOut(){
-    System.out.println("Deflectorinator out");
     DeflectMotor.set(Constants.DEFLECTORINATOR_SPEED);
   }
   public void off(){
-    System.out.println("Deflectorinator off");
     DeflectMotor.set(0);
   }
 
   public void deflectorinatorEncoderPivot(double setpoint) {
-    System.out.println("Moving");
     DeflectMotor.set(controller.calculate(DeflectEncoder.getPosition(), setpoint));
   }
 

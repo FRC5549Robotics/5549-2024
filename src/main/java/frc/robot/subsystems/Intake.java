@@ -26,9 +26,8 @@ public class Intake extends SubsystemBase {
   }
 
   public void intake(double speed) {//make dependent on trigger
-    IntakeMotorBottom.set(-speed);
-    IntakeMotorTop.set(-speed);
-    System.out.println("kind of works");
+    IntakeMotorBottom.set(speed);
+    IntakeMotorTop.set(speed);
   }
     public void intakeFull() {
     IntakeMotorBottom.set(-1);
@@ -36,8 +35,9 @@ public class Intake extends SubsystemBase {
   }
 
   public void shoot() {
-    IntakeMotorBottom.set(Constants.INTAKE_OUTTAKE_SPEED);
-    IntakeMotorTop.set(Constants.INTAKE_OUTTAKE_SPEED);
+    IntakeMotorBottom.set(-Constants.INTAKE_OUTTAKE_SPEED);
+    IntakeMotorTop.set(-
+    Constants.INTAKE_OUTTAKE_SPEED);
   }
 
   public void off(){

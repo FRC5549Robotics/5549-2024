@@ -87,21 +87,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
       this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
       this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       (ChassisSpeeds speeds) -> 
-      drive(new ChassisSpeeds(-speeds.vxMetersPerSecond,-speeds.vyMetersPerSecond,-speeds.omegaRadiansPerSecond), true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+      drive(new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond), true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-              new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-              new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-              4.5, // Max module speed, in m/s
+              new PIDConstants(0.1, 0.0, 0.0), // Translation PID constants
+              new PIDConstants(0.001, 0.0, 0.0), // Rotation PID constants
+              4.2, // Max module speed, in m/s
               0.399621397388, // Drive base radius in meters. Distance from robot center to furthest module.
               new ReplanningConfig() // Default path replanning config. See the API for the options here
       ),
       () -> {
         // Boolean supplier that controls when the path will be mirrored for the red alliance
-        // This will flip the path being followed to the red side of the field.
+        // This will flip the path
+        // being followed to the red side of the field.
         // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
         var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
+      
+      if (alliance.isPresent()) {
           return alliance.get() == DriverStation.Alliance.Red;
         }
         return false;
@@ -134,6 +136,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     timer.start();
     lastTime = 0;
     new WaitCommand(0.5);
+  }
+
+  public void syncEncoders() {
+    for (SwerveModule module: modules) {
+      module.resetDistance();
+      module.syncTurningEncoders();
+    }
   }
 
   @Override
@@ -274,7 +283,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates =
         Constants.kDriveKinematics.toSwerveModuleStates(speeds);
 
-    System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
+    // System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
     if (normalize) normalizeDrive(swerveModuleStates, speeds);
     
     setModuleStates(swerveModuleStates);
@@ -426,10 +435,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
               return alliance.isPresent() && alliance.get() == Alliance.Red;
       },
       this);
-  }
-
-  public void ChoreoTest(){
-    System.out.println("the path ends");
   }
 
   public ChassisSpeeds getChassisSpeeds() {
