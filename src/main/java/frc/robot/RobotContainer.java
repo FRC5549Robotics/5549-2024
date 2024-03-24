@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.XboxController;
  import frc.robot.subsystems.Intake;
  import frc.robot.commands.PivotIntake;
 import frc.robot.commands.Auton.OneNoteAutonNoDrive;
+import frc.robot.commands.Auton.SimpleDrive;
 import frc.robot.commands.ClimberAnalog.Side;
 import frc.robot.commands.IntakeAnalog;
 
@@ -31,6 +32,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.SPI;
 import org.ejml.simple.SimpleBase;
@@ -162,7 +164,8 @@ public class RobotContainer {
     // An example command will be run in autonomous
     
     // return AutoBuilder.followPath(t3);
-    // return new SequentialCommandGroup(m_drive.ChoreoTrajectoryFollower(traj), new InstantCommand(m_drive::ChoreoTest));
-    return new OneNoteAutonNoDrive(m_shooter, m_indexer, m_limelight);
+    // return new SequentialCommandGroup(m_drive.ChoreoTrajectoryFoll[ower(traj), new InstantCommand(m_drive::ChoreoTest));
+    // return new OneNoteAutonNoDrive(m_shooter, m_indexer, m_limelight);
+    return new SimpleDrive(m_drive);
   }
 }
