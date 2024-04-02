@@ -63,7 +63,8 @@ public class SwerveModule extends SubsystemBase {
         m_krakenMotor.getVelocity();
         m_krakenConfigurator = m_krakenMotor.getConfigurator();
         {
-            m_krakenConfiguration.Feedback.RotorToSensorRatio = Constants.kDriveConversionFactor;
+            // m_krakenConfiguration.Feedback.RotorToSensorRatio = Constants.kDriveConversionFactor;
+            // m_krakenConfiguration.Feedback.SensorToMechanismRatio = Constants.kDriveConversionFactor;
             m_krakenConfiguration.CurrentLimits.StatorCurrentLimit = 80;
             m_krakenConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
             m_krakenConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -185,7 +186,7 @@ public class SwerveModule extends SubsystemBase {
 
         SmartDashboard.putNumber("Commanded Velocity", driveOutput);
 
-        m_krakenMotor.setControl(new VelocityVoltage(driveOutput, 6, false, Constants.kDriveFF * driveOutput, 0, false, false, false));
+        m_krakenMotor.setControl(new VelocityVoltage(driveOutput/Constants.kDriveConversionFactor, Constants.kAcceleration, false, Constants.kDriveFF*driveOutput, 0, false, false, false));
         SmartDashboard.putNumber("Module Speeds", m_krakenMotor.getMotorVoltage().getValueAsDouble());
     }
 
@@ -222,7 +223,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public double getDriveDistanceMeters() {
-        return m_krakenMotor.getPosition().getValueAsDouble();
+        return m_krakenMotor.getPosition().getValueAsDouble() * Constants.kDriveConversionFactor;
     }
 
     public void resetDistance() {

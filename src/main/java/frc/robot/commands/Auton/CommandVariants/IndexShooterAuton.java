@@ -2,28 +2,30 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Auton.CommandVariants;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Indexer;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Timer;
 
-public class IndexerAuton extends Command {
-  /** Creates a new IndexerAuton. */
+public class IndexShooterAuton extends Command {
+  /** Creates a new AutoIndex. */
+  Timer m_timer;
+  double startTime;
   Indexer m_indexer;
-  Timer timer;
-  public IndexerAuton(Indexer indexer) {
-    m_indexer = indexer;
+  public IndexShooterAuton(Indexer indexer, Timer timer) {
     // Use addRequirements() here to declare subsystem dependencies.
-
-    timer = new Timer();
-    timer.reset();
-    timer.start();
+    // analog = new AnalogInput(0);
+    m_indexer = indexer;
+    m_timer = timer;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    startTime = m_timer.get();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -40,6 +42,6 @@ public class IndexerAuton extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get()>2;
+    return m_timer.get() - startTime > 0.25;
   }
 }

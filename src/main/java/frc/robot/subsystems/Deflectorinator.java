@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,6 +36,15 @@ public class Deflectorinator extends SubsystemBase {
     DeflectEncoder = DeflectMotor.getEncoder();
     DeflectMotor.setIdleMode(IdleMode.kBrake);
     DeflectEncoder.setPositionConversionFactor(1/Constants.kDeflectGearRatio);
+    { //CAN Status Frames
+      DeflectMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 400);
+      DeflectMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 400);
+      DeflectMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 400);
+      DeflectMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 400);
+      DeflectMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 400);
+      DeflectMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 400);
+      DeflectMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 400);
+    }
   }
 
   public void deflectorinate(double speed){

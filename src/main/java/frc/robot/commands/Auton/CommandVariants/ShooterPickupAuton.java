@@ -2,51 +2,45 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Auton;
+package frc.robot.commands.Auton.CommandVariants;
 
-import java.io.Console;
-
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.Shooter;
+import edu.wpi.first.wpilibj.Timer;
 
-
-public class SimpleDrive extends Command {
-  /** Creates a new SimpleDrive. */
-  DrivetrainSubsystem m_drive;
-  Timer timer;
-  public SimpleDrive(DrivetrainSubsystem drive) {
+public class ShooterPickupAuton extends Command {
+  Timer m_timer;
+  double startTime;
+  Shooter m_shooter;
+  /** Creates a new ShooterAuton. */
+  public ShooterPickupAuton(Shooter shooter, Timer timer) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drive = drive;
-    timer = new Timer();
-    addRequirements(m_drive);
+    m_shooter = shooter;
+    m_timer = timer;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
-    timer.start();
+    startTime = m_timer.get();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.drive(new ChassisSpeeds(0.5, 0, 0),true);
+    m_shooter.shooterIn();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("end");
+    m_shooter.off();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > 2;
-    //return false;
+    return m_timer.get() - startTime > 0.5;
   }
 }

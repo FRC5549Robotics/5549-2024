@@ -4,13 +4,14 @@
 
 package frc.robot.commands.Auton;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.IntakeAnalog;
-import frc.robot.commands.PIDShooter;
 import frc.robot.commands.Auton.CommandVariants.IndexShooterAuton;
 import frc.robot.commands.Auton.CommandVariants.ShooterSpinUpAuton;
 import frc.robot.subsystems.Indexer;
@@ -20,18 +21,19 @@ import frc.robot.subsystems.Shooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class OneNoteAutonNoDrive extends SequentialCommandGroup {
-  /** Creates a new OneNoteAuton. */
-  public OneNoteAutonNoDrive(Shooter shooter, Indexer indexer, Limelight limelight) {
+public class ShootnDrive extends SequentialCommandGroup {
+  /** Creates a new ShootnDrive. */
+  public ShootnDrive(Shooter shooter, Indexer indexer, Limelight limelight, PathPlannerPath traj) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     Timer timer = new Timer();
     timer.reset();
     timer.start();
     addCommands(
-        new ParallelCommandGroup(
+      new ParallelCommandGroup(
           new ShooterSpinUpAuton(shooter, timer),
-          new SequentialCommandGroup(new WaitCommand(0.5), new IndexShooterAuton(indexer, timer)))
+          new SequentialCommandGroup(new WaitCommand(0.75), new IndexShooterAuton(indexer, timer))),
+      AutoBuilder.followPath(traj)
     );
   }
 }

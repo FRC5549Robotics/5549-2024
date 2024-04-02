@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import java.util.Optional;
-import java.util.function.BooleanSupplier;
 
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
@@ -10,22 +9,29 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
 // import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 // import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 
 
 @SuppressWarnings("PMD.ExcessiveImports")
@@ -78,7 +84,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   Pose2d m_targetPose;
   PIDController m_thetaController = new PIDController(1.0, 0.0, 0.05);
 
-  private ChassisSpeeds speeds; 
+  ChassisSpeeds speeds; 
+  Field2d m_field;
     
   /** Creates a new DriveSubsystem. */
   public DrivetrainSubsystem(AHRS ahrs) {
@@ -87,10 +94,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
       this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
       this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       (ChassisSpeeds speeds) -> 
-      drive(new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond), true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+      drive(new ChassisSpeeds(speeds.vxMetersPerSecond*0.15, speeds.vyMetersPerSecond*0.15, speeds.omegaRadiansPerSecond), true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
               new PIDConstants(0.1, 0.0, 0.0), // Translation PID constants
-              new PIDConstants(0.001, 0.0, 0.0), // Rotation PID constants
+              new PIDConstants(0.1, 0.0, 0.0), // Rotation PID constants
               4.2, // Max module speed, in m/s
               0.399621397388, // Drive base radius in meters. Distance from robot center to furthest module.
               new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -130,6 +137,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
       m_rearLeft.getDriveDistanceMeters(),
       m_rearRight.getDriveDistanceMeters(),
     };
+
+    m_field = new Field2d();
+    SmartDashboard.putData("Field", m_field);
 
     timer = new Timer();
     timer.reset();
@@ -182,11 +192,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Angle 2", modules[2].getTurnCANcoderAngle());
     // SmartDashboard.putNumber("Angle 3", modules[3].getTurnCANcoderAngle());
 
-    
+    m_field.setRobotPose(m_odometry.getPoseMeters());
+
     if (1 <= timer.get() && timer.get() <= 1.5) {
       m_ahrs.zeroYaw();
       System.out.println("Zeroed: " + getHeading());
     }
+
+    System.out.println(getPose());
+    SmartDashboard.putNumber("Pitch", m_ahrs.getPitch());
+    SmartDashboard.putNumber("Roll", m_ahrs.getRoll());
+    SmartDashboard.putNumber("Yaw", m_ahrs.getYaw());
   }
 
   public void updateOdometry() {
@@ -396,9 +412,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return the robot's heading as a Rotation2d
    */
   public Rotation2d getHeading() {
-    float raw_yaw = -m_ahrs.getYaw(); // Returns yaw as -180 to +180.
+    double raw_yaw = 25*Math.sin(Math.toRadians(2*m_ahrs.getYaw())) + m_ahrs.getYaw();
+    SmartDashboard.putNumber("Raw Yaw", raw_yaw);
     // float raw_yaw = m_ahrs.getYaw(); // Returns yaw as -180 to +180.
-    float calc_yaw = raw_yaw;
+    double calc_yaw = raw_yaw;
 
     if (0.0 > raw_yaw ) { // yaw is negative
       calc_yaw += 360.0;

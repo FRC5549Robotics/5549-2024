@@ -71,7 +71,7 @@ public final class Constants {
     // Units are meters per second
     public static final double kMaxTranslationalVelocity = 6000 / 60.0 *
     (1/kDriveGearRatio) *
-    kWheelDiameterMeters * Math.PI; //max 4.5
+    kWheelDiameterMeters * Math.PI;
 
     // Units are radians per second
     public static final double kMaxRotationalVelocity = kMaxTranslationalVelocity /
@@ -91,15 +91,18 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
-    public static final double kDriveP = 0.1;
+    public static final double kDriveP = 0.05;
     public static final double kDriveI = 0.0;
     public static final double kDriveD = 0.0;
-    public static final double kDriveFF = 4;
+    public static final double kDriveFF = 0;
 
-    public static final double kTurningP = 0.01;
+    public static final double kTurningP = 0.005;
     public static final double kTurningI = 0.0;
     public static final double kTurningD = 0.0;
+    public static final double kAcceleration = 4;
+
     public static final int RESET_NAVX_BUTTON = 4;
+    public static final double ROBOT_ORIENTED_DEADBAND = 0.15;
 
 
     //Pivot Constants
@@ -112,14 +115,14 @@ public final class Constants {
     public static final int PIVOT_JOYSTICK = 1;
     public static final double PIVOT_DEADBAND = 0.05;
     public static final double PIVOT_SCALING_FACTOR = 0.15;
-    public static final double PIVOT_RIGHT_RETRACTED_SETPOINT = 51.9;
-    public static final double PIVOT_LEFT_RETRACTED_SETPOINT = -55.1;
-    public static final double PIVOT_RIGHT_INTAKE_SETPOINT = 117.3;
-    public static final double PIVOT_LEFT_INTAKE_SETPOINT = -124.3;
+    public static final double PIVOT_RIGHT_RETRACTED_SETPOINT = 1;
+    public static final double PIVOT_LEFT_RETRACTED_SETPOINT = -1;
+    public static final double PIVOT_RIGHT_INTAKE_SETPOINT = 102.5;
+    public static final double PIVOT_LEFT_INTAKE_SETPOINT = -107.2;
     public static final int PIVOT_ENCODER_RIGHT = 4;
     public static final int PIVOT_ENCODER_LEFT = 0;
-    public static final double PIVOT_OFFSET_RIGHT = 0.316;
-    public static final double PIVOT_OFFSET_LEFT = 0.119;
+    public static final double PIVOT_OFFSET_RIGHT = 0.331;
+    public static final double PIVOT_OFFSET_LEFT = 0.769;
     public static final double PIVOT_RIGHT_AMP_SETPOINT = 0;
     public static final double PIVOT_LEFT_AMP_SETPOINT = 0;
     public static final int AMP_SHOOTER_BUTTON = 3;
@@ -156,7 +159,7 @@ public final class Constants {
     public static final double SHOOTER_kA = 0;
     public static final double SHOOTER_TRIGGER_THRESHOLD = 0.075;
     public static final int SHOOTER_TRIGGER = 3;
-    public static final double SHOOTER_SET_SPEED = 0.8;
+    public static final double SHOOTER_SET_SPEED = 1;
 
     //Climber Constants
     public static final int CLIMBER_MOTOR_LEFT = 27;

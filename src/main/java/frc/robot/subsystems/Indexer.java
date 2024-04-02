@@ -7,6 +7,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
+
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -39,6 +41,16 @@ public class Indexer extends SubsystemBase {
   public Indexer(AddressableLED led) {
     IndexerMotor = new CANSparkMax(Constants.INDEXER_MOTOR, MotorType.kBrushless);
     IndexerMotor.setIdleMode(IdleMode.kCoast);
+    { //CAN Status Frames
+      IndexerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 400);
+      IndexerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 400);
+      IndexerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 400);
+      IndexerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 400);
+      IndexerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 400);
+      IndexerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 400);
+      IndexerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 400);
+    }
+    
     analog = new AnalogInput(0);
 
     i2cPort = I2C.Port.kOnboard;
@@ -58,6 +70,7 @@ public class Indexer extends SubsystemBase {
 
   public void indexIn(){
     IndexerMotor.set(-Constants.INDEXER_SPEED);
+    System.out.println("Indexing");
     // if (analog.getVoltage() < Constants.SENSOR_VOLTAGE_THRESHOLD) {
     //   IndexerMotor.set(-Constants.INDEXER_SPEED);
     //   return false;

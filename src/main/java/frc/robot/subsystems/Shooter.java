@@ -17,6 +17,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 //import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import frc.robot.Constants;
 
@@ -35,6 +36,22 @@ public class Shooter extends SubsystemBase {
 	public Shooter() {
 		ShooterRight = new CANSparkFlex(Constants.SHOOTER_RIGHT_MOTOR, MotorType.kBrushless);
 		ShooterLeft = new CANSparkFlex(Constants.SHOOTER_LEFT_MOTOR, MotorType.kBrushless);
+		{//CAN Status Frames
+			ShooterRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+			ShooterRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+			ShooterRight.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 20);
+			ShooterRight.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 50);
+			ShooterRight.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20);
+			ShooterRight.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 200);
+			ShooterRight.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 200);
+			ShooterLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+			ShooterLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+			ShooterLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 20);
+			ShooterLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 50);
+			ShooterLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20);
+			ShooterLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 200);
+			ShooterLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 200);
+		}
 
 		motor1_encoder = ShooterRight.getEncoder();
 		motor2_encoder = ShooterLeft.getEncoder();
@@ -69,8 +86,8 @@ public class Shooter extends SubsystemBase {
 	}
 
 	public void shooterAmp(){
-		ShooterRight.set(-Constants.SHOOTER_SET_SPEED/2.74);
-		ShooterLeft.set(Constants.SHOOTER_SET_SPEED/2.74);
+		ShooterRight.set(-Constants.SHOOTER_SET_SPEED/3.4);
+		ShooterLeft.set(Constants.SHOOTER_SET_SPEED/3.4);
 	}
 
 	public void off(){

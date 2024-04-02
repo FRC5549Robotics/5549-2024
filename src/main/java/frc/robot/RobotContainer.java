@@ -14,12 +14,14 @@ import frc.robot.commands.PivotAnalog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController; 
  import frc.robot.subsystems.Pivot;
  import frc.robot.subsystems.Intake;
  import frc.robot.commands.PivotIntake;
 import frc.robot.commands.Auton.OneNoteAutonNoDrive;
+import frc.robot.commands.Auton.ShootnDrive;
 import frc.robot.commands.Auton.SimpleDrive;
+import frc.robot.commands.Auton.TwoNoteAuton;
 import frc.robot.commands.ClimberAnalog.Side;
 import frc.robot.commands.IntakeAnalog;
 
@@ -31,7 +33,11 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
+import com.pathplanner.lib.path.*;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.SPI;
@@ -98,6 +104,7 @@ public class RobotContainer {
   PathPlannerPath traj = PathPlannerPath.fromChoreoTrajectory("Simple");
   PathPlannerPath traj2 = PathPlannerPath.fromChoreoTrajectory("RighttoNoteFarR");
   PathPlannerPath t3 = PathPlannerPath.fromPathFile("Simple2");
+  PathPlannerPath t4 = PathPlannerPath.fromPathFile("Simple3");
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -123,7 +130,7 @@ public class RobotContainer {
      retractPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Retracted));
     //  ampPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Amp));
      deployPivotButton.or(retractPivotButton).onFalse(new InstantCommand(m_pivot::off));
-    //  m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
+     m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
     
     // Intake
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).whileTrue(new IntakeAnalog(m_intake, m_controller2));
@@ -151,8 +158,8 @@ public class RobotContainer {
 
     // Climber
     //  autoClimbButton.onTrue(new AutoClimb(m_climber, m_ahrs)).onFalse(new InstantCommand(m_climber::off));
-     m_controller2.axisGreaterThan(Constants.CLIMBER_LEFT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_LEFT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Left)).onFalse(new InstantCommand(m_climber::leftOff));
-     m_controller2.axisGreaterThan(Constants.CLIMBER_RIGHT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_RIGHT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Right)).onFalse(new InstantCommand(m_climber::rightOff));
+    //  m_controller2.axisGreaterThan(Constants.CLIMBER_LEFT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_LEFT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Left)).onFalse(new InstantCommand(m_climber::leftOff));
+    //  m_controller2.axisGreaterThan(Constants.CLIMBER_RIGHT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_RIGHT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Right)).onFalse(new InstantCommand(m_climber::rightOff));
   }
 
   /**
@@ -161,11 +168,17 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
+    // An example command will be run in autonomou
+
+    // m_drive.resetOdometry(new Pose2d(new Translation2d(1.75, 5.5), new Rotation2d(0)));
+    m_drive.resetOdometry(t3.getPreviewStartingHolonomicPose());
     
-    // return AutoBuilder.followPath(t3);
+    // return AutoBuilder.followPath(t4);
+    // return new ShootnDrive(m_shooter, m_indexer, m_limelight, t3);
+    return new TwoNoteAuton(m_shooter, m_indexer, m_pivot, m_intake, m_limelight, t3, t4);
+    // return AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(0.3, 0), new Rotation2d(0)), new PathConstraints(0.5, 0.5, 0.5, 0.5));
     // return new SequentialCommandGroup(m_drive.ChoreoTrajectoryFoll[ower(traj), new InstantCommand(m_drive::ChoreoTest));
     // return new OneNoteAutonNoDrive(m_shooter, m_indexer, m_limelight);
-    return new SimpleDrive(m_drive);
+    // return new SimpleDrive(m_drive);
   }
 }

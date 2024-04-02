@@ -7,9 +7,10 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import frc.robot.Constants;
-
+import edu.wpi.first.wpilibj.PWM.PeriodMultiplier;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -20,6 +21,23 @@ public class Climber extends SubsystemBase {
   public Climber() {
     climber_motor_L = new CANSparkMax(Constants.CLIMBER_MOTOR_LEFT, MotorType.kBrushless);
     climber_motor_R = new CANSparkMax(Constants.CLIMBER_MOTOR_RIGHT, MotorType.kBrushless);
+    { // CAN Status Frames
+      climber_motor_L.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 400);
+      climber_motor_L.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 400);
+      climber_motor_L.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 400);
+      climber_motor_L.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 400);
+      climber_motor_L.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 400);
+      climber_motor_L.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 400);
+      climber_motor_L.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 400);
+      climber_motor_R.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 400);
+      climber_motor_R.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 400);
+      climber_motor_R.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 400);
+      climber_motor_R.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 400);
+      climber_motor_R.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 400);
+      climber_motor_R.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 400);
+      climber_motor_R.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 400);
+
+    }
   }
 
   public void runRightClimber(double speed) {
