@@ -41,6 +41,6 @@ public class ShooterStationaryAuton extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_timer.get() - startTime > 1.5;
+    return m_timer.get() - startTime > 0.5;
   }
 }

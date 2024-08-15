@@ -102,8 +102,15 @@ public class DriveCommand extends Command {
         thetaDot *= 1/(1-(0.07*0.07));
       }
         
-      if(m_controller.leftTrigger(Constants.ROBOT_ORIENTED_DEADBAND).getAsBoolean()){
+      if(m_controller.leftTrigger(Constants.ROBOT_ORIENTED_DEADBAND).getAsBoolean() && m_controller.rightTrigger(Constants.ROBOT_ORIENTED_DEADBAND).getAsBoolean()){
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xDot*0.25, yDot*0.25, thetaDot*0.25, new Rotation2d(0));
+
+      }
+      else if(m_controller.leftTrigger(Constants.ROBOT_ORIENTED_DEADBAND).getAsBoolean()){
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xDot*0.25, yDot*0.25, thetaDot*0.25, new Rotation2d(Math.PI));
+      }
+      else if(m_controller.rightTrigger(Constants.ROBOT_ORIENTED_DEADBAND).getAsBoolean()){
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xDot, yDot, thetaDot, new Rotation2d(0));
       }
       else{
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xDot, yDot, thetaDot, drivetrain.getHeading());

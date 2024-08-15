@@ -34,11 +34,13 @@ public class SwerveModule extends SubsystemBase {
 
 
     private final CANSparkMax m_turningMotor;
-    private final TalonFX m_krakenMotor;
-    private final TalonFXConfigurator m_krakenConfigurator;
-    private TalonFXConfiguration m_krakenConfiguration = new TalonFXConfiguration();
+    private final CANSparkMax m_driveMotor;
+    // private final TalonFX m_krakenMotor;
+    // private final TalonFXConfigurator m_krakenConfigurator;
+    // private TalonFXConfiguration m_krakenConfiguration = new TalonFXConfiguration();
   
     private final RelativeEncoder m_turningEncoder;
+    private final RelativeEncoder m_driveEncoder;
 
     private final CANcoder m_turningCANCoder;
 
@@ -47,6 +49,7 @@ public class SwerveModule extends SubsystemBase {
 //    private final Rotation2d m_CANCoderOffset;
 
     private final SparkPIDController m_turningController;
+    private final SparkPIDController m_driveController;
 
     /**
      * Constructs a SwerveModule.
@@ -58,31 +61,57 @@ public class SwerveModule extends SubsystemBase {
                         int driveMotorChannel,
                         int turningMotorChannel,
                         int turningCANCoderChannel) {
-        m_krakenMotor = new TalonFX(driveMotorChannel);
-        m_krakenMotor.getPosition();
-        m_krakenMotor.getVelocity();
-        m_krakenConfigurator = m_krakenMotor.getConfigurator();
-        {
-            // m_krakenConfiguration.Feedback.RotorToSensorRatio = Constants.kDriveConversionFactor;
-            // m_krakenConfiguration.Feedback.SensorToMechanismRatio = Constants.kDriveConversionFactor;
-            m_krakenConfiguration.CurrentLimits.StatorCurrentLimit = 80;
-            m_krakenConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
-            m_krakenConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-            m_krakenConfiguration.Slot0.kP = Constants.kDriveP;
-            m_krakenConfiguration.Slot0.kI = Constants.kDriveI;
-            m_krakenConfiguration.Slot0.kD = Constants.kDriveD;
-            m_krakenConfiguration.Slot0.kS = 0.3;
-            m_krakenConfiguration.Slot0.kV = (1/(Constants.kMaxTranslationalVelocity-0.3)+0.6);
-        }
-        m_krakenConfigurator.apply(m_krakenConfiguration);
+        // m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+        // m_turningMotor.restoreFactoryDefaults();
+        // m_turningMotor.setIdleMode(IdleMode.kBrake);
+        // m_turningMotor.setSmartCurrentLimit(40);
+        // m_turningMotor.burnFlash();
+        // Timer.delay(0.5);
+
+
+        // Timer.delay(1);
+        // System.out.println("initialized");
+        // m_turningCANCoder = new CANcoder(turningCANCoderChannel);
+    
+        // m_turningCANCoder.setPosition(m_turningCANCoder.getAbsolutePosition().getValueAsDouble());
+        // // m_turningCANCoder.setPosition(0);        
+        // m_turningEncoder = m_turningMotor.getEncoder();
+
+        // // m_CANCoderOffset = Rotation2d.fromDegrees(turningCANCoderOffsetDegrees);
+
+        // // m_driveMotor.setIdleMode(IdleMode.kBrake);
+        // // m_turningMotor.setIdleMode(IdleMode.kCoast);
+
+        // m_turningMotor.setIdleMode(IdleMode.kBrake);
+        // m_turningMotor.setSmartCurrentLimit(40);
+
+        // // m_driveEncoder returns RPM by default. Use setVelocityConversionFactor() to
+        // // convert that to meters per second.
+
+        // m_turningEncoder.setPositionConversionFactor(360.0 / Constants.kTurnPositionConversionFactor);
+
+        // m_turningController = m_turningMotor.getPIDController();
+
+
+        // m_turningController.setP(Constants.kTurningP);
+        // m_turningController.setI(Constants.kTurningI);
+        // m_turningController.setD(Constants.kTurningD);
+
+        // 401 only sets P of the drive PID
+
+        m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
+        m_driveMotor.restoreFactoryDefaults();
+        m_driveMotor.setIdleMode(IdleMode.kBrake);
         m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
         m_turningMotor.restoreFactoryDefaults();
         m_turningMotor.setIdleMode(IdleMode.kBrake);
+        m_driveMotor.setSmartCurrentLimit(40);
         m_turningMotor.setSmartCurrentLimit(40);
+        m_driveMotor.burnFlash();
         m_turningMotor.burnFlash();
         Timer.delay(0.5);
 
-
+        m_driveEncoder = m_driveMotor.getEncoder();
         Timer.delay(1);
         System.out.println("initialized");
         m_turningCANCoder = new CANcoder(turningCANCoderChannel);
@@ -96,22 +125,31 @@ public class SwerveModule extends SubsystemBase {
         // m_driveMotor.setIdleMode(IdleMode.kBrake);
         // m_turningMotor.setIdleMode(IdleMode.kCoast);
 
+        m_driveMotor.setIdleMode(IdleMode.kBrake);
         m_turningMotor.setIdleMode(IdleMode.kBrake);
+        m_driveMotor.setSmartCurrentLimit(40);
         m_turningMotor.setSmartCurrentLimit(40);
 
         // m_driveEncoder returns RPM by default. Use setVelocityConversionFactor() to
         // convert that to meters per second.
+        m_driveEncoder.setVelocityConversionFactor(Constants.kDriveConversionFactor / 60.0);
+        m_driveEncoder.setPositionConversionFactor(Constants.kDriveConversionFactor);
 
         m_turningEncoder.setPositionConversionFactor(360.0 / Constants.kTurnPositionConversionFactor);
 
         m_turningController = m_turningMotor.getPIDController();
+        m_driveController = m_driveMotor.getPIDController();
 
+        m_driveMotor.enableVoltageCompensation(12);
 
         m_turningController.setP(Constants.kTurningP);
         m_turningController.setI(Constants.kTurningI);
         m_turningController.setD(Constants.kTurningD);
 
         // 401 only sets P of the drive PID
+        m_driveController.setP(Constants.kDriveP);
+        m_driveController.setI(Constants.kDriveI);
+        m_driveController.setD(Constants.kDriveD);
     }
 
     /**
@@ -132,15 +170,15 @@ public class SwerveModule extends SubsystemBase {
         y="3";
         String a = x != null ? y : x;
 
-        return new SwerveModuleState(m_krakenMotor.getVelocity().getValueAsDouble(), new Rotation2d(m2 * Math.PI / 180));
+        return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(m2 * Math.PI / 180));
     }
 
     public CANSparkMax getTurnMotor() {
         return m_turningMotor;
     }
 
-    public TalonFX getDriveMotor() {
-        return m_krakenMotor;
+    public CANSparkMax getDriveMotor() {
+        return m_driveMotor;
     }
 
     public RelativeEncoder getTurnEncoder() {
@@ -186,8 +224,10 @@ public class SwerveModule extends SubsystemBase {
 
         SmartDashboard.putNumber("Commanded Velocity", driveOutput);
 
-        m_krakenMotor.setControl(new VelocityVoltage(driveOutput/Constants.kDriveConversionFactor, Constants.kAcceleration, false, Constants.kDriveFF*driveOutput, 0, false, false, false));
-        SmartDashboard.putNumber("Module Speeds", m_krakenMotor.getMotorVoltage().getValueAsDouble());
+        
+        SmartDashboard.putNumber("Module Speeds", m_driveEncoder.getVelocity());
+
+        m_driveController.setReference(driveOutput, ControlType.kVelocity, 0, Constants.kDriveFF * driveOutput);
     }
 
     public void setOpenLoopState(SwerveModuleState state) {
@@ -212,7 +252,7 @@ public class SwerveModule extends SubsystemBase {
 
         SmartDashboard.putNumber("Commanded Velocity", driveOutput);
 
-        m_krakenMotor.setVoltage(Constants.kDriveFF * driveOutput);
+        m_driveMotor.setVoltage(Constants.kDriveFF * driveOutput);
     }
 
     //calculate the angle motor setpoint based on the desired angle and the current angle measurement
@@ -223,11 +263,11 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public double getDriveDistanceMeters() {
-        return m_krakenMotor.getPosition().getValueAsDouble() * Constants.kDriveConversionFactor;
+        return m_driveEncoder.getPosition();
     }
 
     public void resetDistance() {
-        m_krakenMotor.setPosition(0.0);
+        m_driveEncoder.setPosition(0.0);
     }
 
     public void syncTurningEncoders() {

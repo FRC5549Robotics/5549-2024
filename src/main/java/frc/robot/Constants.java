@@ -24,6 +24,7 @@ public final class Constants {
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 10; 
 
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 2; 
+    
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 1;
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 13; 
 
@@ -142,7 +143,7 @@ public final class Constants {
     public static final int INTAKE_MOTOR_TOP = 24; 
     public static final int INTAKE_TRIGGER = 2;
     public static final double INTAKE_DEADBAND = 0.05;
-    public static final double INTAKE_SCALING_FACTOR = 1;
+    public static final double INTAKE_SCALING_FACTOR = 0.8;
     public static final int INTAKE_SHOOTER_BUTTON = 5;
     public static final double INTAKE_OUTTAKE_SPEED = 0.5;
 

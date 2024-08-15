@@ -52,12 +52,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
           Constants.FRONT_RIGHT_MODULE_STEER_ENCODER
           );
 
-  private final SwerveModule m_rearLeft =
-      new SwerveModule(
-        Constants.BACK_LEFT_MODULE_DRIVE_MOTOR,
-        Constants.BACK_LEFT_MODULE_STEER_MOTOR,
-        Constants.BACK_LEFT_MODULE_STEER_ENCODER
-          );
+  // private final SwerveModule m_rearLeft =
+  //     new SwerveModule(
+  //       Constants.BACK_LEFT_MODULE_DRIVE_MOTOR,
+  //       Constants.BACK_LEFT_MODULE_STEER_MOTOR,
+  //       Constants.BACK_LEFT_MODULE_STEER_ENCODER
+  //         );
 
   private final SwerveModule m_rearRight =
       new SwerveModule(
@@ -66,7 +66,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         Constants.BACK_RIGHT_MODULE_STEER_ENCODER
           );
 
-  private SwerveModule[] modules = {m_frontLeft, m_frontRight, m_rearLeft, m_rearRight};
+  // private SwerveModule[] modules = {m_frontLeft, m_frontRight, m_rearLeft, m_rearRight};
+  private SwerveModule[] modules = {m_frontLeft, m_frontRight, m_rearRight};
   private double[] lastDistances;
   private double lastTime;
   private double offset = 0.0;
@@ -94,10 +95,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
       this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
       this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       (ChassisSpeeds speeds) -> 
-      drive(new ChassisSpeeds(speeds.vxMetersPerSecond*0.15, speeds.vyMetersPerSecond*0.15, speeds.omegaRadiansPerSecond), true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+      drive(new ChassisSpeeds(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, -speeds.omegaRadiansPerSecond), true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
               new PIDConstants(0.1, 0.0, 0.0), // Translation PID constants
-              new PIDConstants(0.1, 0.0, 0.0), // Rotation PID constants
+              new PIDConstants(0.05, 0.0, 0.0), // Rotation PID constants
               4.2, // Max module speed, in m/s
               0.399621397388, // Drive base radius in meters. Distance from robot center to furthest module.
               new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -121,7 +122,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     fixBackRight();
 
     // Zero out the gyro
-    m_odometry = new SwerveDriveOdometry(Constants.kDriveKinematics, getHeading(), getModulePositions());
+    m_odometry = new SwerveDriveOdometry(Constants.kDriveKinematics, new Rotation2d(0), getModulePositions());
 
     for (SwerveModule module: modules) {
       module.resetDistance();
@@ -131,12 +132,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_targetPose = m_odometry.getPoseMeters();
     m_thetaController.reset();
     m_thetaController.enableContinuousInput(-Math.PI, Math.PI);
-    lastDistances = new double[]{
-      m_frontLeft.getDriveDistanceMeters(),
-      m_frontRight.getDriveDistanceMeters(),
-      m_rearLeft.getDriveDistanceMeters(),
-      m_rearRight.getDriveDistanceMeters(),
-    };
 
     m_field = new Field2d();
     SmartDashboard.putData("Field", m_field);
@@ -162,12 +157,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Front Left CANCoder", m_frontLeft.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
     SmartDashboard.putNumber("Front Right CANCoder", m_frontRight.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
-    SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
+    // SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
     SmartDashboard.putNumber("Back Right CANCoder", m_rearRight.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
 
     SmartDashboard.putNumber("Front Left Neo Encoder", m_frontLeft.getTurnEncoder().getPosition());
     SmartDashboard.putNumber("Front Right Neo Encoder", m_frontRight.getTurnEncoder().getPosition());
-    SmartDashboard.putNumber("Back Left Neo Encoder", m_rearLeft.getTurnEncoder().getPosition());
+    // SmartDashboard.putNumber("Back Left Neo Encoder", m_rearLeft.getTurnEncoder().getPosition());
     SmartDashboard.putNumber("Back Right Neo Encoder", m_rearRight.getTurnEncoder().getPosition());
     
     SmartDashboard.putNumber("Heading", getHeading().getDegrees());
@@ -200,24 +195,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     System.out.println(getPose());
+ 
     SmartDashboard.putNumber("Pitch", m_ahrs.getPitch());
     SmartDashboard.putNumber("Roll", m_ahrs.getRoll());
     SmartDashboard.putNumber("Yaw", m_ahrs.getYaw());
   }
 
   public void updateOdometry() {
-    double[] distances = new double[]{
-      m_frontLeft.getDriveDistanceMeters(),
-      m_frontRight.getDriveDistanceMeters(),
-      m_rearLeft.getDriveDistanceMeters(),
-      m_rearRight.getDriveDistanceMeters(),
-    };
     double time = timer.get();
     double dt = time - lastTime;
     lastTime = time;
     if (dt == 0) return;
     m_odometry.update(getHeading(), getModulePositions());
-    lastDistances = distances;
   }
 
 
@@ -299,7 +288,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates =
         Constants.kDriveKinematics.toSwerveModuleStates(speeds);
 
-    // System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
+    System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
     if (normalize) normalizeDrive(swerveModuleStates, speeds);
     
     setModuleStates(swerveModuleStates);
@@ -413,6 +402,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public Rotation2d getHeading() {
     double raw_yaw = 25*Math.sin(Math.toRadians(2*m_ahrs.getYaw())) + m_ahrs.getYaw();
+    // double raw_yaw = m_ahrs.getYaw();
     SmartDashboard.putNumber("Raw Yaw", raw_yaw);
     // float raw_yaw = m_ahrs.getYaw(); // Returns yaw as -180 to +180.
     double calc_yaw = raw_yaw;
@@ -426,10 +416,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private SwerveModulePosition[] getModulePositions(){
     return new SwerveModulePosition[]{
-      new SwerveModulePosition(m_frontLeft.getDriveDistanceMeters(), m_frontLeft.getState().angle),
-      new SwerveModulePosition(m_frontRight.getDriveDistanceMeters(), m_frontRight.getState().angle),
-      new SwerveModulePosition(m_rearLeft.getDriveDistanceMeters(), m_rearLeft.getState().angle),
-      new SwerveModulePosition(m_rearRight.getDriveDistanceMeters(), m_rearRight.getState().angle)};
+      new SwerveModulePosition(-m_frontLeft.getDriveDistanceMeters(), m_frontLeft.getState().angle),
+      new SwerveModulePosition(-m_frontRight.getDriveDistanceMeters(), m_frontRight.getState().angle),
+      // new SwerveModulePosition(-m_rearLeft.getDriveDistanceMeters(), m_rearLeft.getState().angle),
+      new SwerveModulePosition(-m_rearRight.getDriveDistanceMeters(), m_rearRight.getState().angle)};
   }
   private void fixBackRight(){
     m_rearRight.getTurnMotor().setInverted(false);
@@ -446,7 +436,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       new PIDController(5, 0.0, 0.0),  
       new PIDController(0.35, 0.0, 0.0),  
       (ChassisSpeeds speeds) -> 
-          drive(new ChassisSpeeds(-speeds.vxMetersPerSecond,-speeds.vyMetersPerSecond,-speeds.omegaRadiansPerSecond), true),
+          drive(new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond), true),
       () -> {
           Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
               return alliance.isPresent() && alliance.get() == Alliance.Red;
@@ -458,7 +448,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return Constants.kDriveKinematics.toChassisSpeeds(
         m_frontLeft.getState(),
         m_frontRight.getState(),
-        m_rearLeft.getState(),
+        // m_rearLeft.getState(),
         m_rearRight.getState());
   }
 

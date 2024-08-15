@@ -68,7 +68,7 @@ public class RobotContainer {
   private final CommandXboxController m_controller = new CommandXboxController(Constants.DRIVE_CONTROLLER);
   private final CommandXboxController m_controller2 = new CommandXboxController(Constants.OPERATOR_CONTROLLER);
   private final AHRS m_ahrs = new AHRS();
-  public final DrivetrainSubsystem m_drive = new DrivetrainSubsystem(m_ahrs);
+  // public final DrivetrainSubsystem m_drive = new DrivetrainSubsystem(m_ahrs);
   private final Pivot m_pivot = new Pivot(m_controller2);
   private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
@@ -101,10 +101,24 @@ public class RobotContainer {
   // public static ChoreoTrajectory RighttoNote = Choreo.getTrajectory("RighttoNote");
   // public static ChoreoTrajectory NotetoRight = Choreo.getTrajectory("NotetoRight");
 
-  PathPlannerPath traj = PathPlannerPath.fromChoreoTrajectory("Simple");
-  PathPlannerPath traj2 = PathPlannerPath.fromChoreoTrajectory("RighttoNoteFarR");
-  PathPlannerPath t3 = PathPlannerPath.fromPathFile("Simple2");
-  PathPlannerPath t4 = PathPlannerPath.fromPathFile("Simple3");
+  // PathPlannerPath MidtoNoteM = PathPlannerPath.fromPathFile("MidtoNoteM");
+  // PathPlannerPath NoteMtoMid = PathPlannerPath.fromPathFile("NoteMtoMid");
+  // PathPlannerPath MidtoNoteR = PathPlannerPath.fromPathFile("MidtoNoteR");
+  // PathPlannerPath NoteRtoMid = PathPlannerPath.fromPathFile("NoteRtoMid");
+  // PathPlannerPath MidtoNoteL = PathPlannerPath.fromPathFile("MidtoNoteL");
+  // PathPlannerPath NoteLtoMid = PathPlannerPath.fromPathFile("NoteLtoMid");
+  // PathPlannerPath RighttoNoteR = PathPlannerPath.fromPathFile("RighttoNoteR");
+  // PathPlannerPath NoteRtoRight = PathPlannerPath.fromPathFile("NoteRtoRight");
+  // PathPlannerPath RighttoNoteM = PathPlannerPath.fromPathFile("RighttoNoteM");
+  // PathPlannerPath NoteMtoRight = PathPlannerPath.fromPathFile("NoteMtoRight");
+  // PathPlannerPath LefttoNoteL = PathPlannerPath.fromPathFile("LefttoNoteL");
+  // PathPlannerPath NoteLtoLeft = PathPlannerPath.fromPathFile("NoteLtoLeft");
+  // PathPlannerPath LefttoNoteM = PathPlannerPath.fromPathFile("LefttoNoteM");
+  // PathPlannerPath NoteMtoLeft = PathPlannerPath.fromPathFile("NoteMtoLeft");
+  // PathPlannerPath t3 = PathPlannerPath.fromPathFile("Simple2");
+  // PathPlannerPath t4 = PathPlannerPath.fromPathFile("Simple3");
+  // PathPlannerPath LeftMove = PathPlannerPath.fromPathFile("LeftMove");
+  // PathPlannerPath RightMove = PathPlannerPath.fromPathFile("RightMove");
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -122,15 +136,15 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_drive.setDefaultCommand(new DriveCommand(m_drive, m_controller, m_limelight));
-    resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
+    // m_drive.setDefaultCommand(new DriveCommand(m_drive, m_controller, m_limelight));
+    // resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
 
     // Pivot
      deployPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Intake));
      retractPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Retracted));
     //  ampPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Amp));
      deployPivotButton.or(retractPivotButton).onFalse(new InstantCommand(m_pivot::off));
-     m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
+    //  m_controller2.axisGreaterThan(Constants.PIVOT_JOYSTICK, Constants.PIVOT_DEADBAND).or(m_controller2.axisLessThan(Constants.PIVOT_JOYSTICK, -Constants.PIVOT_DEADBAND)).onTrue(new PivotAnalog(m_pivot, m_controller2)).onFalse(new InstantCommand(m_pivot::off));
     
     // Intake
      m_controller2.axisGreaterThan(Constants.INTAKE_TRIGGER, Constants.INTAKE_DEADBAND).whileTrue(new IntakeAnalog(m_intake, m_controller2));
@@ -158,8 +172,8 @@ public class RobotContainer {
 
     // Climber
     //  autoClimbButton.onTrue(new AutoClimb(m_climber, m_ahrs)).onFalse(new InstantCommand(m_climber::off));
-    //  m_controller2.axisGreaterThan(Constants.CLIMBER_LEFT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_LEFT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Left)).onFalse(new InstantCommand(m_climber::leftOff));
-    //  m_controller2.axisGreaterThan(Constants.CLIMBER_RIGHT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_RIGHT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Right)).onFalse(new InstantCommand(m_climber::rightOff));
+     m_controller2.axisGreaterThan(Constants.CLIMBER_LEFT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_LEFT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Left)).onFalse(new InstantCommand(m_climber::leftOff));
+     m_controller2.axisGreaterThan(Constants.CLIMBER_RIGHT_JOYSTICK, Constants.CLIMBER_DEADBAND).or(m_controller2.axisLessThan(Constants.CLIMBER_RIGHT_JOYSTICK, -Constants.CLIMBER_DEADBAND)).whileTrue(new ClimberAnalog(m_climber, m_controller2, Side.Right)).onFalse(new InstantCommand(m_climber::rightOff));
   }
 
   /**
@@ -171,14 +185,16 @@ public class RobotContainer {
     // An example command will be run in autonomou
 
     // m_drive.resetOdometry(new Pose2d(new Translation2d(1.75, 5.5), new Rotation2d(0)));
-    m_drive.resetOdometry(t3.getPreviewStartingHolonomicPose());
+    // m_drive.resetOdometry(RightMove.getPreviewStartingHolonomicPose());
     
-    // return AutoBuilder.followPath(t4);
-    // return new ShootnDrive(m_shooter, m_indexer, m_limelight, t3);
-    return new TwoNoteAuton(m_shooter, m_indexer, m_pivot, m_intake, m_limelight, t3, t4);
+    // return AutoBuilder.followPath(LeftMove);
+    // return new ShootnDrive(m_shooter, m_indexer, m_limelight, RightMove);
+    // return new TwoNoteAuton(m_shooter, m_indexer, m_pivot, m_intake, m_limelight, MidtoNoteM, NoteMtoMid);
     // return AutoBuilder.pathfindToPose(new Pose2d(new Translation2d(0.3, 0), new Rotation2d(0)), new PathConstraints(0.5, 0.5, 0.5, 0.5));
     // return new SequentialCommandGroup(m_drive.ChoreoTrajectoryFoll[ower(traj), new InstantCommand(m_drive::ChoreoTest));
     // return new OneNoteAutonNoDrive(m_shooter, m_indexer, m_limelight);
     // return new SimpleDrive(m_drive);
+    return null;
   }
 }
+

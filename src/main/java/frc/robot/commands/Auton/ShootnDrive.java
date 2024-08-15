@@ -33,6 +33,7 @@ public class ShootnDrive extends SequentialCommandGroup {
       new ParallelCommandGroup(
           new ShooterSpinUpAuton(shooter, timer),
           new SequentialCommandGroup(new WaitCommand(0.75), new IndexShooterAuton(indexer, timer))),
+      new WaitCommand(8),
       AutoBuilder.followPath(traj)
     );
   }
