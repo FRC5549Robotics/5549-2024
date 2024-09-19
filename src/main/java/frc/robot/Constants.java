@@ -23,8 +23,7 @@ public final class Constants {
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 3;
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 10; 
 
-    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 2; 
-    
+    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 2;  
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 1;
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 13; 
 
@@ -70,7 +69,7 @@ public final class Constants {
     public static final double kWheelBase = 0.56515;
 
     // Units are meters per second
-    public static final double kMaxTranslationalVelocity = 6000 / 60.0 *
+    public static final double kMaxTranslationalVelocity = 6784 / 60.0 *
     (1/kDriveGearRatio) *
     kWheelDiameterMeters * Math.PI;
 
@@ -95,7 +94,7 @@ public final class Constants {
     public static final double kDriveP = 0.05;
     public static final double kDriveI = 0.0;
     public static final double kDriveD = 0.0;
-    public static final double kDriveFF = 0;
+    public static final double kDriveFF = 0.1;
 
     public static final double kTurningP = 0.005;
     public static final double kTurningI = 0.0;

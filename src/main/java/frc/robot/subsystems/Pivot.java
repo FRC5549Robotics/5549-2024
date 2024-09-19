@@ -113,9 +113,9 @@ public class Pivot extends SubsystemBase {
     }
     SmartDashboard.putBoolean("Intake Allowed", intakePosition);
      
-    if(!XboxController.a().getAsBoolean() && !XboxController.x().getAsBoolean() && intakePosition){
-    PivotRightMotor.set(-controllerRight.calculate(getRightPosition(), Constants.PIVOT_RIGHT_RETRACTED_SETPOINT));
-    PivotLeftMotor.set(-controllerLeft.calculate(getLeftPosition(), Constants.PIVOT_LEFT_RETRACTED_SETPOINT));
-    }
+    // if(!XboxController.a().getAsBoolean() && !XboxController.x().getAsBoolean() && intakePosition){
+    // PivotRightMotor.set(-controllerRight.calculate(getRightPosition(), Constants.PIVOT_RIGHT_RETRACTED_SETPOINT));
+    // PivotLeftMotor.set(-controllerLeft.calculate(getLeftPosition(), Constants.PIVOT_LEFT_RETRACTED_SETPOINT));
+    // }
   }
 }

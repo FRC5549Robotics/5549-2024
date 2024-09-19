@@ -52,12 +52,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
           Constants.FRONT_RIGHT_MODULE_STEER_ENCODER
           );
 
-  // private final SwerveModule m_rearLeft =
-  //     new SwerveModule(
-  //       Constants.BACK_LEFT_MODULE_DRIVE_MOTOR,
-  //       Constants.BACK_LEFT_MODULE_STEER_MOTOR,
-  //       Constants.BACK_LEFT_MODULE_STEER_ENCODER
-  //         );
+  private final SwerveModule m_rearLeft =
+      new SwerveModule(
+        Constants.BACK_LEFT_MODULE_DRIVE_MOTOR,
+        Constants.BACK_LEFT_MODULE_STEER_MOTOR,
+        Constants.BACK_LEFT_MODULE_STEER_ENCODER
+          );
 
   private final SwerveModule m_rearRight =
       new SwerveModule(
@@ -66,8 +66,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         Constants.BACK_RIGHT_MODULE_STEER_ENCODER
           );
 
-  // private SwerveModule[] modules = {m_frontLeft, m_frontRight, m_rearLeft, m_rearRight};
-  private SwerveModule[] modules = {m_frontLeft, m_frontRight, m_rearRight};
+  private SwerveModule[] modules = {m_frontLeft, m_frontRight, m_rearLeft, m_rearRight};
   private double[] lastDistances;
   private double lastTime;
   private double offset = 0.0;
@@ -157,14 +156,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Front Left CANCoder", m_frontLeft.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
     SmartDashboard.putNumber("Front Right CANCoder", m_frontRight.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
-    // SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
+    SmartDashboard.putNumber("Back Left CANCoder", m_rearLeft.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
     SmartDashboard.putNumber("Back Right CANCoder", m_rearRight.getTurnCANcoder().getAbsolutePosition().getValueAsDouble()*360);
 
     SmartDashboard.putNumber("Front Left Neo Encoder", m_frontLeft.getTurnEncoder().getPosition());
     SmartDashboard.putNumber("Front Right Neo Encoder", m_frontRight.getTurnEncoder().getPosition());
-    // SmartDashboard.putNumber("Back Left Neo Encoder", m_rearLeft.getTurnEncoder().getPosition());
+    SmartDashboard.putNumber("Back Left Neo Encoder", m_rearLeft.getTurnEncoder().getPosition());
     SmartDashboard.putNumber("Back Right Neo Encoder", m_rearRight.getTurnEncoder().getPosition());
     
+    SmartDashboard.putNumber("Front Left Neo Velocity", m_frontLeft.getDriveEncoder().getVelocity());
+    SmartDashboard.putNumber("Front Right Neo Velocity", m_frontRight.getDriveEncoder().getVelocity());
+    SmartDashboard.putNumber("Back Left Neo Velocity", m_rearLeft.getDriveEncoder().getVelocity());
+    SmartDashboard.putNumber("Back Right Neo Velocity", m_rearRight.getDriveEncoder().getVelocity());
+
     SmartDashboard.putNumber("Heading", getHeading().getDegrees());
     
     SmartDashboard.putNumber("currentX", getPose().getX());
@@ -194,7 +198,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       System.out.println("Zeroed: " + getHeading());
     }
 
-    System.out.println(getPose());
+    // System.out.println(getPose());
  
     SmartDashboard.putNumber("Pitch", m_ahrs.getPitch());
     SmartDashboard.putNumber("Roll", m_ahrs.getRoll());
@@ -288,7 +292,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates =
         Constants.kDriveKinematics.toSwerveModuleStates(speeds);
 
-    System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
+    // System.out.println(swerveModuleStates[0]+":"+swerveModuleStates[1]+":"+swerveModuleStates[2]+":"+swerveModuleStates[3]);
     if (normalize) normalizeDrive(swerveModuleStates, speeds);
     
     setModuleStates(swerveModuleStates);
@@ -418,7 +422,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return new SwerveModulePosition[]{
       new SwerveModulePosition(-m_frontLeft.getDriveDistanceMeters(), m_frontLeft.getState().angle),
       new SwerveModulePosition(-m_frontRight.getDriveDistanceMeters(), m_frontRight.getState().angle),
-      // new SwerveModulePosition(-m_rearLeft.getDriveDistanceMeters(), m_rearLeft.getState().angle),
+      new SwerveModulePosition(-m_rearLeft.getDriveDistanceMeters(), m_rearLeft.getState().angle),
       new SwerveModulePosition(-m_rearRight.getDriveDistanceMeters(), m_rearRight.getState().angle)};
   }
   private void fixBackRight(){
@@ -448,7 +452,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return Constants.kDriveKinematics.toChassisSpeeds(
         m_frontLeft.getState(),
         m_frontRight.getState(),
-        // m_rearLeft.getState(),
+        m_rearLeft.getState(),
         m_rearRight.getState());
   }
 

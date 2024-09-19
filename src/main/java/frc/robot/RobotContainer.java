@@ -68,7 +68,7 @@ public class RobotContainer {
   private final CommandXboxController m_controller = new CommandXboxController(Constants.DRIVE_CONTROLLER);
   private final CommandXboxController m_controller2 = new CommandXboxController(Constants.OPERATOR_CONTROLLER);
   private final AHRS m_ahrs = new AHRS();
-  // public final DrivetrainSubsystem m_drive = new DrivetrainSubsystem(m_ahrs);
+  public final DrivetrainSubsystem m_drive = new DrivetrainSubsystem(m_ahrs);
   private final Pivot m_pivot = new Pivot(m_controller2);
   private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
@@ -136,8 +136,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // m_drive.setDefaultCommand(new DriveCommand(m_drive, m_controller, m_limelight));
-    // resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
+      m_drive.setDefaultCommand(new DriveCommand(m_drive, m_controller, m_limelight));
+      resetNavXButton.onTrue(new InstantCommand(m_drive::zeroGyroscope));
 
     // Pivot
      deployPivotButton.whileTrue(new PivotIntake(m_pivot, PivotTarget.Intake));
