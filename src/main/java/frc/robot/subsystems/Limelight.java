@@ -26,7 +26,9 @@ public class Limelight extends SubsystemBase {
   double ty, tv, tx, angle, distance;
   double min_command = 0.05;
   PIDController alignController = new PIDController(Constants.ALIGN_kP, Constants.ALIGN_kI, Constants.ALIGN_kD);
-  PhotonCamera camera;
+  PhotonCamera  camera;
+  PIDController pid = new PIDController(1, 1, 1);
+
   
   double steering_adjust = 0.0;
   private static Limelight limelight = null;
