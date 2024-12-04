@@ -49,8 +49,8 @@ public class SwerveModule extends SubsystemBase {
 //    private final Rotation2d m_CANCoderOffset;
 
     private final SparkPIDController m_turningController;
+    
     private final SparkPIDController m_driveController;
-
     /**
      * Constructs a SwerveModule.
      *
@@ -185,6 +185,10 @@ public class SwerveModule extends SubsystemBase {
         return m_turningEncoder;
     }
 
+    public RelativeEncoder getDriveEncoder() {
+        return m_driveEncoder;
+    }
+
     public CANcoder getTurnCANcoder() {
         return m_turningCANCoder;
     }
@@ -227,7 +231,7 @@ public class SwerveModule extends SubsystemBase {
         
         SmartDashboard.putNumber("Module Speeds", m_driveEncoder.getVelocity());
 
-        m_driveController.setReference(driveOutput, ControlType.kVelocity, 0, Constants.kDriveFF * driveOutput);
+        m_driveController.setReference(driveOutput, ControlType.kVelocity, 0, 0);//Constants.kDriveFF * driveOutput);
     }
 
     public void setOpenLoopState(SwerveModuleState state) {

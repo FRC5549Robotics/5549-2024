@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-  /** Creates a new Intake. */
+  /** Creates a new Intake. */ 
   CANSparkFlex IntakeMotorBottom;
   CANSparkMax IntakeMotorTop;
 

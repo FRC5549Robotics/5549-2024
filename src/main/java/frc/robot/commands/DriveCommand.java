@@ -115,6 +115,8 @@ public class DriveCommand extends Command {
       else{
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xDot, yDot, thetaDot, drivetrain.getHeading());
       }
+
+      // System.out.println(chassisSpeeds);
       
       drivetrain.drive(chassisSpeeds, true);
     }
